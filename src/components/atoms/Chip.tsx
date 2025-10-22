@@ -19,4 +19,4 @@ const Chip = ({ name, iconPath }: { name: string; iconPath?: string }) => {
 	);
 };
 
-export default Chip;
+export { Chip };

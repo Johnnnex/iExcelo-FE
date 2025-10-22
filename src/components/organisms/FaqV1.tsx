@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
-import Chip from '../atoms/Chip';
+import { Chip } from '../atoms';
 
 const FaqV1 = () => {
 	const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -124,4 +124,4 @@ const FaqV1 = () => {
 	);
 };
 
-export default FaqV1;
+export { FaqV1 };

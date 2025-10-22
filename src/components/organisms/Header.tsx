@@ -1,6 +1,6 @@
 import React from 'react';
-import SVGClient from '../atoms/SVGClient';
-import Button from '../atoms/Button';
+import { SVGClient } from '../atoms';
+import { Button } from '../atoms';
 import Link from 'next/link';
 
 const Header = () => {
@@ -42,4 +42,4 @@ const Header = () => {
 	);
 };
 
-export default Header;
+export { Header };

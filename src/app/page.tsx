@@ -1,9 +1,5 @@
-import Button from '@/components/atoms/Button';
-import Chip from '@/components/atoms/Chip';
-import SVGClient from '@/components/atoms/SVGClient';
-import CTA from '@/components/organisms/CTA';
-import FaqV1 from '@/components/organisms/FaqV1';
-import Testimonial from '@/components/organisms/Testimonial';
+import { Button, Chip, SVGClient } from '@/components/atoms';
+import { CTA, FaqV1, Testimonial } from '@/components/organisms';
 import { Icon } from '@iconify/react';
 import { Metadata } from 'next';
 import Link from 'next/link';

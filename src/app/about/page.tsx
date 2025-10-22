@@ -1,8 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import Button from '@/components/atoms/Button';
-import Chip from '@/components/atoms/Chip';
-import SVGClient from '@/components/atoms/SVGClient';
-import CTA from '@/components/organisms/CTA';
+import { Button, Chip, SVGClient } from '@/components/atoms';
+import { CTA } from '@/components/organisms';
 import { Icon } from '@iconify/react';
 import { Metadata } from 'next';
 import React, { Fragment } from 'react';

@@ -4,7 +4,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import Button from '../atoms/Button';
+import { Button } from '../atoms';
 
 // Dummy data
 const testimonials = [
@@ -144,4 +144,4 @@ const Testimonial = () => {
 	);
 };
 
-export default Testimonial;
+export { Testimonial };

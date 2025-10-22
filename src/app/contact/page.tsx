@@ -1,4 +1,4 @@
-import CTA from '@/components/organisms/CTA';
+import { CTA } from '@/components/organisms';
 import { Icon } from '@iconify/react';
 import { Metadata } from 'next';
 import React from 'react';

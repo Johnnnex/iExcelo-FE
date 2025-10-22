@@ -1,5 +1,5 @@
 import React from 'react';
-import SVGClient from '../atoms/SVGClient';
+import { SVGClient } from '../atoms';
 import Link from 'next/link';
 
 const Footer = () => {
@@ -97,4 +97,4 @@ const Footer = () => {
 	);
 };
 
-export default Footer;
+export { Footer };

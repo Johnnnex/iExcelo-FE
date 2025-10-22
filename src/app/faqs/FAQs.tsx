@@ -1,6 +1,6 @@
 'use client';
 
-import CTA from '@/components/organisms/CTA';
+import { CTA } from '@/components/organisms';
 import { Icon } from '@iconify/react';
 import React, { useState } from 'react';
 

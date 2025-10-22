@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../atoms/Button';
+import { Button } from '../atoms';
 import { Icon } from '@iconify/react';
 
 const CTA = ({
@@ -33,4 +33,4 @@ const CTA = ({
 	);
 };
 
-export default CTA;
+export { CTA };
