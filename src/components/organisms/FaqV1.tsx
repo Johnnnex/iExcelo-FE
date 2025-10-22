@@ -10,44 +10,45 @@ const FaqV1 = () => {
 	const faqs = [
 		{
 			id: 1,
-			question: 'What is iExcelo Exam Revision all about?',
-			answer: `It is an exam revision platform for final primary, secondary, and pre-university examinations. It provides expert solutions and explanations to numerous past questions for the above-level exams. It also gives concise but well-explanatory summaries for every topic addressed by every question. It is a single and only last stop for exam success.`,
+			question: 'What is iExcelo?',
+			answer:
+				'iExcelo is an all-in-one digital learning and impact platform that helps students prepare for exams through interactive revision tools and connects sponsors to learners in need through transparent donations.',
 		},
 		{
 			id: 2,
-			question: 'Who can use iExcelo Exam Revision Platform?',
+			question: 'What is the iExcelo Giveback Program?',
 			answer:
-				"The iExcelo Exam Revision Platform is designed for students at various educational levels, including secondary school, high school, and preparation for standardized tests. Whether you're studying for GCSEs, A-Levels, SATs, or other major examinations, our platform provides tailored content to match your needs. Teachers and tutors can also use our platform to supplement their teaching materials and track student progress.",
+				"It's a transparent platform that allows individuals and organizations to sponsor students' education by funding their access to quality learning materials on iExcelo.",
 		},
 		{
 			id: 3,
-			question: 'How much does it cost to use iExcelo exam revision?',
+			question: 'How often is content updated?',
 			answer:
-				'iExcelo offers flexible pricing plans to suit different needs and budgets. We have a free tier that provides access to basic study materials and limited practice questions. Our premium subscription starts at $9.99/month for individual students, with discounted annual plans available at $89.99/year. We also offer family plans and institutional licenses for schools. Students can try our premium features with a 14-day free trial before committing to a subscription.',
+				'Our content team regularly updates questions, explanations, and summaries to align with current exam formats and trends.',
 		},
 		{
 			id: 4,
-			question: 'What is iExcelo GiveBack Platform?',
+			question: 'How does sponsorship work?',
 			answer:
-				"The iExcelo GiveBack Platform is our community-driven initiative that allows experienced students, educators, and subject matter experts to contribute educational content and help fellow learners. It's built on the principle of knowledge sharing, where contributors can create study guides, practice questions, and tutorial videos. Contributors earn rewards and recognition within our community while making quality education more accessible to students worldwide.",
+				"You choose how many students you'd like to support, make your donation, and get a dashboard where you can see their progress in real time.",
 		},
 		{
 			id: 5,
-			question: 'How can I become a member of iExcelo GiveBack Team?',
+			question: 'Is my donation safe?',
 			answer:
-				"Becoming a member of the iExcelo GiveBack Team is straightforward. First, create an account on our platform and complete your profile with your educational background and areas of expertise. Then, apply through the GiveBack section by submitting sample content that demonstrates your teaching ability and subject knowledge. Our team reviews applications within 5-7 business days. Once approved, you'll gain access to our content creation tools and community forums, and you can start contributing immediately.",
+				'Absolutely. All donations are processed through secure payment systems, and we maintain full transparency on fund allocation.',
 		},
 		{
 			id: 6,
-			question: 'How can I earn money with iExcelo?',
+			question: 'How are students selected for the Giveback Program?',
 			answer:
-				'There are several ways to earn money with iExcelo. As a GiveBack Team member, you earn revenue based on the popularity and usage of your contributed content. We operate on a fair revenue-sharing model where creators receive a percentage of subscription fees attributed to their materials. Additionally, highly-rated contributors can become verified tutors on our platform, offering one-on-one sessions at their own rates. Top contributors also receive bonuses, prizes, and opportunities for sponsored content creation.',
+				'We partner with schools, NGOs, and verified local institutions to identify deserving students from low-income backgrounds.',
 		},
 		{
 			id: 7,
-			question: 'How does iExcelo GiveBack work?',
+			question: 'What is the iExcelo Affiliate Program?',
 			answer:
-				'iExcelo GiveBack operates on a collaborative content creation model. Contributors submit educational materials through our platform, which undergo a quality review process by our academic team. Once approved, content is made available to students using the platform. We track engagement metrics such as views, completion rates, and student feedback. Contributors are compensated based on these metrics through our revenue-sharing program. The platform also features a rating system where students can review content, helping to highlight the most effective learning materials and rewarding quality contributions.',
+				"It's an opportunity for you to earn money by referring others to iExcelo's learning or Giveback programs.",
 		},
 	];
 

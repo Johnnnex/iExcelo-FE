@@ -3,6 +3,7 @@
 import { CTA } from '@/components/organisms';
 import { Icon } from '@iconify/react';
 import React, { useState } from 'react';
+import { faqData } from './data';
 
 const FAQs = () => {
 	const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -13,114 +14,6 @@ const FAQs = () => {
 		'exam-revision-platform',
 		'give-back',
 		'affiliate-program',
-	];
-
-	const faqData = [
-		{
-			id: 1,
-			category: 'general',
-			question: 'What is iExcelo?',
-			answer:
-				'iExcelo is a comprehensive educational platform designed to help students excel in their academic pursuits through innovative learning tools and resources.',
-		},
-		{
-			id: 2,
-			category: 'general',
-			question: 'How do I create an account?',
-			answer:
-				'You can create an account by clicking the sign-up button on our homepage and filling in your details. The process takes less than 2 minutes.',
-		},
-		{
-			id: 3,
-			category: 'general',
-			question: 'Is iExcelo free to use?',
-			answer:
-				'We offer both free and premium plans. The free plan gives you access to basic features, while premium unlocks advanced tools and exclusive content.',
-		},
-		{
-			id: 4,
-			category: 'general',
-			question: 'What devices can I use iExcelo on?',
-			answer:
-				'iExcelo works seamlessly on all devices including desktop computers, tablets, and smartphones. Our platform is fully responsive and optimized for all screen sizes.',
-		},
-		{
-			id: 5,
-			category: 'exam-revision-platform',
-			question: 'What is iExcelo Exam Revision all about?',
-			answer:
-				'It is an exam revision platform for final primary, secondary, and pre-university examinations. It provides expert solutions and explanations to numerous past questions for the above-level exams. It also gives concise but well-explanatory summaries for every topic addressed by every question. It is a single and only last stop for exam success.',
-		},
-		{
-			id: 6,
-			category: 'exam-revision-platform',
-			question: 'Which exam bodies are covered?',
-			answer:
-				'We cover major exam bodies including WAEC, NECO, JAMB, BECE, and other regional examination boards. Our content is regularly updated to match current syllabi.',
-		},
-		{
-			id: 7,
-			category: 'exam-revision-platform',
-			question: 'How many past questions are available?',
-			answer:
-				'Our platform hosts over 50,000 past questions spanning the last 15 years across all major subjects. New questions are added regularly as they become available.',
-		},
-		{
-			id: 8,
-			category: 'exam-revision-platform',
-			question: 'Can I practice offline?',
-			answer:
-				'Yes! Premium users can download question sets and study materials for offline practice. This ensures you can continue learning even without internet access.',
-		},
-		{
-			id: 9,
-			category: 'give-back',
-			question: 'What is the Give Back initiative?',
-			answer:
-				'Our Give Back program provides free access to underprivileged students and sponsors educational resources in underserved communities across Africa.',
-		},
-		{
-			id: 10,
-			category: 'give-back',
-			question: 'How can I contribute to Give Back?',
-			answer:
-				"You can contribute by donating directly through our platform, volunteering as a tutor, or sponsoring a student. Every contribution makes a real difference in a student's life.",
-		},
-		{
-			id: 11,
-			category: 'give-back',
-			question: 'Who benefits from the Give Back program?',
-			answer:
-				'The program benefits students from low-income families, orphanages, and rural communities who lack access to quality educational resources.',
-		},
-		{
-			id: 12,
-			category: 'affiliate-program',
-			question: 'How does the affiliate program work?',
-			answer:
-				'Our affiliate program allows you to earn commission by referring new users to iExcelo. You receive a unique referral link and earn up to 30% commission on qualifying sales.',
-		},
-		{
-			id: 13,
-			category: 'affiliate-program',
-			question: 'What are the payout terms?',
-			answer:
-				'Payouts are processed monthly once you reach the minimum threshold of $50. Payments are made via bank transfer or PayPal within 7 business days.',
-		},
-		{
-			id: 14,
-			category: 'affiliate-program',
-			question: 'Can schools join the affiliate program?',
-			answer:
-				'Absolutely! We have special partnership terms for schools and educational institutions. Contact our partnerships team for customized commission structures.',
-		},
-		{
-			id: 15,
-			category: 'affiliate-program',
-			question: 'How do I track my referrals?',
-			answer:
-				'You get access to a comprehensive dashboard that shows real-time statistics including clicks, conversions, and earnings. You can track everything from your affiliate portal.',
-		},
 	];
 
 	const formatCategoryName = (category: string) => {
