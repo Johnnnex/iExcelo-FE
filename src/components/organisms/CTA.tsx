@@ -13,10 +13,10 @@ const CTA = ({
 		<section className='py-[6rem] max-w-[1300px] mx-auto w-[90%]'>
 			<div className='bg-[url(/images/background-pattern-2.png)] bg-cover rounded-[2rem] bg-center'>
 				<div className='py-[5.5rem] flex flex-col items-center mx-auto w-[70%] text-white'>
-					<h3 className='mb-[.5rem] leading-[3rem] tracking-[-.8px] font-[600] text-[2.5rem]'>
+					<h3 className='mb-[.5rem] leading-[3rem] text-center tracking-[-.8px] font-[600] text-[2.5rem]'>
 						{title}
 					</h3>
-					<p className='mb-[2rem] leading-[1.75rem] text-[1.125rem] font-[400]'>
+					<p className='mb-[2rem] leading-[1.75rem] text-center text-[1.125rem] font-[400]'>
 						{content}
 					</p>
 					<Button>

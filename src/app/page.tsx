@@ -108,7 +108,7 @@ export default function Home() {
 											color='#007FFF'
 										/>
 									</span>
-									<h4 className='text-[#101928] text-[1.25rem] leading-[1.75rem] font-[500] tracking-[.4px]'>
+									<h4 className='text-[#101928] text-[1.25rem] leading-[1.75rem] font-[500] tracking-[-.4px]'>
 										{item?.title}
 									</h4>
 									<p className='leading-[1.25rem] text-[#667185] w-[90%] font-[400] text-[.875rem]'>
