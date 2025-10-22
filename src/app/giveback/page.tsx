@@ -3,7 +3,12 @@
 import { Button, Chip } from '@/components/atoms';
 import { CTA } from '@/components/organisms';
 import { Icon } from '@iconify/react';
+import { Metadata } from 'next';
 import React from 'react';
+
+export const metadata: Metadata = {
+	title: 'iExcelo - Giveback',
+};
 
 const GiveBack = () => {
 	return (
