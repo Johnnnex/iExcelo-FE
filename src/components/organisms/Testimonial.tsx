@@ -75,10 +75,13 @@ const Testimonial = () => {
 	const currentTestimonial = testimonials[currentIndex];
 
 	return (
-		<section className='flex gap-[5.25rem] my-[.375rem] items-center'>
+		<section className='flex lg:gap-[5.25rem] md:gap-[2rem] gap-[1rem] flex-col lg:flex-row my-[.375rem] items-center'>
 			<Button
+				className='lg:block hidden'
 				style={{ borderRadius: '50%', aspectRatio: '1/1' }}
 				onClick={handlePrev}
+				data-aos='fade-right'
+				data-aos-duration='600'
 			>
 				<Icon
 					icon={'hugeicons:arrow-left-02'}
@@ -87,13 +90,17 @@ const Testimonial = () => {
 					color='#fff'
 				/>
 			</Button>
-			<div className='relative z-[1]'>
+			<div
+				className='relative z-[1]'
+				data-aos='fade-up'
+				data-aos-duration='800'
+			>
 				<div
 					style={{
 						boxShadow:
 							'0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)',
 					}}
-					className='bg-[#fff] border-[.833px] border-[#DCDFE4] rounded-[1rem] p-[5rem_2.4375rem] flex-1'
+					className='bg-[#fff] border-[.833px] max-w-[90%] md:max-w-[100%] mx-auto border-[#DCDFE4] rounded-[1rem] p-[2.5rem_.75rem] md:p-[5rem_2.4375rem] flex-1'
 				>
 					<div
 						style={{
@@ -101,10 +108,10 @@ const Testimonial = () => {
 							transition: 'opacity 300ms ease-in-out',
 						}}
 					>
-						<h3 className='text-[2.25rem] font-[600] text-[#101928] tracking-[-.72px] mb-[2.5rem] leading-[2.75rem]'>
+						<h3 className='md:text-[2.25rem] text-[2rem] font-[600] text-[#101928] tracking-[-.64px] md:tracking-[-.72px] leading-[2.5rem] md:leading-[2.75rem]'>
 							&ldquo;{currentTestimonial.quote}&rdquo;
 						</h3>
-						<span className='block h-[1px] bg-[#DCDFE4] w-full mb-[2.5rem]' />
+						<span className='block h-[1px] bg-[#DCDFE4] w-full my-[2.5rem]' />
 						<div className='flex gap-[0.9375rem] items-center'>
 							<img
 								src={`/images/avatar.png`}
@@ -123,15 +130,15 @@ const Testimonial = () => {
 						</div>
 					</div>
 
-					<div
-						style={{ width: 'calc(100% + 4.5rem)', height: 'calc(100% - 4rem)' }}
-						className='absolute bg-[#E6F2FF] border border-[#39F] left-[-2.25rem] h-full top-[2rem] z-[-1] rounded-[.84375rem] w-full'
-					/>
+					<div className='absolute bg-[#E6F2FF] testimonial-box border border-[#39F] md:left-[-2.25rem] left-0 top-[2rem] z-[-1] rounded-[.84375rem]' />
 				</div>
 			</div>
 			<Button
+				className='lg:block hidden'
 				style={{ borderRadius: '50%', aspectRatio: '1/1' }}
 				onClick={handleNext}
+				data-aos='fade-left'
+				data-aos-duration='600'
 			>
 				<Icon
 					icon={'hugeicons:arrow-right-02'}
@@ -140,6 +147,36 @@ const Testimonial = () => {
 					color='#fff'
 				/>
 			</Button>
+
+			<div
+				className='flex items-center justify-between md:w-[12rem] w-[8.5rem] lg:hidden'
+				data-aos='fade-up'
+				data-aos-duration='600'
+				data-aos-delay='100'
+			>
+				<Button
+					style={{ borderRadius: '50%', aspectRatio: '1/1' }}
+					onClick={handlePrev}
+				>
+					<Icon
+						icon={'hugeicons:arrow-left-02'}
+						// width={'.8125rem'}
+						// height={'.8125rem'}
+						color='#fff'
+					/>
+				</Button>
+				<Button
+					style={{ borderRadius: '50%', aspectRatio: '1/1' }}
+					onClick={handleNext}
+				>
+					<Icon
+						icon={'hugeicons:arrow-right-02'}
+						// width={'.8125rem'}
+						// height={'.8125rem'}
+						color='#fff'
+					/>
+				</Button>
+			</div>
 		</section>
 	);
 };

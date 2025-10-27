@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Button, SVGClient } from '../atoms';
 import { Icon } from '@iconify/react';
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
 	const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
@@ -13,6 +14,8 @@ const Header = () => {
 	// Refs for click outside detection
 	const featuresDropdownRef = useRef<HTMLLIElement>(null);
 	const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+	const pathname = usePathname();
 
 	const features = [
 		{
@@ -24,7 +27,7 @@ const Header = () => {
 		},
 		{
 			icon: 'hugeicons:healtcare',
-			link: 'giveback',
+			link: '/giveback',
 			title: 'Give Backs',
 			description:
 				'Support other students by sponsoring access to quality education and helping more people excel.',
@@ -80,8 +83,8 @@ const Header = () => {
 	}, [isMobileMenuOpen]);
 
 	return (
-		<header className='fixed z-[4] w-full top-[3.25rem] lg:top-[3.25rem] md:top-[1.5rem] sm:top-[1rem]'>
-			<div className='flex backdrop-blur-[40px] mx-auto justify-between items-center max-w-[870px] w-[90%] p-[.625rem] bg-[#00356B] rounded-[6.25rem]'>
+		<header className='fixed z-[4] w-full top-[3.25rem] lg:top-[3.25rem] px-[1rem] md:px-[2rem] lg:px-0 md:top-[1.5rem] sm:top-[1rem]'>
+			<div className='flex backdrop-blur-[40px] mx-auto justify-between items-center max-w-[870px] w-[100%] p-[.625rem] bg-[#00356B] rounded-[6.25rem]'>
 				<Link href={'/'}>
 					<SVGClient src='/svg/logo.svg' />
 				</Link>
@@ -121,7 +124,9 @@ const Header = () => {
 												<Link
 													key={index}
 													href={feature?.link}
-													className='flex gap-[1rem] p-[.75rem] items-start hover:bg-[#E6F2FF] rounded-[0.75rem] transition-colors'
+													className={`flex gap-[1rem] p-[.75rem] items-start hover:bg-[#ffffff] ${
+														pathname === feature?.link ? 'bg-[#ffffff]' : ''
+													} rounded-[0.75rem] transition-colors duration-[.4s]`}
 												>
 													<div>
 														<Icon
@@ -153,7 +158,9 @@ const Header = () => {
 							].map((item, index) => (
 								<li key={`__nav__${index}`}>
 									<Link
-										className='font-[600] text-[1rem] leading-[1.5rem]'
+										className={`font-[600] hover:underline ${
+											pathname === item?.href ? 'underline text-[#007FFF]' : ''
+										} text-[1rem] leading-[1.5rem]`}
 										href={item?.href}
 									>
 										{item?.title}
@@ -172,7 +179,7 @@ const Header = () => {
 
 				{/* Mobile Menu Button */}
 				<button
-					className='lg:hidden text-white p-2'
+					className='lg:hidden cursor-pointer text-white p-2'
 					onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
 				>
 					<svg
@@ -204,7 +211,7 @@ const Header = () => {
 			{isMobileMenuOpen && (
 				<div
 					ref={mobileMenuRef}
-					className='lg:hidden mt-[1rem] mx-auto w-[90%] max-w-[870px] bg-[#00356B] backdrop-blur-[40px] rounded-[1.25rem] p-[1.5rem] text-white'
+					className='lg:hidden mt-[1rem] mx-auto w-[100%] md:w-[90%] max-w-[870px] bg-[#00356B] backdrop-blur-[40px] rounded-[1.25rem] p-[1.5rem] text-white'
 				>
 					<nav className='space-y-[1rem]'>
 						<div>
@@ -234,15 +241,23 @@ const Header = () => {
 								<div className='mt-[0.5rem] pl-[1rem] space-y-[1rem] border-l-2 border-white/20'>
 									{features.map((feature, index) => (
 										<Link
-											key={index}
+											key={`__feature__${index}`}
 											href={feature?.link}
-											className='block py-[0.5rem]'
+											className='block group py-[0.5rem]'
 											onClick={() => setIsMobileMenuOpen(false)}
 										>
-											<h4 className='font-[600] text-[0.875rem] mb-[0.25rem]'>
+											<h4
+												className={`font-[600] group-hover:underline ${
+													pathname === feature?.link ? 'underline' : ''
+												} text-[0.875rem] mb-[0.25rem]`}
+											>
 												{feature.title}
 											</h4>
-											<p className='text-white/70 text-[0.75rem] leading-[1.125rem]'>
+											<p
+												className={`text-white/70 group-hover:underline ${
+													pathname === feature?.link ? 'underline' : ''
+												} text-[0.75rem] leading-[1.125rem]`}
+											>
 												{feature.description}
 											</p>
 										</Link>
@@ -258,7 +273,9 @@ const Header = () => {
 						].map((item, index) => (
 							<Link
 								key={index}
-								className='block font-[600] text-[1rem] leading-[1.5rem] py-[0.5rem]'
+								className={`block hover:underline ${
+									pathname === item?.href ? 'underline' : ''
+								} font-[600] text-[1rem] leading-[1.5rem] py-[0.5rem]`}
 								href={item?.href}
 								onClick={() => setIsMobileMenuOpen(false)}
 							>

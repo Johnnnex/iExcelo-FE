@@ -1,6 +1,8 @@
+'use client';
+
 import { Geist } from 'next/font/google';
 import './globals.css';
-import { Header, Footer } from '@/components/organisms';
+import { Header, Footer, AOSInit } from '@/components/organisms';
 
 export const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -15,6 +17,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
+			<AOSInit />
 			<body className={`${geistSans.className} antialiased`}>
 				<Header />
 				{children}

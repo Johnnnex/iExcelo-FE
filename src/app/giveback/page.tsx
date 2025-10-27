@@ -12,15 +12,15 @@ export const metadata: Metadata = {
 
 const GiveBack = () => {
 	return (
-		<main className='bg-white'>
-			<section className='bg-[url(/images/background-pattern-3.png)] bg-center bg-cover flex items-center h-[100vh]'>
-				<div className='max-w-[1300px] w-[90%] flex items-center justify-between gap-[2.3125rem] mx-auto'>
-					<div className='w-[50%]'>
+		<main className='bg-white w-[100%] overflow-hidden'>
+			<section className='bg-[url(/images/background-pattern-3.png)] bg-center bg-cover flex items-center pt-[8rem] lg:pt-0 lg:h-[100vh]'>
+				<div className='max-w-[1300px] md:w-[90%] w-[100%] px-[1rem] flex flex-col lg:flex-row items-center justify-between gap-[2.3125rem] mx-auto'>
+					<div className='lg:w-[50%]'>
 						<Chip name='iExcelo GIveback' />
-						<h1 className='my-[1rem] text-[3.25rem] font-[600] tracking-[-1.04px] text-[#101928] leading-[3.5rem]'>
+						<h1 className='my-[1rem] text-[2.75rem] md:text-[3.25rem] font-[600] tracking-[-.88px] md:tracking-[-1.04px] text-[#101928] leading-[3rem] md:leading-[3.5rem]'>
 							Learn, Excel, and Make a Difference
 						</h1>
-						<p className='mb-[1.5rem] text-[1.25rem] max-w-[33rem] leading-[1.75rem] tracking-[-.4px] text-[#98A2B3] font-[500]'>
+						<p className='mb-[1.5rem] text-[1.125rem] md:text-[1.25rem] max-w-[33rem] leading-[1.5rem] md:leading-[1.75rem] tracking-[-.36px] md:tracking-[-.4px] text-[#98A2B3] font-[500]'>
 							Join iExelo Giveback to support learning for underprivileged students. A
 							trusted platform that connects your donations to real educational impact.
 							Every contribution helps learners in need access tools and resources to
@@ -38,21 +38,18 @@ const GiveBack = () => {
 					<img
 						src={'/images/hero-img-5.png'}
 						alt='Hero Image 5'
-						className='w-[50%] h-[37.5rem]'
+						className='lg:w-[50%] w-full h-[22rem] md:h-[37.5rem]'
 						loading='lazy'
 					/>
 				</div>
 			</section>
 
-			<section className='py-[6rem] max-w-[1300px] flex justify-between items-center mx-auto w-[90%]'>
-				<div className='w-[47%]'>
+			<section className='py-[6rem] max-w-[1300px] flex justify-between items-center flex-col gap-[2rem] lg:gap-0 lg:flex-row mx-auto md:w-[90%] w-[100%] px-[1rem]'>
+				<div className='lg:w-[47%]'>
 					<div className='mb-[2rem]'>
-						<Chip
-							name='Our Benefits'
-							iconPath='hugeicons:star'
-						/>
+						<Chip name='Benefits' />
 					</div>
-					<h2 className='text-[2.75rem] leading-[3rem] w-[90%] tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]'>
+					<h2 className='md:text-[2.75rem] text-[2.25rem] leading-[2.75rem] md:leading-[3rem] w-[90%] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]'>
 						Why Join the GiveBack Program?
 					</h2>
 					<p className='text-[#667185] font-[400] text-[1.125rem] leading-[1.75rem] mb-[2.5rem]'>
@@ -96,18 +93,18 @@ const GiveBack = () => {
 						]?.map((item, index) => (
 							<div
 								key={`__item__${index}`}
-								className='flex justify-between w-full items-center'
+								className='flex justify-between flex-col md:flex-row w-full md:items-center gap-[1.5rem] md:gap-0'
 							>
 								{item?.map((itemChild, index) =>
 									itemChild?.type === 'divider' ? (
 										<span
 											key={`__divider___${index}`}
-											className='h-[12.1875rem] w-[1px] bg-[#DCDFE4]'
+											className='h-[12.1875rem] md:block hidden w-[1px] bg-[#DCDFE4]'
 										/>
 									) : (
 										<div
 											key={`__container___${index}`}
-											className='flex flex-col w-[45%] gap-[2rem]'
+											className='flex flex-col md:w-[45%] gap-[2rem]'
 										>
 											<span
 												style={{
@@ -138,7 +135,7 @@ const GiveBack = () => {
 						))}
 					</div>
 				</div>
-				<figure className='w-[47%]'>
+				<figure className='lg:w-[47%]'>
 					<img
 						src={`/images/giveback-img-1.png`}
 						alt='Giveback Image 1'
@@ -146,40 +143,37 @@ const GiveBack = () => {
 				</figure>
 			</section>
 
-			<section className='max-w-[1300px] pb-[6rem] mx-auto w-[90%]'>
+			<section className='max-w-[1300px] pb-[6rem] mx-auto md:w-[90%] w-[100%] px-[1rem]'>
 				<div className='mb-[2rem] w-fit mx-auto'>
 					<Chip name='How It Works' />
 				</div>
-				<h2 className='text-center text-[#101928] tracking-[-.88px] leading-[3rem] font-[600] text-[2.75rem] mb-[4rem]'>
+				<h2 className='text-center text-[#101928] tracking-[-.72px] md:tracking-[-.88px] leading-[2.75rem] md:leading-[3rem] font-[600] md:text-[2.75rem] text-[2.25rem] mb-[4rem]'>
 					Turning Support into Success
 				</h2>
-				<div className='flex gap-[2rem]'>
+				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[2rem] md:[&>*:last-child:nth-child(odd)]:col-span-2 md:[&>*:last-child:nth-child(odd)]:mx-auto md:[&>*:last-child:nth-child(odd)]:max-w-[calc(50%-1rem)] lg:[&>*:last-child:nth-child(odd)]:col-span-1 lg:[&>*:last-child:nth-child(odd)]:mx-0 lg:[&>*:last-child:nth-child(odd)]:max-w-none'>
 					{[
 						{
-							direction: 'column',
+							direction: 'flex-col',
 							icon: 'hugeicons:medal-02',
 							title: 'Inspire Through Identity',
 							content: `Your name proudly appears on the dashboard of every child or student you sponsor as their unique ID, a symbol of hope that reminds them someone believes in their potential.`,
 						},
 						{
-							direction: 'column-reverse',
-							icon: 'hugeicons:medal-02',
-							title: 'Inspire Through Identity',
-							content: `Your name proudly appears on the dashboard of every child or student you sponsor as their unique ID, a symbol of hope that reminds them someone believes in their potential.`,
+							direction: 'lg:flex-col-reverse flex-col',
+							icon: 'hugeicons:chart-histogram',
+							title: 'Track Impact in Real Time',
+							content: `Gain access to a personalized dashboard where you can see the academic growth and progress of every child or student you sponsor, all updated in real time.`,
 						},
 						{
-							direction: 'column',
-							icon: 'hugeicons:medal-02',
-							title: 'Inspire Through Identity',
-							content: `Your name proudly appears on the dashboard of every child or student you sponsor as their unique ID, a symbol of hope that reminds them someone believes in their potential.`,
+							direction: 'flex-col',
+							icon: 'hugeicons:book-open-02',
+							title: 'Send Words That Inspire',
+							content: `Connect directly with the children or students you sponsor by sending personalized, uplifting messages through your dashboard.`,
 						},
 					]?.map((item, index) => (
 						<div
-							style={{
-								flexDirection: item?.direction as 'column' | 'column-reverse',
-							}}
 							key={`__item__card__${index}`}
-							className='flex flex-col h-[28.9375rem] flex-1 gap-[1.5rem]'
+							className={`flex h-[28.9375rem] ${item?.direction} flex-1 gap-[1.5rem]`}
 						>
 							<div className='flex flex-col gap-[2rem]'>
 								<span

@@ -26,12 +26,21 @@ const FAQs = () => {
 	const filteredFAQs = faqData.filter((faq) => faq.category === activeCategory);
 
 	return (
-		<main className='bg-white'>
-			<section className='bg-[url(/images/background-pattern-3.png)] bg-center bg-cover justify-center flex-col gap-[1rem] flex items-center h-[100vh]'>
-				<h2 className='text-[3.25rem] text-center leading-[3.5rem] tracking-[-1.04px] font-[600] text-[#101928]'>
+		<main className='bg-white w-[100%] overflow-hidden'>
+			<section className='bg-[url(/images/background-pattern-3.png)] bg-center bg-cover justify-center flex-col gap-[1rem] flex px-[1rem] items-center h-[100vh]'>
+				<h2
+					className='text-[2.75rem] md:text-[3.25rem] text-center leading-[3.5rem] tracking-[-.88px] md:tracking-[-1.04px] font-[600] text-[#101928]'
+					data-aos='fade-up'
+					data-aos-duration='700'
+				>
 					Frequently Asked Questions
 				</h2>
-				<p className='text-[#98A2B3] text-center font-[500] max-w-[50rem] tracking-[-.4px] text-[1.25rem] leading-[1.75rem] mb-[4rem]'>
+				<p
+					className='text-[#98A2B3] text-center font-[500] max-w-[50rem] tracking-[-.36px] md:tracking-[-.4px] md:text-[1.25rem] text-[1.125rem] leading-[1.5rem] md:leading-[1.75rem] mb-[4rem]'
+					data-aos='fade-up'
+					data-aos-duration='700'
+					data-aos-delay='100'
+				>
 					Everything you need to know about the product and its benefits. Can&apos;t
 					find the answer you&apos;re looking for?{' '}
 					<a
@@ -42,15 +51,19 @@ const FAQs = () => {
 					</a>
 				</p>
 			</section>
-			<section className='py-[6rem] max-w-[1300px] items-start justify-between mx-auto w-[90%] flex gap-[2rem]'>
-				<div className='flex sticky top-[3rem] gap-[1.5rem] w-[100%] flex-col max-w-[17.125rem]'>
+			<section className='py-[6rem] max-w-[1300px] items-start justify-between mx-auto md:w-[90%] w-[100%] px-[1rem] flex flex-col lg:flex-row gap-[4.375rem] lg:gap-[2rem]'>
+				<div
+					className='flex lg:sticky top-[3rem] gap-[1.5rem] w-[100%] flex-col max-w-[17.125rem]'
+					data-aos='fade-right'
+					data-aos-duration='700'
+				>
 					{categories.map((category, index) => (
 						<button
 							className={`pl-[.875rem] transition-colors duration-[.4s] text-left border-l-[2px] ${
 								activeCategory === category
 									? 'border-[#007FFF] text-[#007FFF]'
 									: 'border-transparent text-[#98A2B3]'
-							} py-[.3rem] font-[500] text-[1.25rem] leading-[1.75rem] tracking-[-.4px] cursor-pointer w-full hover:bg-[#00000010]`}
+							} py-[.3rem] font-[500] text-[1.25rem] leading-[1.75rem] tracking-[-.4px] cursor-pointer w-full hover:text-[#007FFF]`}
 							key={`__button__item__deet__${index}__`}
 							onClick={() => {
 								setActiveCategory(category);
@@ -61,7 +74,11 @@ const FAQs = () => {
 						</button>
 					))}
 				</div>
-				<div className='max-w-[51.75rem] w-[100%] flex flex-col gap-[1rem]'>
+				<div
+					className='max-w-[51.75rem] w-[100%] flex flex-col gap-[1rem]'
+					data-aos='fade-left'
+					data-aos-duration='700'
+				>
 					{filteredFAQs.map((faq, index) => (
 						<button
 							key={faq.id}

@@ -53,16 +53,20 @@ const FaqV1 = () => {
 	];
 
 	return (
-		<section className='py-20 max-w-[1300px] flex justify-between items-start mx-auto w-[90%] bg-white gap-12'>
-			<div className='w-[40%] sticky top-12'>
+		<section className='py-20 max-w-[1300px] flex flex-col lg:flex-row justify-between items-start mx-auto w-[90%] bg-white gap-[2rem] lg:gap-12'>
+			<div
+				className='lg:w-[40%] lg:sticky top-12'
+				data-aos='fade-right'
+				data-aos-duration='700'
+			>
 				<Chip
 					name='FAQs'
 					iconPath='hugeicons:bubble-chat-question'
 				/>
-				<h2 className='text-5xl mt-8 leading-tight tracking-tight font-semibold text-[#101928] mb-2'>
+				<h2 className='md:text-[2.75rem] text-[2.25rem] mt-[1.875rem] leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] font-semibold text-[#101928] mb-2'>
 					Got Questions? We&apos;ve Got Answers
 				</h2>
-				<p className='text-[#667185] font-normal text-lg leading-7 mb-10'>
+				<p className='text-[#667185] font-[400] text-[1.125rem] leading-[1.75rem]'>
 					If you have any additional questions or need further clarifications,
 					don&apos;t hesitate to get in touch with us. We&apos;re here to help you!
 				</p>
@@ -73,7 +77,9 @@ const FaqV1 = () => {
 					boxShadow:
 						'0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)',
 				}}
-				className='border border-[#DCDFE4] py-1 rounded-[2rem] w-[53%] overflow-hidden'
+				className='border border-[#DCDFE4] py-1 rounded-[2rem] lg:w-[53%] overflow-hidden'
+				data-aos='fade-left'
+				data-aos-duration='700'
 			>
 				{faqs.map((faq, index) => (
 					<div

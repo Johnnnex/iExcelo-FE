@@ -3,11 +3,13 @@ import { SVGClient } from '../atoms';
 import Link from 'next/link';
 
 const Footer = () => {
+	const currentYear = new Date().getFullYear();
+
 	return (
 		<footer className='bg-[#E6F2FF] py-[4rem]'>
-			<section className='max-w-[1300px] mx-auto w-[90%]'>
+			<section className='max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]'>
 				<div className='flex flex-col gap-[4rem]'>
-					<div className='flex items-start justify-between'>
+					<div className='flex items-start flex-col lg:flex-row gap-[3.25rem] lg:gap-0 justify-between'>
 						<div className='flex flex-col gap-[2rem]'>
 							<Link href={'/'}>
 								<SVGClient src='/svg/logo.svg' />
@@ -41,7 +43,7 @@ const Footer = () => {
 							</div>
 							<div className='flex flex-col gap-[.25rem]'>
 								<span className='text-[#1D2739] text-[.875rem] font-[500] leading-[1.25rem]'>
-									E-mail Address::
+									E-mail Address:
 								</span>
 								<span className='leading-[1.25rem] font-[400] text-[#667185] text-[.875rem]'>
 									Platform@iexcelo.com
@@ -49,30 +51,29 @@ const Footer = () => {
 							</div>
 						</div>
 					</div>
-					<div className='border-t border-[#DCDFE4] flex justify-between items-center pt-[2rem]'>
-						<div className='flex gap-[1.5rem] items-center'>
-							{[
-								{ path: 'facebook', url: '/' },
-								{ path: 'twitter', url: '/' },
-								{ path: 'instagram', url: '/' },
-							]?.map((item, index) => (
-								<a
-									href={item?.path}
-									target='_blank'
-									key={`__icon__social__${index}`}
-									className='h-[1.5rem] w-[1.5rem] rounded-[50%] bg-[#007FFF] flex items-center justify-center'
-								>
-									<SVGClient src={`/svg/${item?.path}.svg`} />
-								</a>
-							))}
-						</div>
-						<div className='flex gap-[2rem] items-center'>
-							{[
-								{ title: 'Terms of Service', url: '/terms' },
-								{ title: 'Privacy Policy', url: '/privacy' },
-								{ title: '© Copyright 2025 | All rights are reserved by iExcelo' },
-							]?.map((item, index) =>
-								item?.url ? (
+					<div className='border-t border-[#DCDFE4] pt-[2rem]'>
+						<div className='grid grid-cols-1 lg:grid-cols-2 gap-[2rem]'>
+							<div className='flex gap-[1.5rem] items-center'>
+								{[
+									{ path: 'facebook', url: '/' },
+									{ path: 'twitter', url: '/' },
+									{ path: 'instagram', url: '/' },
+								]?.map((item, index) => (
+									<a
+										href={item?.url}
+										target='_blank'
+										key={`__icon__social__${index}`}
+										className='h-[1.5rem] w-[1.5rem] rounded-[50%] bg-[#007FFF] flex items-center justify-center'
+									>
+										<SVGClient src={`/svg/${item?.path}.svg`} />
+									</a>
+								))}
+							</div>
+							<div className='flex gap-[2rem] items-center flex-wrap lg:justify-end'>
+								{[
+									{ title: 'Terms of Service', url: '/terms' },
+									{ title: 'Privacy Policy', url: '/privacy' },
+								]?.map((item, index) => (
 									<Link
 										href={item?.url}
 										className='text-[#667185] leading-[1.25rem] font-[400] text-[.875rem]'
@@ -80,15 +81,11 @@ const Footer = () => {
 									>
 										{item?.title}
 									</Link>
-								) : (
-									<span
-										className='text-[#667185] leading-[1.25rem] font-[400] text-[.875rem]'
-										key={`__text__${index}`}
-									>
-										{item?.title}
-									</span>
-								)
-							)}
+								))}
+							</div>
+							<span className='text-[#667185] leading-[1.25rem] font-[400] text-[.875rem] lg:col-span-2 lg:text-center'>
+								© Copyright {currentYear} | All rights are reserved by iExcelo
+							</span>
 						</div>
 					</div>
 				</div>

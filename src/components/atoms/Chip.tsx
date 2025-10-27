@@ -3,7 +3,7 @@ import React from 'react';
 
 const Chip = ({ name, iconPath }: { name: string; iconPath?: string }) => {
 	return (
-		<div className='flex p-[.5rem_.75rem] items-center w-fit rounded-[1rem] gap-[.5rem] border border-[#F6BEDA] bg-[#FCEAF3]'>
+		<div className='flex p-[.5rem_.75rem] items-center w-fit rounded-[1rem] gap-[.5rem] border border-[#E32E89]'>
 			{iconPath && (
 				<Icon
 					icon={iconPath}
@@ -12,7 +12,7 @@ const Chip = ({ name, iconPath }: { name: string; iconPath?: string }) => {
 					color='#E32E89'
 				/>
 			)}
-			<span className='text-[#E958A1] text-[1rem] font-[500] leading-[1.5rem]'>
+			<span className='text-[#E32E89] text-[1rem] font-[500] leading-[1.5rem]'>
 				{name}
 			</span>
 		</div>

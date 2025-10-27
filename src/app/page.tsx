@@ -12,12 +12,16 @@ export const metadata: Metadata = {
 /* eslint-disable @next/next/no-img-element */
 export default function Home() {
 	return (
-		<main className='bg-white'>
-			<section className='bg-[url(/images/background-pattern.png)] bg-center bg-cover flex justify-end h-[122vh]'>
-				<div className='max-w-[1300px] flex flex-col gap-[2rem] justify-end w-[90%] mx-auto'>
-					<div className='flex items-center justify-between'>
-						<div className='max-w-[40rem]'>
-							<h1 className='mb-[1rem] text-[3.25rem] font-[600] tracking-[-1.04px] text-[#101928] leading-[3.5rem]'>
+		<main className='bg-white w-[100%] overflow-hidden'>
+			<section className='bg-[url(/images/background-pattern.png)] bg-center bg-cover flex justify-end pt-[8rem] md:pt-[10rem]'>
+				<div className='max-w-[1300px] flex flex-col md:gap-[3rem] gap-[2rem] lg:gap-[2rem] justify-end md:w-[90%] w-[100%] px-[1rem] mx-auto'>
+					<div className='flex flex-col lg:flex-row items-center gap-[2rem] md:gap-[3rem] lg:gap-0 justify-between'>
+						<div
+							className='max-w-[40rem]'
+							data-aos='fade-up'
+							data-aos-duration='800'
+						>
+							<h1 className='mb-[1rem] text-[2.75rem] text-center lg:text-left md:text-[3.25rem] font-[600] md:tracking-[-1.04px] tracking-[-.88px] text-[#101928] leading-[3rem] md:leading-[3.5rem]'>
 								Revise Smarter, Practice Harder and{' '}
 								<span className='text-[#E32E89] z-[3] relative'>
 									Excel{' '}
@@ -28,10 +32,10 @@ export default function Home() {
 								</span>
 								<br /> in every Exam!
 							</h1>
-							<p className='mb-[1.5rem] text-[1.5rem] max-w-[33rem] leading-[2rem] tracking-[-.48px] text-[#667185] font-[500]'>
+							<p className='mb-[1.5rem] text-center lg:text-left text-[1.125rem] md:text-[1.5rem] lg:ml-0 mx-auto max-w-[33rem] leading-[1.5rem] md:leading-[2rem] tracking-[-.36px] md:tracking-[-.48px] text-[#667185] font-[500]'>
 								Modern online revision that makes exam prep simpler and smarter
 							</p>
-							<Button>
+							<Button className='w-fit mx-auto lg:ml-0'>
 								Get Started
 								<Icon
 									icon='hugeicons:arrow-right-02'
@@ -43,33 +47,53 @@ export default function Home() {
 						<img
 							src={'/images/hero-img-1.png'}
 							alt='Hero Image 1'
-							className='max-w-[36.625rem] h-[34.5rem]'
+							className='max-w-[36.625rem] w-[100%] md:h-[34.5rem]'
 							loading='lazy'
+							data-aos='fade-left'
+							data-aos-duration='800'
+							data-aos-delay='100'
 						/>
 					</div>
 					<img
 						src={'/images/hero-img-2.png'}
 						alt='Hero Image 2'
 						loading='lazy'
+						data-aos='fade-up'
+						data-aos-duration='800'
+						data-aos-delay='200'
 					/>
 				</div>
 			</section>
 
-			<section className='py-[6rem] max-w-[1300px] mx-auto w-[90%]'>
-				<Chip
-					name='Our Benefits'
-					iconPath='hugeicons:star'
-				/>
-				<div className='mt-[2rem] flex justify-between items-center'>
-					<div className='w-[47%]'>
-						<h2 className='text-[2.75rem] leading-[3rem] w-[90%] tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]'>
+			<section className='py-[6rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]'>
+				<div
+					data-aos='fade-up'
+					data-aos-duration='600'
+				>
+					<Chip
+						name='Our Benefits'
+						iconPath='hugeicons:star'
+					/>
+				</div>
+				<div className='mt-[2rem] flex flex-col lg:flex-row gap-[3.5625rem] lg:gap-0 justify-between lg:items-center'>
+					<div className='lg:w-[47%]'>
+						<h2
+							className='md:text-[2.75rem] text-[2.25rem] leading-[2.75rem] md:leading-[3rem] w-[90%] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]'
+							data-aos='fade-up'
+							data-aos-duration='700'
+						>
 							Why Students Choose Us to Excel.
 						</h2>
-						<p className='text-[#667185] font-[400] text-[1.125rem] leading-[1.75rem] mb-[2.5rem]'>
+						<p
+							className='text-[#667185] font-[400] text-[1.125rem] leading-[1.75rem] mb-[2.5rem]'
+							data-aos='fade-up'
+							data-aos-duration='700'
+							data-aos-delay='100'
+						>
 							From top-level exam questions to smart revision tools, we make
 							preparation simpler, faster, and more effective.
 						</p>
-						<div className=' gap-[1.5rem_1rem] grid grid-cols-1 md:grid-cols-2'>
+						<div className='md:gap-[1.5rem_1rem] gap-[1rem] grid grid-cols-1 md:grid-cols-2'>
 							{[
 								{
 									title: 'Practice with the Best',
@@ -99,6 +123,9 @@ export default function Home() {
 											'0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)',
 									}}
 									className='p-[1rem] flex flex-col gap-[1rem] bg-white rounded-[.75rem] overflow-hidden'
+									data-aos='fade-up'
+									data-aos-duration='600'
+									data-aos-delay={index * 100}
 								>
 									<span className='p-[.75rem] w-fit bg-[#E6F2FF] rounded-[.5rem]'>
 										<Icon
@@ -118,7 +145,11 @@ export default function Home() {
 							))}
 						</div>
 					</div>
-					<figure className='w-[47%]'>
+					<figure
+						className='lg:w-[47%]'
+						data-aos='fade-left'
+						data-aos-duration='800'
+					>
 						<img
 							src={`/images/landing-img-1.png`}
 							alt='Landing Image 1'
@@ -127,21 +158,34 @@ export default function Home() {
 				</div>
 			</section>
 
-			<section className='py-[6rem] max-w-[1300px] mx-auto w-[90%]'>
-				<div className='w-fit mx-auto mb-[2rem]'>
+			<section className='py-[6rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]'>
+				<div
+					className='w-fit mx-auto mb-[2rem]'
+					data-aos='fade-up'
+					data-aos-duration='600'
+				>
 					<Chip
 						name='Our Features'
 						iconPath='hugeicons:sparkles'
 					/>
 				</div>
-				<h2 className='text-[2.75rem] text-center leading-[3rem] tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]'>
+				<h2
+					className='text-[2.25rem] md:text-[2.75rem] text-center leading-[2.75rem] md:leading-[3rem] md:tracking-[-.88px] tracking-[-.72px] font-[600] text-[#101928] mb-[.5rem]'
+					data-aos='fade-up'
+					data-aos-duration='700'
+				>
 					Where Success Meets Innovation.
 				</h2>
-				<p className='text-[#667185] font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[2.5rem]'>
+				<p
+					className='text-[#667185] font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[2.5rem]'
+					data-aos='fade-up'
+					data-aos-duration='700'
+					data-aos-delay='100'
+				>
 					Revise smarter, support others through giveback, and unlock new
 					opportunities with our affiliate program
 				</p>
-				<div className='flex gap-[1rem] justify-between'>
+				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1rem]'>
 					{[
 						{
 							title: 'Master Every Question',
@@ -164,11 +208,14 @@ export default function Home() {
 					]?.map((item, index) => (
 						<div
 							key={`__item__${item?.title}__${index}`}
-							className='flex-1 rounded-[.75rem] overflow-hidden'
+							className='rounded-[.75rem] overflow-hidden md:last:col-span-2 md:last:max-w-[50%] md:last:mx-auto lg:last:col-span-1 lg:last:max-w-none'
 							style={{
 								boxShadow:
 									'0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)',
 							}}
+							data-aos='fade-up'
+							data-aos-duration='700'
+							data-aos-delay={index * 100}
 						>
 							<figure className='h-[15.25rem] overflow-hidden'>
 								<img
@@ -204,19 +251,33 @@ export default function Home() {
 				</div>
 			</section>
 
-			<section className='py-[4rem] max-w-[1300px] mx-auto w-[90%]'>
-				<div className='w-fit mx-auto mb-[2rem]'>
+			<section className='py-[4rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]'>
+				<div
+					className='w-fit mx-auto mb-[2rem]'
+					data-aos='fade-up'
+					data-aos-duration='600'
+				>
 					<Chip
 						name='Testimonials'
 						iconPath='hugeicons:megaphone-02'
 					/>
 				</div>
-				<h2 className='text-[2.75rem] text-center leading-[3rem] tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]'>
+				<h2
+					className='md:text-[2.75rem] text-[2.25rem] text-center leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]'
+					data-aos='fade-up'
+					data-aos-duration='700'
+				>
 					What Our Users Say
 				</h2>
-				<p className='text-[#667185] font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[2.5rem]'>
+				<p
+					className='text-[#667185] font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[2.5rem]'
+					data-aos='fade-up'
+					data-aos-duration='700'
+					data-aos-delay='100'
+				>
 					Used by thousands of students, parents and partners
 				</p>
+
 				<Testimonial />
 			</section>
 
