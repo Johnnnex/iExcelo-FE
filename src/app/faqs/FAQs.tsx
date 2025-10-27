@@ -44,7 +44,7 @@ const FAQs = () => {
 					Everything you need to know about the product and its benefits. Can&apos;t
 					find the answer you&apos;re looking for?{' '}
 					<a
-						href=''
+						href='mailto:platform@iexcelo.com'
 						className='text-[#E32E89] underline'
 					>
 						Please contact our friendly team.

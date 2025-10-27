@@ -191,19 +191,19 @@ export default function Home() {
 							title: 'Master Every Question',
 							icon: 'hugeicons:book-open-02',
 							content: `Access curated past exam questions designed to help you practice smarter and build confidence for the real test.`,
-							href: 'https://johnex.com',
+							href: '/revisions',
 						},
 						{
 							title: 'Support Students',
 							icon: 'hugeicons:healtcare',
 							content: `Our Giveback program connects sponsors and learners to make education accessible for everyone.`,
-							href: 'https://johnex.com',
+							href: '/giveback',
 						},
 						{
 							title: 'Earn as You Share',
 							icon: 'hugeicons:affiliate',
 							content: `Our affiliate program gives you a simple way to earn by sharing the power of smart learning.`,
-							href: 'https://johnex.com',
+							href: '/affiliate',
 						},
 					]?.map((item, index) => (
 						<div
@@ -239,7 +239,6 @@ export default function Home() {
 									{item?.content}
 								</p>
 								<Link
-									target='_blank'
 									className='block text-[#E32E89] text-[.75rem] font-[600] leading-[1.25rem]'
 									href={item?.href}
 								>

@@ -45,9 +45,12 @@ const Footer = () => {
 								<span className='text-[#1D2739] text-[.875rem] font-[500] leading-[1.25rem]'>
 									E-mail Address:
 								</span>
-								<span className='leading-[1.25rem] font-[400] text-[#667185] text-[.875rem]'>
-									Platform@iexcelo.com
-								</span>
+								<a
+									href='mailto:platform@iexcelo.com'
+									className='leading-[1.25rem] font-[400] text-[#667185] text-[.875rem]'
+								>
+									platform@iexcelo.com
+								</a>
 							</div>
 						</div>
 					</div>

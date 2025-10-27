@@ -33,7 +33,8 @@ const Contact = () => {
 						icon: 'hugeicons:mail-01',
 						name: 'Email',
 						content: 'Our friendly team is here to help.',
-						moreInfo: 'Platform@iexcelo.com',
+						moreInfo: 'platform@iexcelo.com',
+						url: 'mailto:platform@iexcelo.com',
 					},
 					{
 						icon: 'hugeicons:location-06',
@@ -72,9 +73,18 @@ const Contact = () => {
 								{item?.content}
 							</span>
 						</div>
-						<p className='text-[#007FFF] text-center leading-[1.5rem] font-[600] text-[1rem]'>
-							{item?.moreInfo}
-						</p>
+						{item?.url ? (
+							<a
+								href={item?.url}
+								className='text-[#007FFF] text-center leading-[1.5rem] font-[600] text-[1rem]'
+							>
+								{item?.moreInfo}
+							</a>
+						) : (
+							<p className='text-[#007FFF] text-center leading-[1.5rem] font-[600] text-[1rem]'>
+								{item?.moreInfo}
+							</p>
+						)}
 					</div>
 				))}
 			</section>
