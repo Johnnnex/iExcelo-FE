@@ -1,1 +1,1 @@
-declare module 'aos/dist/aos.css';
+declare module "aos/dist/aos.css";

@@ -1,28 +1,27 @@
-'use client';
-
-import { Geist } from 'next/font/google';
-import './globals.css';
-import { Header, Footer, AOSInit } from '@/components/organisms';
+import { Geist } from "next/font/google";
+import "./globals.css";
+import { ClientLayout, UtilsProvider } from "@/components/organisms";
 
 export const geistSans = Geist({
-	variable: '--font-geist-sans',
-	weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-	subsets: ['latin'],
+  variable: "--font-geist-sans",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
 });
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang='en'>
-			<AOSInit />
-			<body className={`${geistSans.className} antialiased`}>
-				<Header />
-				{children}
-				<Footer />
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
+      <body className={`${geistSans.className} antialiased`} suppressHydrationWarning>
+        <UtilsProvider />
+        <ClientLayout>{children}</ClientLayout>
+      </body>
+    </html>
+  );
 }
