@@ -166,12 +166,12 @@ const SkeletonSubjectScores = () => (
     className="bg-white rounded-xl p-4 border border-[#D6D6D6]"
   >
     <div className="animate-pulse">
-      <div className="flex items-start justify-between mb-6 px-[.5rem]">
+      <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 px-[.5rem] gap-3">
         <div className="space-y-2">
           <div className="h-5 bg-gray-100 rounded w-52" />
           <div className="h-3 bg-gray-100 rounded w-44" />
         </div>
-        <div className="h-9 bg-gray-100 rounded-lg w-56" />
+        <div className="h-9 bg-gray-100 rounded-lg w-full md:w-56" />
       </div>
       <div className="h-[320px] bg-gray-100 rounded" />
     </div>
@@ -184,12 +184,12 @@ const SkeletonProgressOverTime = () => (
     className="bg-white rounded-xl p-4 border border-[#D6D6D6]"
   >
     <div className="animate-pulse">
-      <div className="flex items-start justify-between mb-6 px-[.5rem]">
+      <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 px-[.5rem] gap-3">
         <div className="space-y-2">
           <div className="h-5 bg-gray-100 rounded w-44" />
           <div className="h-3 bg-gray-100 rounded w-36" />
         </div>
-        <div className="h-9 bg-gray-100 rounded-lg w-36" />
+        <div className="h-9 bg-gray-100 rounded-lg w-full md:w-36" />
       </div>
       <div className="h-[320px] bg-gray-100 rounded" />
     </div>
@@ -217,12 +217,12 @@ const SkeletonRanking = () => (
     className="bg-white rounded-xl p-4 border border-[#D6D6D6]"
   >
     <div className="animate-pulse">
-      <div className="flex items-start justify-between mb-6 px-[.5rem]">
+      <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 px-[.5rem] gap-3">
         <div className="space-y-2">
           <div className="h-5 bg-gray-100 rounded w-40" />
           <div className="h-3 bg-gray-100 rounded w-32" />
         </div>
-        <div className="h-9 bg-gray-100 rounded-lg w-56" />
+        <div className="h-9 bg-gray-100 rounded-lg w-full md:w-56" />
       </div>
       <div className="h-[320px] bg-gray-100 rounded" />
     </div>
@@ -409,7 +409,7 @@ const Analytics = () => {
     <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
       {/* Header */}
       <section className="mb-5">
-        <h1 className="text-2xl font-[600] text-[#171717]">Analytics</h1>
+        <h1 className="text-xl md:text-2xl font-[600] text-[#171717]">Analytics</h1>
         <p className="text-gray-500 text-sm mt-1">
           Your live performance, progress and the overall performance of other
           candidates
@@ -417,14 +417,14 @@ const Analytics = () => {
       </section>
 
       {/* ── Top Stats ──────────────────────────────────────────────────────── */}
-      <section className="grid gap-6 grid-cols-3">
+      <section className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
         {/* Card 1: Overall Accuracy */}
         <div
           style={{ boxShadow: CARD_SHADOW }}
-          className="bg-white flex items-center rounded-xl py-5 px-4 border border-[#D6D6D6]"
+          className="bg-white flex items-center rounded-xl py-3 px-3 md:py-5 md:px-4 border border-[#D6D6D6]"
         >
           <div className="w-full">
-            <div className="bg-[#E5E8F8] rounded-lg flex p-[.875rem] w-fit items-center justify-center mb-4">
+            <div className="bg-[#E5E8F8] rounded-lg flex p-[.625rem] md:p-[.875rem] w-fit items-center justify-center mb-3 md:mb-4">
               <Icon
                 icon="hugeicons:target-01"
                 height="1.5rem"
@@ -460,7 +460,7 @@ const Analytics = () => {
                 )}
               </div>
             </div>
-            <p className="text-[1.75rem] mb-4 leading-[2.25rem] font-[500] text-[#2B2B2B]">
+            <p className="text-xl md:text-[1.75rem] mb-3 md:mb-4 leading-7 md:leading-[2.25rem] font-[500] text-[#2B2B2B]">
               {stats ? `${Math.round(stats.overallAccuracy)}%` : "—"}
             </p>
             <div className="flex gap-[.25rem] items-center">
@@ -496,10 +496,10 @@ const Analytics = () => {
         {/* Card 2: Exams Completed */}
         <div
           style={{ boxShadow: CARD_SHADOW }}
-          className="bg-white flex items-center rounded-xl py-5 px-4 border border-[#D6D6D6]"
+          className="bg-white flex items-center rounded-xl py-3 px-3 md:py-5 md:px-4 border border-[#D6D6D6]"
         >
           <div>
-            <div className="bg-[#E6E6F1] rounded-lg flex p-[.875rem] w-fit items-center justify-center mb-4">
+            <div className="bg-[#E6E6F1] rounded-lg flex p-[.625rem] md:p-[.875rem] w-fit items-center justify-center mb-3 md:mb-4">
               <Icon
                 icon="hugeicons:medal-01"
                 height="1.5rem"
@@ -508,7 +508,7 @@ const Analytics = () => {
               />
             </div>
             <p className="text-[#575757] text-sm mb-1">Exams Completed</p>
-            <p className="text-[1.75rem] mb-4 leading-[2.25rem] font-[500] text-[#2B2B2B]">
+            <p className="text-xl md:text-[1.75rem] mb-3 md:mb-4 leading-7 md:leading-[2.25rem] font-[500] text-[#2B2B2B]">
               {stats ? stats.totalExamsCompleted : "—"}
             </p>
             <div className="flex gap-[.25rem] items-center">
@@ -531,10 +531,10 @@ const Analytics = () => {
         {/* Card 3: Study Streak */}
         <div
           style={{ boxShadow: CARD_SHADOW }}
-          className="bg-white flex items-center rounded-xl py-5 px-4 border border-[#D6D6D6]"
+          className="bg-white flex items-center rounded-xl py-3 px-3 md:py-5 md:px-4 border border-[#D6D6D6]"
         >
           <div>
-            <div className="bg-[#F3F3F3] rounded-lg flex p-[.875rem] w-fit items-center justify-center mb-4">
+            <div className="bg-[#F3F3F3] rounded-lg flex p-[.625rem] md:p-[.875rem] w-fit items-center justify-center mb-3 md:mb-4">
               <Icon
                 icon="hugeicons:book-open-02"
                 height="1.5rem"
@@ -543,7 +543,7 @@ const Analytics = () => {
               />
             </div>
             <p className="text-[#575757] text-sm mb-1">Study Streak</p>
-            <p className="text-[1.75rem] mb-4 leading-[2.25rem] font-[500] text-[#2B2B2B]">
+            <p className="text-xl md:text-[1.75rem] mb-3 md:mb-4 leading-7 md:leading-[2.25rem] font-[500] text-[#2B2B2B]">
               {streak ? `${streak.currentStreak} days` : "—"}
             </p>
             <div className="flex gap-[.25rem] items-center">
@@ -566,9 +566,9 @@ const Analytics = () => {
             style={{ boxShadow: CARD_SHADOW }}
             className="bg-white rounded-xl p-4 border border-[#D6D6D6]"
           >
-            <div className="flex items-start px-[.5rem] justify-between mb-6 gap-4">
+            <div className="flex flex-col md:flex-row md:items-start px-[.5rem] justify-between mb-6 gap-4">
               <div className="shrink-0">
-                <h3 className="font-[500] text-[1.125rem] text-gray-900">
+                <h3 className="font-[500] text-base md:text-[1.125rem] text-gray-900">
                   Score Against Each Subject (%)
                 </h3>
                 <p className="text-[#757575] text-[.875rem] font-[400] leading-5">
@@ -612,15 +612,15 @@ const Analytics = () => {
       <section className="grid mt-5 grid-cols-1 items-stretch lg:grid-cols-3 gap-6">
         {/* Chart 2: Progress Over Time (granularity only) */}
         {!progressLoaded.current && isLoadingProgressOverTime ? (
-          <SkeletonProgressOverTime />
+          <div className="lg:col-span-2"><SkeletonProgressOverTime /></div>
         ) : (
           <div
             style={{ boxShadow: CARD_SHADOW }}
             className="bg-white lg:col-span-2 rounded-xl p-4 border border-[#D6D6D6]"
           >
-            <div className="flex items-start px-[.5rem] justify-between mb-6 gap-3">
+            <div className="flex flex-col md:flex-row md:items-start px-[.5rem] justify-between mb-6 gap-3">
               <div className="shrink-0">
-                <h3 className="font-[500] text-[1.125rem] text-gray-900">
+                <h3 className="font-[500] text-base md:text-[1.125rem] text-gray-900">
                   Progress Over Time
                 </h3>
                 <p className="text-[#757575] text-[.875rem] font-[400] leading-5">
@@ -697,7 +697,7 @@ const Analytics = () => {
             className="bg-white rounded-xl p-4 border border-[#D6D6D6] flex flex-col"
           >
             <div className="mb-4">
-              <h3 className="font-[500] text-[1.125rem] text-gray-900">
+              <h3 className="font-[500] text-base md:text-[1.125rem] text-gray-900">
                 Question Distribution
               </h3>
               <p className="text-[#757575] text-[.875rem] font-[400] leading-5">
@@ -725,15 +725,15 @@ const Analytics = () => {
       <section className="grid mt-5 grid-cols-1 items-stretch lg:grid-cols-3 gap-6">
         {/* Chart 4: Student Ranking (date range) */}
         {!rankingLoaded.current && isLoadingRankingAnalytics ? (
-          <SkeletonRanking />
+          <div className="lg:col-span-2"><SkeletonRanking /></div>
         ) : (
           <div
             style={{ boxShadow: CARD_SHADOW }}
             className="bg-white lg:col-span-2 rounded-xl p-4 border border-[#D6D6D6]"
           >
-            <div className="flex items-start px-[.5rem] justify-between mb-2 gap-3">
+            <div className="flex flex-col md:flex-row md:items-start px-[.5rem] justify-between mb-2 gap-3">
               <div className="shrink-0">
-                <h3 className="font-[500] text-[1.125rem] text-gray-900">
+                <h3 className="font-[500] text-base md:text-[1.125rem] text-gray-900">
                   Student Ranking
                 </h3>
                 <p className="text-[#757575] text-[.875rem] font-[400] leading-5">
@@ -794,7 +794,7 @@ const Analytics = () => {
             className="bg-white rounded-xl p-4 border border-[#D6D6D6] flex flex-col"
           >
             <div className="mb-3">
-              <h3 className="font-[500] text-[1.125rem] text-gray-900">
+              <h3 className="font-[500] text-base md:text-[1.125rem] text-gray-900">
                 Daily Test Attempt
               </h3>
               <p className="text-[#757575] text-[.875rem] font-[400] leading-5">

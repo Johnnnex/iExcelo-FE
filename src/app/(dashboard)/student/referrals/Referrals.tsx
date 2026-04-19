@@ -205,9 +205,9 @@ const Referrals = () => {
   return (
     <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-[600] text-[#171717]">
+          <h1 className="text-xl md:text-2xl font-[600] text-[#171717]">
             Referrals & Invites
           </h1>
           <p className="text-gray-500 text-sm mt-1">
@@ -216,7 +216,7 @@ const Referrals = () => {
           </p>
         </div>
         <Button onClick={() => setShowShareModal(true)}>
-          <Icon icon="hugeicons:gift" className="w-5 h-5" />
+          <Icon icon="hugeicons:gift" className="w-4 h-4 md:w-5 md:h-5" />
           Invite
         </Button>
       </div>
@@ -237,22 +237,22 @@ const Referrals = () => {
       )}
 
       {/* Top row: hero card + balance */}
-      <div className="flex mb-6.5 gap-[1rem]">
+      <div className="flex flex-col md:flex-row mb-6 gap-[1rem]">
         <div
           style={{
             background:
               "radial-gradient(71.77% 100% at 50.18% 0%, #5A2958 13.03%, #371D52 41.67%, #061023 87.06%)",
           }}
-          className="p-[.9375rem_1.25rem] flex items-center justify-between h-42.5 w-[70%] rounded-[.5rem]"
+          className="p-[.9375rem_1.25rem] flex items-center justify-between h-auto md:h-42.5 w-full md:w-[70%] rounded-[.5rem]"
         >
           <div className="flex h-full justify-between flex-col">
             <div>
-              <h2 className="text-[1.25rem] mb-1 font-[600] leading-7 tracking-[-.4px] text-white">
+              <h2 className="text-[1.125rem] md:text-[1.25rem] mb-1 font-[600] leading-7 tracking-[-.4px] text-white">
                 {hasEverSubscribed
                   ? "Refer and earn 15% commission"
                   : "Share your referral link"}
               </h2>
-              <p className="leading-6 font-[400] text-[1rem] text-[#D0D5DD]">
+              <p className="leading-6 font-[400] text-[.875rem] md:text-[1rem] text-[#D0D5DD]">
                 {hasEverSubscribed
                   ? "Earn 15% commission every time someone you refer subscribes to any plan"
                   : "Invite friends to iExcelo — subscribe to any plan to start earning commissions on their payments"}
@@ -271,7 +271,9 @@ const Referrals = () => {
               />
             </button>
           </div>
-          <SVGClient src="/svg/gift-box.svg" />
+          <div className="hidden xl:block">
+            <SVGClient src="/svg/gift-box.svg" />
+          </div>
         </div>
 
         {/* Available balance card */}
@@ -280,20 +282,20 @@ const Referrals = () => {
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="h-42.5 w-[30%] flex flex-col justify-between p-5 rounded-[.5rem]"
+          className="h-auto md:h-42.5 w-full md:w-[30%] flex flex-col justify-between p-5 rounded-[.5rem]"
         >
-          <span className="leading-7 font-[400] text-[1.125rem] text-[#757575]">
+          <span className="leading-7 font-[400] text-[1rem] md:text-[1.125rem] text-[#757575]">
             Available Balance
           </span>
-          <span className="text-[1.75rem] tracking-[-.56px] leading-9 font-[600] text-[#2B2B2B]">
+          <span className="text-xl md:text-[1.75rem] tracking-[-.56px] leading-9 font-[600] text-[#2B2B2B]">
             {currencySymbol}
             {(dashboard?.pendingBalance ?? 0).toLocaleString()}
           </span>
           <div className="flex gap-[.625rem] items-center">
-            <span className="text-[#2B2B2B] font-[400] leading-7 text-[1.125rem]">
+            <span className="text-[#2B2B2B] font-[400] leading-7 text-[1rem] md:text-[1.125rem]">
               Total rewards:
             </span>
-            <span className="leading-7 text-[#757575] text-[1.25rem] font-[500]">
+            <span className="leading-7 text-[#757575] text-[1.125rem] md:text-[1.25rem] font-[500]">
               {currencySymbol}
               {(dashboard?.totalEarnings ?? 0).toLocaleString()}
             </span>
@@ -302,30 +304,30 @@ const Referrals = () => {
       </div>
 
       {/* Metric cards */}
-      <div className="grid mb-6 grid-cols-3 gap-[1rem]">
-        <div className="border rounded-[.75rem] p-[1.25rem_1rem] border-[#D6D6D6] flex flex-col gap-1">
+      <div className="grid mb-6 grid-cols-1 sm:grid-cols-3 gap-[1rem]">
+        <div className="border rounded-[.75rem] p-[1rem_.75rem] md:p-[1.25rem_1rem] border-[#D6D6D6] flex flex-col gap-1">
           <span className="text-[#575757] font-[400] leading-5 text-[.875rem]">
             Pending Users
           </span>
-          <span className="tracking-[-.56px] leading-9 text-[#2B2B2B] text-[1.75rem] font-[500]">
+          <span className="tracking-[-.56px] leading-9 text-[#2B2B2B] text-xl md:text-[1.75rem] font-[500]">
             {dashboard?.referredNotSubscribed ?? 0}
           </span>
         </div>
 
-        <div className="border rounded-[.75rem] p-[1.25rem_1rem] border-[#D6D6D6] flex flex-col gap-1">
+        <div className="border rounded-[.75rem] p-[1rem_.75rem] md:p-[1.25rem_1rem] border-[#D6D6D6] flex flex-col gap-1">
           <span className="text-[#575757] font-[400] leading-5 text-[.875rem]">
             Active Users
           </span>
-          <span className="tracking-[-.56px] leading-9 text-[#2B2B2B] text-[1.75rem] font-[500]">
+          <span className="tracking-[-.56px] leading-9 text-[#2B2B2B] text-xl md:text-[1.75rem] font-[500]">
             {dashboard?.totalConversions ?? 0}
           </span>
         </div>
 
-        <div className="border rounded-[.75rem] p-[1.25rem_1rem] border-[#D6D6D6] flex flex-col gap-1">
+        <div className="border rounded-[.75rem] p-[1rem_.75rem] md:p-[1.25rem_1rem] border-[#D6D6D6] flex flex-col gap-1">
           <span className="text-[#575757] font-[400] leading-5 text-[.875rem]">
             Total Earnings
           </span>
-          <span className="tracking-[-.56px] leading-9 text-[#2B2B2B] text-[1.75rem] font-[500]">
+          <span className="tracking-[-.56px] leading-9 text-[#2B2B2B] text-xl md:text-[1.75rem] font-[500]">
             {currencySymbol}
             {(dashboard?.totalEarnings ?? 0).toLocaleString()}
           </span>
@@ -397,9 +399,9 @@ const Referrals = () => {
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="xl:w-[50%] w-full bg-white rounded-[.75rem] p-[2rem_1.5rem] flex flex-col items-center"
+          className="xl:w-[50%] w-full bg-white rounded-[.75rem] p-[1.25rem_1rem] md:p-[2rem_1.5rem] flex flex-col items-center"
         >
-          <h3 className="text-[1.125rem] font-[500] leading-7 mb-2 self-start">
+          <h3 className="text-[1rem] md:text-[1.125rem] font-[500] leading-7 mb-2 self-start">
             QR Code
           </h3>
           <p className="text-[.875rem] text-[#757575] mb-6 self-start">
@@ -430,9 +432,9 @@ const Referrals = () => {
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="xl:w-[50%] w-full bg-white rounded-[.75rem] p-[2rem_1.5rem]"
+          className="xl:w-[50%] w-full bg-white rounded-[.75rem] p-[1.25rem_1rem] md:p-[2rem_1.5rem]"
         >
-          <h3 className="text-[1.125rem] font-[500] leading-7 mb-2">
+          <h3 className="text-[1rem] md:text-[1.125rem] font-[500] leading-7 mb-2">
             Custom Referral Code
           </h3>
           <p className="text-[.875rem] text-[#757575] mb-6">
@@ -488,9 +490,9 @@ const Referrals = () => {
 
           <Button onClick={handleCodeUpdate} disabled={isCodeButtonDisabled}>
             {isUpdatingCode ? (
-              <Icon icon="svg-spinners:ring-resize" className="w-5 h-5" />
+              <Icon icon="svg-spinners:ring-resize" className="w-4 h-4 md:w-5 md:h-5" />
             ) : (
-              <Icon icon="hugeicons:edit-02" className="w-5 h-5" />
+              <Icon icon="hugeicons:edit-02" className="w-4 h-4 md:w-5 md:h-5" />
             )}
             {isUpdatingCode ? "Updating..." : "Update Code"}
           </Button>
@@ -504,11 +506,11 @@ const Referrals = () => {
           onClick={() => setShowShareModal(false)}
         >
           <div
-            className="bg-white rounded-[1rem] p-8 w-full max-w-md shadow-2xl"
+            className="bg-white rounded-[1rem] p-4 sm:p-8 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-[1.25rem] font-[600] text-[#171717]">
+              <h2 className="text-[1.125rem] md:text-[1.25rem] font-[600] text-[#171717]">
                 Share Your Referral Link
               </h2>
               <button
@@ -535,7 +537,7 @@ const Referrals = () => {
               <Button onClick={handleModalCopy}>
                 <Icon
                   icon={modalCopied ? "hugeicons:tick-01" : "hugeicons:copy-01"}
-                  className="w-5 h-5"
+                  className="w-4 h-4 md:w-5 md:h-5"
                 />
                 {modalCopied ? "Copied!" : "Copy"}
               </Button>
@@ -545,7 +547,7 @@ const Referrals = () => {
               Or share directly via
             </p>
 
-            <div className="flex justify-center gap-6">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
               {SHARE_PLATFORMS.map((platform, i) => (
                 <button
                   key={i}

@@ -666,12 +666,16 @@ export interface IExamStore {
   // ── Topics ──────────────────────────────────────────────────────────────
   topics: ITopic[];
   topicsGrouped: Record<string, ITopic[]>; // subjectId → topics
+  topicsHasMore: Record<string, boolean>;  // subjectId → hasMore
+  topicsPage: Record<string, number>;      // subjectId → last loaded page
+  topicsTotals: Record<string, number>;    // subjectId → real total count
   isLoadingTopics: boolean;
   fetchTopicsByExamType: (
     examTypeId: string,
     subjectIds?: string[],
+    limit?: number,
   ) => Promise<void>;
-  fetchTopicsForSubject: (subjectId: string) => Promise<ITopic[]>;
+  fetchTopicsForSubject: (subjectId: string, page?: number, limit?: number) => Promise<ITopic[]>;
   searchTopics: (examTypeId: string, q: string) => Promise<ITopic[]>;
   topicDetail: ITopic | null;
   isLoadingTopicDetail: boolean;

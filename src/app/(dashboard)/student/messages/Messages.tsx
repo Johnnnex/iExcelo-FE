@@ -9,7 +9,7 @@ import { InputField } from "@/components/molecules";
 import { useAuthStore } from "@/store";
 import { useChatStore } from "@/store/chat.store";
 import { cn } from "@/lib/utils";
-import { CARD_SHADOW } from "@/utils";
+import { CARD_SHADOW, stripMarkdownPreview } from "@/utils";
 import type { IChatroom, IComposeStudent } from "@/types";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -31,19 +31,6 @@ function relativeTime(iso: string): string {
   });
 }
 
-function stripPreview(content: string): string {
-  return content
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "(Image)")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/\*\*([^*]+)\*\*/g, "$1")
-    .replace(/\*([^*]+)\*/g, "$1")
-    .replace(/__([^_]+)__/g, "$1")
-    .replace(/_([^_]+)_/g, "$1")
-    .replace(/`([^`]+)`/g, "$1")
-    .replace(/#+\s/g, "")
-    .replace(/\n+/g, " ")
-    .trim();
-}
 
 function Initials({ name, size = "md" }: { name: string; size?: "sm" | "md" }) {
   const parts = name.trim().split(" ");
@@ -357,7 +344,7 @@ function ChatroomRow({
     ? `${room.partner.firstName} ${room.partner.lastName}`
     : "Unknown";
   const preview = room.lastMessage?.content
-    ? stripPreview(room.lastMessage.content)
+    ? stripMarkdownPreview(room.lastMessage.content)
     : "";
   const ts = room.lastMessage?.createdAt ?? room.createdAt;
   const isMine = !!myUserId && room.lastMessage?.senderId === myUserId;

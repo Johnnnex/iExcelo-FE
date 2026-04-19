@@ -2,7 +2,7 @@ const ReferralsSkeleton = () => {
   return (
     <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="h-7 w-48 bg-gray-200 rounded-lg animate-pulse mb-2" />
           <div className="h-4 w-80 bg-gray-100 rounded animate-pulse" />
@@ -11,14 +11,14 @@ const ReferralsSkeleton = () => {
       </div>
 
       {/* Top row */}
-      <div className="flex mb-6.5 gap-[1rem]">
-        <div className="w-[70%] h-42.5 bg-gray-800/20 rounded-[.5rem] animate-pulse" />
+      <div className="flex flex-col md:flex-row mb-6 gap-[1rem]">
+        <div className="w-full md:w-[70%] h-32 md:h-42.5 bg-gray-800/20 rounded-[.5rem] animate-pulse" />
         <div
           style={{
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="w-[30%] h-42.5 rounded-[.5rem] animate-pulse p-5 flex flex-col justify-between"
+          className="w-full md:w-[30%] h-auto md:h-42.5 rounded-[.5rem] animate-pulse p-5 flex flex-col justify-between"
         >
           <div className="h-4 w-32 bg-gray-200 rounded" />
           <div className="h-8 w-24 bg-gray-200 rounded" />
@@ -27,7 +27,7 @@ const ReferralsSkeleton = () => {
       </div>
 
       {/* Metric cards */}
-      <div className="grid mb-6 grid-cols-3 gap-[1rem]">
+      <div className="grid mb-6 grid-cols-1 sm:grid-cols-3 gap-[1rem]">
         {[0, 1, 2].map((i) => (
           <div
             key={i}

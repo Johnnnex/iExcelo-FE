@@ -47,6 +47,9 @@ export const useExamStore = create<IExamStore>()((set, get) => ({
   // ── Topics ────────────────────────────────────────────────────────────────
   topics: [],
   topicsGrouped: {},
+  topicsHasMore: {},
+  topicsPage: {},
+  topicsTotals: {},
   isLoadingTopics: false,
   topicDetail: null,
   isLoadingTopicDetail: false,
@@ -248,33 +251,50 @@ export const useExamStore = create<IExamStore>()((set, get) => ({
       loadingPages: new Set(),
     }),
 
-  fetchTopicsByExamType: async (examTypeId, subjectIds?) => {
+  fetchTopicsByExamType: async (examTypeId, subjectIds?, limit = 20) => {
     set({ isLoadingTopics: true });
     try {
-      const params: Record<string, string> = {};
+      const params: Record<string, string | number> = { limit };
       if (subjectIds?.length) params.subjectIds = subjectIds.join(",");
       const res: any = await authRequest({
         method: "GET",
         url: `/exams/types/${examTypeId}/topics`,
         params,
       });
-      // Response shape: { subjectId, subjectName, topics: ITopic[] }[]
+      // Response shape: { subjectId, subjectName, topics, total, hasMore }[]
       const raw: {
         subjectId: string;
         subjectName: string;
         topics: ITopic[];
+        total: number;
+        hasMore: boolean;
       }[] = res.data.data ?? [];
+
       const grouped: Record<string, ITopic[]> = {};
+      const hasMoreMap: Record<string, boolean> = {};
+      const pageMap: Record<string, number> = {};
+      const totalsMap: Record<string, number> = {};
       const list: ITopic[] = [];
+
       for (const item of raw) {
         const enriched = item.topics.map((t) => ({
           ...t,
           subjectName: item.subjectName,
         }));
         grouped[item.subjectId] = enriched;
+        hasMoreMap[item.subjectId] = item.hasMore;
+        pageMap[item.subjectId] = 1;
+        totalsMap[item.subjectId] = item.total;
         list.push(...enriched);
       }
-      set({ topics: list, topicsGrouped: grouped });
+
+      set({
+        topics: list,
+        topicsGrouped: grouped,
+        topicsHasMore: hasMoreMap,
+        topicsPage: pageMap,
+        topicsTotals: totalsMap,
+      });
     } catch (e) {
       handleAxiosError(e, "Failed to load topics");
     } finally {
@@ -282,17 +302,45 @@ export const useExamStore = create<IExamStore>()((set, get) => ({
     }
   },
 
-  fetchTopicsForSubject: async (subjectId) => {
+  fetchTopicsForSubject: async (subjectId, page?, limit?) => {
+    const isPaged = page !== undefined && limit !== undefined;
     try {
+      const params: Record<string, number> = {};
+      if (isPaged) { params.page = page!; params.limit = limit!; }
       const res: any = await authRequest({
         method: "GET",
         url: `/exams/subjects/${subjectId}/topics`,
+        params: Object.keys(params).length ? params : undefined,
       });
-      const list: ITopic[] = res.data.data ?? [];
-      set((s) => ({
-        topicsGrouped: { ...s.topicsGrouped, [subjectId]: list },
-      }));
-      return list;
+      if (isPaged) {
+        const { topics, total, hasMore } = res.data.data as {
+          topics: ITopic[];
+          total: number;
+          hasMore: boolean;
+        };
+        set((s) => ({
+          topicsGrouped:
+            page === 1
+              ? { ...s.topicsGrouped, [subjectId]: topics }
+              : {
+                  ...s.topicsGrouped,
+                  [subjectId]: [
+                    ...(s.topicsGrouped[subjectId] ?? []),
+                    ...topics,
+                  ],
+                },
+          topicsHasMore: { ...s.topicsHasMore, [subjectId]: hasMore },
+          topicsPage: { ...s.topicsPage, [subjectId]: page! },
+        }));
+        void total;
+        return topics;
+      } else {
+        const list: ITopic[] = res.data.data ?? [];
+        set((s) => ({
+          topicsGrouped: { ...s.topicsGrouped, [subjectId]: list },
+        }));
+        return list;
+      }
     } catch (e) {
       handleAxiosError(e, "Failed to load topics");
       return [];

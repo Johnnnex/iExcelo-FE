@@ -1,15 +1,47 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Button, RichText } from "@/components/atoms";
 import { InputField } from "@/components/molecules";
 import { useStudentStore, useExamStore } from "@/store";
+import { useAuthStore } from "@/store";
+import { stripMarkdownPreview } from "@/utils";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import type { ITopic } from "@/types";
 
-function TopicsSkeleton() {
+const TOPICS_PAGE_LIMIT = 20;
+
+// Sentinel fires onVisible once when it enters the viewport.
+function TopicSentinel({ onVisible }: { onVisible: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const fired = useRef(false);
+
+  useEffect(() => {
+    fired.current = false;
+  });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !fired.current) {
+          fired.current = true;
+          onVisible();
+        }
+      },
+      { threshold: 0.1 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [onVisible]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return <div ref={ref} className="h-2" />;
+}
+
+function PageSkeleton() {
   return (
     <div className="animate-pulse space-y-3">
       {Array.from({ length: 4 }).map((_, i) => (
@@ -32,18 +64,29 @@ function TopicsSkeleton() {
   );
 }
 
+function Spinner({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
+  const dim = size === "sm" ? 16 : size === "lg" ? 32 : 20;
+  return (
+    <Icon icon="svg-spinners:ring-resize" width={dim} height={dim} color="#007FFF" />
+  );
+}
+
 export default function Topics() {
+  const { accessToken } = useAuthStore();
   const { dashboardData } = useStudentStore();
   const {
-    fetchTopicsByExamType,
     topicsGrouped,
+    topicsHasMore,
+    topicsPage,
+    topicsTotals,
     isLoadingTopics,
+    fetchTopicsByExamType,
+    fetchTopicsForSubject,
     searchTopics,
   } = useExamStore();
 
   const examTypeId = dashboardData?.currentExamType?.id ?? "";
-  const isDemoUser = !dashboardData?.currentExamType?.isPaid;
-  const selectedSubjects = dashboardData?.selectedSubjects ?? [];
+  const subjects = dashboardData?.selectedSubjects ?? [];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<ITopic[] | null>(null);
@@ -51,21 +94,24 @@ export default function Topics() {
   const [expandedSubjects, setExpandedSubjects] = useState<Set<string>>(
     new Set(),
   );
+  const [loadingFallbackSubject, setLoadingFallbackSubject] = useState<
+    string | null
+  >(null);
+  const [loadingMoreSubject, setLoadingMoreSubject] = useState<string | null>(
+    null,
+  );
 
-  // For demo users, show only their selected subjects. For paid users, we'd
-  // load all subjects for the exam type — but since we only have selectedSubjects
-  // from dashboard, we use those for both tiers.
-  const subjects = isDemoUser ? selectedSubjects : selectedSubjects; // paid: same source; could be expanded later
-
+  // Initial load — fetch first 20 topics per subject + totals for all subjects
   useEffect(() => {
-    if (!examTypeId) return;
+    if (!accessToken || !examTypeId) return;
     const subjectIds = subjects.map((s) => s.id);
     fetchTopicsByExamType(
       examTypeId,
       subjectIds.length > 0 ? subjectIds : undefined,
+      TOPICS_PAGE_LIMIT,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [examTypeId, subjects.length]);
+  }, [accessToken, examTypeId]);
 
   const handleSearch = async () => {
     if (!searchQuery.trim() || !examTypeId) return;
@@ -80,16 +126,30 @@ export default function Topics() {
     setSearchResults(null);
   };
 
-  const toggleSubject = (subjectId: string) => {
-    setExpandedSubjects((prev) => {
-      const next = new Set(prev);
-      if (next.has(subjectId)) {
-        next.delete(subjectId);
-      } else {
-        next.add(subjectId);
-      }
-      return next;
-    });
+  const toggleSubject = async (subjectId: string) => {
+    const next = new Set(expandedSubjects);
+    if (next.has(subjectId)) {
+      next.delete(subjectId);
+      setExpandedSubjects(next);
+      return;
+    }
+    next.add(subjectId);
+    setExpandedSubjects(next);
+
+    // Fallback: if initial load missed this subject, fetch it now
+    if (!topicsGrouped[subjectId]) {
+      setLoadingFallbackSubject(subjectId);
+      await fetchTopicsForSubject(subjectId, 1, TOPICS_PAGE_LIMIT);
+      setLoadingFallbackSubject(null);
+    }
+  };
+
+  const handleLoadMore = async (subjectId: string) => {
+    if (loadingMoreSubject) return;
+    const nextPage = (topicsPage[subjectId] ?? 1) + 1;
+    setLoadingMoreSubject(subjectId);
+    await fetchTopicsForSubject(subjectId, nextPage, TOPICS_PAGE_LIMIT);
+    setLoadingMoreSubject(null);
   };
 
   const renderTopicCard = (topic: ITopic) => (
@@ -132,8 +192,8 @@ export default function Topics() {
         </span>
       </div>
 
-      {/* Search */}
-      <div className="flex items-center gap-2 mb-8">
+      {/* Search — matches Exams.tsx pattern */}
+      <div className="flex items-center md:w-fit flex-col md:flex-row gap-2 mb-8">
         <InputField
           type="text"
           label={null}
@@ -145,14 +205,22 @@ export default function Topics() {
           onKeyDown={(e: React.KeyboardEvent) =>
             e.key === "Enter" && handleSearch()
           }
-          className="flex-1 h-12 border rounded-full border-[#A6A6A6] text-[#A6A6A6] px-4"
+          className="flex-1 h-12 w-full xl:w-[19.25rem] border rounded-full border-[#A6A6A6] text-[#A6A6A6] px-4"
         />
         {searchResults !== null ? (
-          <Button variant="outlined" onClick={handleClearSearch}>
+          <Button
+            variant="outlined"
+            onClick={handleClearSearch}
+            className="w-full md:w-fit justify-center"
+          >
             Clear
           </Button>
         ) : (
-          <Button onClick={handleSearch} loading={isSearching}>
+          <Button
+            onClick={handleSearch}
+            loading={isSearching}
+            className="w-full md:w-fit justify-center"
+          >
             <Icon
               icon="hugeicons:search-01"
               className="w-5 h-5 hidden md:block"
@@ -178,7 +246,7 @@ export default function Topics() {
           )}
         </div>
       ) : isLoadingTopics ? (
-        <TopicsSkeleton />
+        <PageSkeleton />
       ) : subjects.length === 0 ? (
         <p className="text-center text-gray-400 py-12">
           No subjects selected. Please select your subjects first.
@@ -188,6 +256,11 @@ export default function Topics() {
           {subjects.map((subject) => {
             const topics = topicsGrouped[subject.id] ?? [];
             const isExpanded = expandedSubjects.has(subject.id);
+            const isFallbackLoading = loadingFallbackSubject === subject.id;
+            const isLoadingMore = loadingMoreSubject === subject.id;
+            const hasMore = topicsHasMore[subject.id] ?? false;
+            const total = topicsTotals[subject.id] ?? topics.length;
+
             return (
               <div
                 key={subject.id}
@@ -207,7 +280,7 @@ export default function Topics() {
                       {subject.name}
                     </h3>
                     <p className="text-xs text-gray-400 mt-0.5">
-                      {topics.length} topic{topics.length !== 1 ? "s" : ""}
+                      {total} topic{total !== 1 ? "s" : ""}
                     </p>
                   </div>
                   <Icon
@@ -222,41 +295,58 @@ export default function Topics() {
                 {/* Topics list */}
                 {isExpanded && (
                   <div className="border-t border-[#EDEDED] px-4 md:px-5 py-4 space-y-3">
-                    {topics.length === 0 ? (
+                    {isFallbackLoading ? (
+                      <div className="flex justify-center py-6">
+                        <Spinner size="lg" />
+                      </div>
+                    ) : topics.length === 0 ? (
                       <p className="text-sm text-gray-400">
                         No topics available for this subject.
                       </p>
                     ) : (
-                      topics.map((topic) => (
-                        <div
-                          key={topic.id}
-                          className="flex items-center justify-between gap-3 py-2 border-b border-[#F3F3F3] last:border-0"
-                        >
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-800">
-                              {topic.name}
-                            </p>
-                            {topic.content && (
-                              <div className="text-xs text-gray-500 line-clamp-1 mt-0.5">
-                                <RichText
-                                  content={topic.content}
-                                  variant="inline"
-                                />
-                              </div>
-                            )}
-                          </div>
-                          <Link
-                            href={`/student/topics/${topic.id}`}
-                            className="shrink-0 flex items-center gap-1 text-[#007FFF] text-xs font-semibold hover:underline"
+                      <>
+                        {topics.map((topic) => (
+                          <div
+                            key={topic.id}
+                            className="flex items-center justify-between gap-3 py-2 border-b border-[#F3F3F3] last:border-0"
                           >
-                            Read
-                            <Icon
-                              icon="hugeicons:arrow-right-01"
-                              className="w-3.5 h-3.5"
-                            />
-                          </Link>
-                        </div>
-                      ))
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-gray-800">
+                                {topic.name}
+                              </p>
+                              {topic.content && (
+                                <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
+                                  {stripMarkdownPreview(topic.content, 80, true)}
+                                </p>
+                              )}
+                            </div>
+                            <Link
+                              href={`/student/topics/${topic.id}`}
+                              className="shrink-0 flex items-center gap-1 text-[#007FFF] text-xs font-semibold hover:underline"
+                            >
+                              Read
+                              <Icon
+                                icon="hugeicons:arrow-right-01"
+                                className="w-3.5 h-3.5"
+                              />
+                            </Link>
+                          </div>
+                        ))}
+
+                        {/* Infinite scroll sentinel — only when more pages exist */}
+                        {hasMore && !isLoadingMore && (
+                          <TopicSentinel
+                            key={`sentinel-${subject.id}-p${topicsPage[subject.id]}`}
+                            onVisible={() => handleLoadMore(subject.id)}
+                          />
+                        )}
+
+                        {isLoadingMore && (
+                          <div className="flex justify-center py-3">
+                            <Spinner />
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 )}

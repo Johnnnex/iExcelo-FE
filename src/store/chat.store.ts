@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { Socket } from "socket.io-client";
 import { authRequest } from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
-import { handleAxiosError } from "@/utils";
+import { handleAxiosError, stripMarkdownPreview } from "@/utils";
 import type {
   IChatStore,
   IChatMessage,
@@ -13,30 +13,6 @@ import type {
 } from "@/types";
 import { nanoid } from "nanoid";
 
-// ─── Preview helper ───────────────────────────────────────────────────────────
-// Mirrors the backend buildPreview util — keeps the chatroom list clean even
-// if the backend sends raw content (e.g. chatroom_created initial message).
-
-function stripPreview(content: string, maxLen = 100): string {
-  return content
-    .replace(/<\/(p|div|li|blockquote|h[1-6])>/gi, " ")
-    .replace(/<(br|hr)\s*\/?>/gi, " ")
-    .replace(/<img[^>]*>/gi, " (Image) ")
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, " (Image) ")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/\*\*([^*]+)\*\*/g, "$1")
-    .replace(/\*([^*]+)\*/g, "$1")
-    .replace(/__([^_]+)__/g, "$1")
-    .replace(/_([^_]+)_/g, "$1")
-    .replace(/`([^`]+)`/g, "$1")
-    .replace(/#+\s/g, "")
-    .replace(/<[^>]+>/g, "")
-    .replace(/&[a-z#0-9]+;/gi, " ")
-    .replace(/\n+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, maxLen);
-}
 
 // ─── Module-level socket reference (not in Zustand state — non-serializable) ──
 let _socket: Socket | null = null;
@@ -492,7 +468,7 @@ export const useChatStore = create<IChatStore>()((set, get) => ({
   },
 
   onNewMessageNotification: (chatroomId, preview, _senderId, createdAt) => {
-    const cleanPreview = stripPreview(preview);
+    const cleanPreview = stripMarkdownPreview(preview);
 
     set((s) => {
       // Only touch rooms that are currently loaded
@@ -626,7 +602,7 @@ export const useChatStore = create<IChatStore>()((set, get) => ({
         lastMessage: message
           ? {
               id: message.id,
-              content: stripPreview(message.content),
+              content: stripMarkdownPreview(message.content),
               createdAt: message.createdAt,
               senderId: message.senderId,
             }

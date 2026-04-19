@@ -182,9 +182,16 @@ export default function Timed() {
     return () => clearInterval(timer);
   }, [timeLeft, isLoading, isExamSubmitted, handleFinalSubmit]);
 
+  // Redirect after render if no active session — avoids setState-during-render warning
+  useEffect(() => {
+    if (!pendingConfig && !examSession) {
+      router.replace("/student/exams");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!pendingConfig, !!examSession]);
+
   // Session guard — after all hooks
   if (!pendingConfig && !examSession) {
-    router.replace("/student/exams");
     return <TimedSkeleton />;
   }
 

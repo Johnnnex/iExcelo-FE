@@ -63,6 +63,13 @@ export function RichText({
           remarkGfm,
         ]}
         rehypePlugins={[[rehypeKatex, { strict: false }]]}
+        components={{
+          img: ({ src, alt }) =>
+            src ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={src} alt={alt ?? ""} />
+            ) : null,
+        }}
       >
         {content}
       </ReactMarkdown>

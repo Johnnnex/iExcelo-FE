@@ -99,9 +99,15 @@ function RevisionTestContent() {
     }
   }, [examSession?.examAttemptId, examSession?.flaggedQuestionIds]);
 
-  // Redirect if no session and no pending config
+  // Redirect after render if no active session — avoids setState-during-render warning
+  useEffect(() => {
+    if (!pendingConfig && !examSession) {
+      router.replace("/student/exams");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!pendingConfig, !!examSession]);
+
   if (!pendingConfig && !examSession) {
-    router.replace("/student/exams");
     return <RevisionSkeleton />;
   }
 
