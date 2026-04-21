@@ -105,7 +105,7 @@ const DateRangePicker = ({
   onStartChange: (v: string) => void;
   onEndChange: (v: string) => void;
 }) => (
-  <div className="flex items-center gap-2 bg-[#F9FAFB] border border-[#E5E5E5] rounded-lg px-2.5 py-1.5">
+  <div className="flex w-fit items-center gap-2 bg-[#F9FAFB] border border-[#E5E5E5] rounded-lg px-2.5 py-1.5">
     <Icon
       icon="hugeicons:calendar-03"
       className="w-3.5 h-3.5 text-[#A6A6A6] shrink-0"
@@ -163,7 +163,7 @@ const DayPicker = ({
 const SkeletonSubjectScores = () => (
   <div
     style={{ boxShadow: CARD_SHADOW }}
-    className="bg-white rounded-xl p-4 border border-[#D6D6D6]"
+    className="bg-white rounded-xl p-3 border border-[#D6D6D6]"
   >
     <div className="animate-pulse">
       <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 px-[.5rem] gap-3">
@@ -181,7 +181,7 @@ const SkeletonSubjectScores = () => (
 const SkeletonProgressOverTime = () => (
   <div
     style={{ boxShadow: CARD_SHADOW }}
-    className="bg-white rounded-xl p-4 border border-[#D6D6D6]"
+    className="bg-white rounded-xl p-3 border border-[#D6D6D6]"
   >
     <div className="animate-pulse">
       <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 px-[.5rem] gap-3">
@@ -199,7 +199,7 @@ const SkeletonProgressOverTime = () => (
 const SkeletonQuestionDist = () => (
   <div
     style={{ boxShadow: CARD_SHADOW }}
-    className="bg-white rounded-xl p-4 border border-[#D6D6D6] flex flex-col"
+    className="bg-white rounded-xl p-3 border border-[#D6D6D6] flex flex-col"
   >
     <div className="animate-pulse">
       <div className="space-y-2 mb-4">
@@ -214,7 +214,7 @@ const SkeletonQuestionDist = () => (
 const SkeletonRanking = () => (
   <div
     style={{ boxShadow: CARD_SHADOW }}
-    className="bg-white rounded-xl p-4 border border-[#D6D6D6]"
+    className="bg-white rounded-xl p-3 border border-[#D6D6D6]"
   >
     <div className="animate-pulse">
       <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 px-[.5rem] gap-3">
@@ -232,7 +232,7 @@ const SkeletonRanking = () => (
 const SkeletonSubjectAttempts = () => (
   <div
     style={{ boxShadow: CARD_SHADOW }}
-    className="bg-white rounded-xl p-4 border border-[#D6D6D6] flex flex-col"
+    className="bg-white rounded-xl p-3 border border-[#D6D6D6] flex flex-col"
   >
     <div className="animate-pulse">
       <div className="space-y-2 mb-3">
@@ -564,9 +564,9 @@ const Analytics = () => {
         ) : (
           <div
             style={{ boxShadow: CARD_SHADOW }}
-            className="bg-white rounded-xl p-4 border border-[#D6D6D6]"
+            className="bg-white rounded-xl p-3 border border-[#D6D6D6]"
           >
-            <div className="flex flex-col md:flex-row md:items-start px-[.5rem] justify-between mb-6 gap-4">
+            <div className="flex flex-col md:flex-row md:items-start justify-between mb-3 gap-4">
               <div className="shrink-0">
                 <h3 className="font-[500] text-base md:text-[1.125rem] text-gray-900">
                   Score Against Each Subject (%)
@@ -616,9 +616,9 @@ const Analytics = () => {
         ) : (
           <div
             style={{ boxShadow: CARD_SHADOW }}
-            className="bg-white lg:col-span-2 rounded-xl p-4 border border-[#D6D6D6]"
+            className="bg-white lg:col-span-2 rounded-xl p-3 border border-[#D6D6D6]"
           >
-            <div className="flex flex-col md:flex-row md:items-start px-[.5rem] justify-between mb-6 gap-3">
+            <div className="flex flex-col md:flex-row md:items-start justify-between mb-3 gap-3">
               <div className="shrink-0">
                 <h3 className="font-[500] text-base md:text-[1.125rem] text-gray-900">
                   Progress Over Time
@@ -632,7 +632,7 @@ const Analytics = () => {
                       : "months this year"}
                 </p>
               </div>
-              <div className="relative shrink-0">
+              <div className="relative shrink-0 self-start">
                 <button
                   onClick={() => setProgressDropdownOpen((v) => !v)}
                   className="flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50"
@@ -645,7 +645,7 @@ const Analytics = () => {
                   <Icon icon="hugeicons:arrow-down-01" className="w-4 h-4" />
                 </button>
                 {progressDropdownOpen && (
-                  <div className="absolute right-0 top-full mt-1 w-40 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-10">
+                  <div className="absolute left-0 md:left-auto md:right-0 top-full mt-1 w-40 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-10">
                     {GRANULARITY_OPTIONS.map((option) => (
                       <button
                         key={option.value}
@@ -694,7 +694,7 @@ const Analytics = () => {
         ) : (
           <div
             style={{ boxShadow: CARD_SHADOW }}
-            className="bg-white rounded-xl p-4 border border-[#D6D6D6] flex flex-col"
+            className="bg-white rounded-xl p-3 border border-[#D6D6D6] flex flex-col"
           >
             <div className="mb-4">
               <h3 className="font-[500] text-base md:text-[1.125rem] text-gray-900">
@@ -729,9 +729,9 @@ const Analytics = () => {
         ) : (
           <div
             style={{ boxShadow: CARD_SHADOW }}
-            className="bg-white lg:col-span-2 rounded-xl p-4 border border-[#D6D6D6]"
+            className="bg-white lg:col-span-2 rounded-xl p-3 border border-[#D6D6D6]"
           >
-            <div className="flex flex-col md:flex-row md:items-start px-[.5rem] justify-between mb-2 gap-3">
+            <div className="flex flex-col md:flex-row md:items-start justify-between mb-3 gap-3">
               <div className="shrink-0">
                 <h3 className="font-[500] text-base md:text-[1.125rem] text-gray-900">
                   Student Ranking
@@ -791,7 +791,7 @@ const Analytics = () => {
         ) : (
           <div
             style={{ boxShadow: CARD_SHADOW }}
-            className="bg-white rounded-xl p-4 border border-[#D6D6D6] flex flex-col"
+            className="bg-white rounded-xl p-3 border border-[#D6D6D6] flex flex-col"
           >
             <div className="mb-3">
               <h3 className="font-[500] text-base md:text-[1.125rem] text-gray-900">

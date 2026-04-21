@@ -223,7 +223,7 @@ const Referrals = () => {
 
       {/* Soft nudge — only shown when student hasn't subscribed yet */}
       {!hasEverSubscribed && (
-        <div className="mb-6 flex items-center gap-3 p-4 bg-[#FFF9ED] border border-[#F3A218] rounded-[.75rem]">
+        <div className="mb-6 flex items-center gap-3 p-3 md:p-4 bg-[#FFF9ED] border border-[#F3A218] rounded-[.75rem]">
           <Icon
             icon="hugeicons:star-01"
             className="w-5 h-5 text-[#F3A218] shrink-0"
@@ -237,13 +237,13 @@ const Referrals = () => {
       )}
 
       {/* Top row: hero card + balance */}
-      <div className="flex flex-col md:flex-row mb-6 gap-[1rem]">
+      <div className="flex flex-col lg:flex-row mb-6 gap-[1rem]">
         <div
           style={{
             background:
               "radial-gradient(71.77% 100% at 50.18% 0%, #5A2958 13.03%, #371D52 41.67%, #061023 87.06%)",
           }}
-          className="p-[.9375rem_1.25rem] flex items-center justify-between h-auto md:h-42.5 w-full md:w-[70%] rounded-[.5rem]"
+          className="p-[.9375rem_1.25rem] flex items-center justify-between h-auto lg:h-42.5 w-full lg:w-[70%] rounded-[.5rem]"
         >
           <div className="flex h-full justify-between flex-col">
             <div>
@@ -282,7 +282,7 @@ const Referrals = () => {
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="h-auto md:h-42.5 w-full md:w-[30%] flex flex-col justify-between p-5 rounded-[.5rem]"
+          className="h-auto lg:h-42.5 w-full lg:w-[30%] flex flex-col justify-between p-5 rounded-[.5rem]"
         >
           <span className="leading-7 font-[400] text-[1rem] md:text-[1.125rem] text-[#757575]">
             Available Balance
@@ -443,7 +443,7 @@ const Referrals = () => {
 
           <div className="mb-4">
             <p className="text-sm text-[#575757] mb-1">Current code</p>
-            <p className="text-[1rem] font-[500] text-[#2B2B2B] bg-[#F3F3F3] rounded-lg p-3">
+            <p className="text-[.875rem] md:text-[1rem] font-[500] text-[#2B2B2B] bg-[#F3F3F3] rounded-lg p-2 md:p-3">
               {affiliateCode || "—"}
             </p>
           </div>
@@ -530,11 +530,11 @@ const Referrals = () => {
             </p>
 
             {/* Link + copy */}
-            <div className="flex gap-2 mb-8">
+            <div className="flex flex-col sm:flex-row gap-2 mb-6">
               <span className="flex-1 bg-[#F3F3F3] rounded-[.5rem] p-3 text-sm truncate text-[#575757]">
                 {affiliateLink}
               </span>
-              <Button onClick={handleModalCopy}>
+              <Button onClick={handleModalCopy} className="w-full sm:w-auto justify-center">
                 <Icon
                   icon={modalCopied ? "hugeicons:tick-01" : "hugeicons:copy-01"}
                   className="w-4 h-4 md:w-5 md:h-5"

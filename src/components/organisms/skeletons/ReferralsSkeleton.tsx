@@ -11,14 +11,14 @@ const ReferralsSkeleton = () => {
       </div>
 
       {/* Top row */}
-      <div className="flex flex-col md:flex-row mb-6 gap-[1rem]">
-        <div className="w-full md:w-[70%] h-32 md:h-42.5 bg-gray-800/20 rounded-[.5rem] animate-pulse" />
+      <div className="flex flex-col lg:flex-row mb-6 gap-[1rem]">
+        <div className="w-full lg:w-[70%] h-32 lg:h-42.5 bg-gray-800/20 rounded-[.5rem] animate-pulse" />
         <div
           style={{
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="w-full md:w-[30%] h-auto md:h-42.5 rounded-[.5rem] animate-pulse p-5 flex flex-col justify-between"
+          className="w-full lg:w-[30%] h-auto lg:h-42.5 rounded-[.5rem] animate-pulse p-5 flex flex-col justify-between"
         >
           <div className="h-4 w-32 bg-gray-200 rounded" />
           <div className="h-8 w-24 bg-gray-200 rounded" />

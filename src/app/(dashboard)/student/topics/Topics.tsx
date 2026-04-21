@@ -36,7 +36,7 @@ function TopicSentinel({ onVisible }: { onVisible: () => void }) {
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [onVisible]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [onVisible]);
 
   return <div ref={ref} className="h-2" />;
 }
@@ -67,7 +67,12 @@ function PageSkeleton() {
 function Spinner({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const dim = size === "sm" ? 16 : size === "lg" ? 32 : 20;
   return (
-    <Icon icon="svg-spinners:ring-resize" width={dim} height={dim} color="#007FFF" />
+    <Icon
+      icon="svg-spinners:ring-resize"
+      width={dim}
+      height={dim}
+      color="#007FFF"
+    />
   );
 }
 
@@ -316,7 +321,11 @@ export default function Topics() {
                               </p>
                               {topic.content && (
                                 <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
-                                  {stripMarkdownPreview(topic.content, 80, true)}
+                                  {stripMarkdownPreview(
+                                    topic.content,
+                                    80,
+                                    true,
+                                  )}
                                 </p>
                               )}
                             </div>
