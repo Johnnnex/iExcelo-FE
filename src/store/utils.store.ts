@@ -1,8 +1,11 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { toast } from "sonner";
 import type { IUtilsStore } from "@/types";
 import { api, authRequest } from "@/lib/api";
 import { handleAxiosError } from "@/utils";
+
+const MAX_IMAGE_UPLOAD_SIZE = 10 * 1024 * 1024; // 10 MB
 
 export const useUtilsStore = create<IUtilsStore>()(
   persist(
@@ -31,6 +34,10 @@ export const useUtilsStore = create<IUtilsStore>()(
       },
 
       uploadImage: async (file, folder) => {
+        if (file.size > MAX_IMAGE_UPLOAD_SIZE) {
+          toast.error("Image must be under 10 MB");
+          return null;
+        }
         set({ isUploadingImage: true });
         try {
           const formData = new FormData();
