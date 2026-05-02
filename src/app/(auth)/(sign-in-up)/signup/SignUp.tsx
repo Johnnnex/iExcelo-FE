@@ -19,6 +19,7 @@ import { Button, CheckBox, Radio, SVGClient } from "@/components/atoms";
 import Link from "next/link";
 import { useAuthStore, useUtilsStore } from "@/store";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 const SignUp = () => {
   const router = useRouter();
@@ -84,6 +85,12 @@ const SignUp = () => {
   const handleGoBack = () => {
     setStep(1);
     setUserType(null);
+  };
+
+  const onFormError = (errs: Record<string, { message?: string }>) => {
+    if (errs.agreeToTerms) {
+      toast.error(errs.agreeToTerms.message ?? "You must agree to the terms");
+    }
   };
 
   const onSubmit = async (data: RegistrationFormDataTypes) => {
@@ -347,7 +354,7 @@ const SignUp = () => {
         </h2>
 
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit, onFormError)}
           className="flex flex-col gap-y-[1rem]"
         >
           <button
@@ -391,11 +398,6 @@ const SignUp = () => {
                 </span>
               }
             />
-            {errors.agreeToTerms && (
-              <p className="text-sm text-red-600">
-                {errors?.agreeToTerms?.message as string}
-              </p>
-            )}
           </div>
 
           <div className="mt-[1rem]">

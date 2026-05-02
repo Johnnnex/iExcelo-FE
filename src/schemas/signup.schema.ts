@@ -19,7 +19,7 @@ export const studentSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password")], "Passwords must match")
     .required("Confirm password is required"),
-  agreeToTerms: yup.boolean().oneOf([true], "You must agree to the terms"),
+  agreeToTerms: yup.boolean().required("You must agree to the terms").oneOf([true], "You must agree to the terms"),
 });
 
 export const sponsorSchema = yup.object().shape({
@@ -45,7 +45,7 @@ export const sponsorSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password")], "Passwords must match")
     .required("Confirm password is required"),
-  agreeToTerms: yup.boolean().oneOf([true], "You must agree to the terms"),
+  agreeToTerms: yup.boolean().required("You must agree to the terms").oneOf([true], "You must agree to the terms"),
 });
 
 export const affiliateSchema = yup.object().shape({
@@ -65,5 +65,5 @@ export const affiliateSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password")], "Passwords must match")
     .required("Confirm password is required"),
-  agreeToTerms: yup.boolean().oneOf([true], "You must agree to the terms"),
+  agreeToTerms: yup.boolean().required("You must agree to the terms").oneOf([true], "You must agree to the terms"),
 });

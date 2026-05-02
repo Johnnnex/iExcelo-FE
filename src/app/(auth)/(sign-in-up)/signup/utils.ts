@@ -94,6 +94,20 @@ export function getFormFieldsByType(
     ],
     sponsor: [
       {
+        name: "firstName",
+        type: "text",
+        label: "First Name",
+        placeholder: "John",
+        gridColumn: "half",
+      },
+      {
+        name: "lastName",
+        type: "text",
+        label: "Last Name",
+        placeholder: "Doe",
+        gridColumn: "half",
+      },
+      {
         name: "category",
         type: "select",
         label: "Category",
@@ -103,6 +117,14 @@ export function getFormFieldsByType(
           ...option,
           label: capitalizeFirstLetter(option.label),
         })),
+      },
+      {
+        name: "companyName",
+        type: "text",
+        label: "Company Name",
+        placeholder: "Enter your company name",
+        gridColumn: "full",
+        conditionalOn: { field: "category", value: "company" },
       },
       {
         name: "email",
