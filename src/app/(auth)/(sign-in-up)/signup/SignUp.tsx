@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldErrors, type FieldError } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { InputField } from "@/components/molecules";
 import { affiliateSchema, sponsorSchema, studentSchema } from "@/schemas";
@@ -87,9 +87,9 @@ const SignUp = () => {
     setUserType(null);
   };
 
-  const onFormError = (errs: Record<string, { message?: string }>) => {
+  const onFormError = (errs: FieldErrors) => {
     if (errs.agreeToTerms) {
-      toast.error(errs.agreeToTerms.message ?? "You must agree to the terms");
+      toast.error((errs.agreeToTerms as FieldError).message ?? "You must agree to the terms");
     }
   };
 
