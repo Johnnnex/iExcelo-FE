@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, SVGClient } from "@/components/atoms";
-import { InputField, Table } from "@/components/molecules";
+import { InputField, Modal, Table } from "@/components/molecules";
 import { useAffiliateStore, useAuthStore } from "@/store";
 import { affiliateCodeSchema } from "@/schemas/affiliate.schema";
 import { Icon } from "@iconify/react";
@@ -409,14 +409,7 @@ const SponsorReferrals = () => {
 
       {/* Share Modal */}
       {showShareModal && (
-        <div
-          className="fixed inset-0 bg-black/50 z-[1000] flex items-center justify-center p-4"
-          onClick={() => setShowShareModal(false)}
-        >
-          <div
-            className="bg-white rounded-[1rem] p-8 w-full max-w-md shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
+        <Modal isOpen onClose={() => setShowShareModal(false)} zIndex="z-[1000]" className="rounded-[1rem] p-8 w-full max-w-md">
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-[1.25rem] font-[600] text-[#171717]">
                 Share Your Referral Link
@@ -476,8 +469,7 @@ const SponsorReferrals = () => {
                 </button>
               ))}
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
     </section>
   );

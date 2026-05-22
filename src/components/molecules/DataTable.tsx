@@ -177,11 +177,12 @@ const DataTable = ({
     });
   }, [JSON.stringify(columns)]);
 
-  useMemo(() => {
+  useEffect(() => {
     const selectedData = formattedData.filter((_, index) =>
       selectedCheckBoxes.includes(index),
     );
     onCheckChange(selectedData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(selectedCheckBoxes)]);
 
   const Table = React.forwardRef((restProps: any, ref) => (

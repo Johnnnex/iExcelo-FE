@@ -2,7 +2,7 @@
 
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/atoms";
-import { InputField } from "@/components/molecules";
+import { Modal, InputField } from "@/components/molecules";
 import { ChangeEvent, useState } from "react";
 
 interface RevisionModeModalProps {
@@ -24,8 +24,6 @@ export function RevisionModeModal({
 }: RevisionModeModalProps) {
   const [numQuestions, setNumQuestions] = useState<number | "">("");
 
-  if (!isOpen) return null;
-
   const handleContinue = () => {
     if (!numQuestions) return;
     const capped = isDemoUser
@@ -35,9 +33,8 @@ export function RevisionModeModal({
   };
 
   return (
-    <section className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-auto">
-        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
+    <Modal isOpen={isOpen} onClose={onClose} className="rounded-2xl w-full max-w-md">
+      <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
           <h2 className="text-lg font-semibold text-gray-900">Revision Mode</h2>
           <button
             onClick={onClose}
@@ -113,8 +110,7 @@ export function RevisionModeModal({
               Continue
             </Button>
           </div>
-        </div>
       </div>
-    </section>
+    </Modal>
   );
 }

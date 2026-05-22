@@ -6,6 +6,36 @@ import { Button, SVGClient } from "../atoms";
 import { Icon } from "@iconify/react";
 import { usePathname, useRouter } from "next/navigation";
 
+const FEATURES = [
+  {
+    icon: "hugeicons:notebook-01",
+    link: "/revisions",
+    title: "Exam Revisions",
+    description:
+      "Thousands of top-tier questions and instant feedback to help you excel in every subject.",
+  },
+  {
+    icon: "hugeicons:healtcare",
+    link: "/giveback",
+    title: "Give Backs",
+    description:
+      "Support other students by sponsoring access to quality education and helping more people excel.",
+  },
+  {
+    icon: "hugeicons:affiliate",
+    link: "/affiliate",
+    title: "Affiliates",
+    description:
+      "Share iExcelo with friends, schools, or students and get rewarded for every successful referral.",
+  },
+];
+
+const NAV_LINKS = [
+  { title: "About Us", href: "/about" },
+  { title: "FAQs", href: "/faqs" },
+  { title: "Contact Us", href: "/contact" },
+];
+
 const LandingHeader = () => {
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,30 +47,6 @@ const LandingHeader = () => {
 
   const pathname = usePathname();
   const { push } = useRouter();
-
-  const features = [
-    {
-      icon: "hugeicons:notebook-01",
-      link: "/revisions",
-      title: "Exam Revisions",
-      description:
-        "Thousands of top-tier questions and instant feedback to help you excel in every subject.",
-    },
-    {
-      icon: "hugeicons:healtcare",
-      link: "/giveback",
-      title: "Give Backs",
-      description:
-        "Support other students by sponsoring access to quality education and helping more people excel.",
-    },
-    {
-      icon: "hugeicons:affiliate",
-      link: "/affiliate",
-      title: "Affiliates",
-      description:
-        "Share iExcelo with friends, schools, or students and get rewarded for every successful referral.",
-    },
-  ];
 
   // Click outside handler for features dropdown
   useEffect(() => {
@@ -118,7 +124,7 @@ const LandingHeader = () => {
                     onMouseLeave={() => setIsFeaturesOpen(false)}
                   >
                     <div className="flex flex-col gap-[.25rem]">
-                      {features.map((feature, index) => (
+                      {FEATURES.map((feature, index) => (
                         <Link
                           key={index}
                           href={feature?.link}
@@ -149,11 +155,7 @@ const LandingHeader = () => {
                 )}
               </li>
 
-              {[
-                { title: "About Us", href: "/about" },
-                { title: "FAQs", href: "/faqs" },
-                { title: "Contact Us", href: "/contact" },
-              ].map((item, index) => (
+              {NAV_LINKS.map((item, index) => (
                 <li key={`__nav__${index}`}>
                   <Link
                     className={`font-[600] hover:underline ${
@@ -240,7 +242,7 @@ const LandingHeader = () => {
 
               {isMobileFeaturesOpen && (
                 <div className="mt-[0.5rem] pl-[1rem] space-y-[1rem] border-l-2 border-white/20">
-                  {features.map((feature, index) => (
+                  {FEATURES.map((feature, index) => (
                     <Link
                       key={`__feature__${index}`}
                       href={feature?.link}
@@ -267,11 +269,7 @@ const LandingHeader = () => {
               )}
             </div>
 
-            {[
-              { title: "About Us", href: "/about" },
-              { title: "FAQs", href: "/faqs" },
-              { title: "Contact Us", href: "/contact" },
-            ].map((item, index) => (
+            {NAV_LINKS.map((item, index) => (
               <Link
                 key={index}
                 className={`block hover:underline ${

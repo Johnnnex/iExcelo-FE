@@ -10,6 +10,7 @@ import {
   TestResults,
   TestInstructions,
 } from "@/components/molecules/student-dashboard";
+import { Modal } from "@/components/molecules";
 import { Icon } from "@iconify/react";
 import { useExamProtection, useExamLeaveGuard } from "@/hooks";
 import { cn } from "@/lib/utils";
@@ -132,6 +133,8 @@ function RevisionTestContent() {
   const isMatching = question?.type === "matching";
   const isTextInput = isFillInBlank || isShortAnswer;
   const passage = question?.passageId ? getPassage(question.passageId) : null;
+  const hideScore =
+    question?.category === "theory" || question?.category === "practical";
 
   // Frozen = whole exam submitted OR this question individually confirmed
   const isCurrentFrozen =
@@ -466,6 +469,7 @@ function RevisionTestContent() {
                           <InputField
                             type="rich-text"
                             name={`essay-${question.id}`}
+                            placeholder="Type Your Answer Here"
                             value={(answers[question.id] as string) ?? ""}
                             readOnly={isCurrentFrozen}
                             onChange={(e: { target: { name?: string; value: any } }) =>
@@ -922,19 +926,21 @@ function RevisionTestContent() {
                   {!isNavigationMinimized && (
                     <>
                       <hr className="mt-4 text-[#DCDFE4]" />
-                      <div className="my-8">
-                        <div className="flex w-fit mx-auto flex-col items-center border p-[1rem_2rem] bg-[#F3F3F3] rounded-[1rem] text-[#E32E89] border-[#E32E89] gap-2 mb-2">
-                          <span className="text-[1.5rem] tracking-[-.48px] leading-8 font-[600]">
-                            Score
-                          </span>
-                          <span className="text-[2.25rem] tracking-[-.72px] leading-11 font-[500]">
-                            {isExamSubmitted && examResult
-                              ? Math.round(examResult.scorePercentage)
-                              : score}
-                            %
-                          </span>
+                      {!hideScore && (
+                        <div className="my-8">
+                          <div className="flex w-fit mx-auto flex-col items-center border p-[1rem_2rem] bg-[#F3F3F3] rounded-[1rem] text-[#E32E89] border-[#E32E89] gap-2 mb-2">
+                            <span className="text-[1.5rem] tracking-[-.48px] leading-8 font-[600]">
+                              Score
+                            </span>
+                            <span className="text-[2.25rem] tracking-[-.72px] leading-11 font-[500]">
+                              {isExamSubmitted && examResult
+                                ? Math.round(examResult.scorePercentage)
+                                : score}
+                              %
+                            </span>
+                          </div>
                         </div>
-                      </div>
+                      )}
                       <div className="grid grid-cols-8 gap-2 mb-6">
                         {Array.from(
                           { length: totalQuestions },
@@ -1011,15 +1017,17 @@ function RevisionTestContent() {
                     {!isNavigationMinimized && (
                       <>
                         <hr className="mb-4" />
-                        <div className="mb-4 flex items-center justify-between">
-                          <span className="text-sm text-gray-600">Score</span>
-                          <span className="text-lg font-bold text-blue-600">
-                            {isExamSubmitted && examResult
-                              ? Math.round(examResult.scorePercentage)
-                              : score}
-                            %
-                          </span>
-                        </div>
+                        {!hideScore && (
+                          <div className="mb-4 flex items-center justify-between">
+                            <span className="text-sm text-gray-600">Score</span>
+                            <span className="text-lg font-bold text-blue-600">
+                              {isExamSubmitted && examResult
+                                ? Math.round(examResult.scorePercentage)
+                                : score}
+                              %
+                            </span>
+                          </div>
+                        )}
                         <div className="grid grid-cols-8 gap-2 mb-6">
                           {Array.from(
                             { length: totalQuestions },
@@ -1069,8 +1077,7 @@ function RevisionTestContent() {
 
       {/* ── Confirm Submit Modal ── */}
       {showConfirmModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6">
+        <Modal isOpen className="rounded-2xl w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-1">
               <h2 className="text-lg font-semibold text-gray-900">
                 Submit Exam?
@@ -1097,14 +1104,12 @@ function RevisionTestContent() {
                 Yes, Submit
               </Button>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* ── Leave Exam Modal ── */}
       {showLeaveModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6">
+        <Modal isOpen className="rounded-2xl w-full max-w-md p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-1">
               Leave Exam?
             </h2>
@@ -1125,15 +1130,13 @@ function RevisionTestContent() {
                 Leave Without Submitting
               </Button>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* ── Explanation Modal ── */}
       {showFullDetails && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-auto">
-            <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
+        <Modal isOpen onClose={() => setShowFullDetails(false)} className="rounded-2xl w-full max-w-2xl">
+            <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
               <h2 className="text-lg font-semibold text-gray-900">
                 Explanation
               </h2>
@@ -1182,8 +1185,7 @@ function RevisionTestContent() {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
     </>
   );

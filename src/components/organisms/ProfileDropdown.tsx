@@ -40,8 +40,15 @@ export function ProfileDropdown({
   onCurrencyChange,
 }: ProfileDropdownProps) {
   const router = useRouter();
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
+
+  const settingsBase =
+    user?.role === "sponsor"
+      ? "/sponsor/settings"
+      : user?.role === "affiliate"
+        ? "/affiliates/settings"
+        : "/student/settings";
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -132,7 +139,7 @@ export function ProfileDropdown({
 
           <div className="py-2">
             <Link
-              href="/profile"
+              href={`${settingsBase}/profile`}
               className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
               onClick={() => setIsOpen(false)}
             >
@@ -140,7 +147,7 @@ export function ProfileDropdown({
               <span className="text-sm">Profile</span>
             </Link>
             <Link
-              href="/settings"
+              href={`${settingsBase}/security`}
               className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
               onClick={() => setIsOpen(false)}
             >

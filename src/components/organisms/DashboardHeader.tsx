@@ -10,43 +10,10 @@ import { ProfileDropdown } from "./ProfileDropdown";
 import { ExamTypeSelectModal } from "./student-dashboard";
 import type { INotification } from "@/types";
 import { cn } from "@/lib/utils";
+import { relativeTime, notifIcon } from "@/utils";
 
 interface DashboardHeaderProps {
   onMenuClick: () => void;
-}
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function toUTC(iso: string): Date {
-  return new Date(/Z$|[+-]\d{2}:\d{2}$/.test(iso) ? iso : iso + "Z");
-}
-
-function relativeTime(iso: string): string {
-  const diff = Date.now() - toUTC(iso).getTime();
-  const mins = Math.floor(diff / 60_000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
-}
-
-function notifIcon(type: INotification["type"]): string {
-  switch (type) {
-    case "new_message":
-      return "hugeicons:bubble-chat-notification";
-    case "new_chatroom":
-      return "hugeicons:messenger";
-    case "giveback_activated":
-      return "hugeicons:healtcare";
-    case "subscription_expiring":
-    case "subscription_expired":
-      return "hugeicons:wallet-01";
-    case "exam_result":
-      return "hugeicons:book-open-02";
-    default:
-      return "hugeicons:notification-01";
-  }
 }
 
 // ─── Notification panel ───────────────────────────────────────────────────────
@@ -263,7 +230,10 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
           ) : null}
 
           {/* Bell icon + notification panel */}
-          <div ref={bellRef} className="relative">
+          <div
+            ref={bellRef}
+            className="relative flex items-center justify-center"
+          >
             <button
               onClick={handleBellClick}
               className="relative text-gray-500 hover:text-gray-700"

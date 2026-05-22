@@ -43,3 +43,32 @@ export function formatTimeFromSeconds(seconds: number): string {
   const s = seconds % 60;
   return [h, m, s].map((v) => String(v).padStart(2, "0")).join(":");
 }
+
+export function countdownFromMs(ms: number): {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+} | null {
+  if (ms <= 0) return null;
+  return {
+    days: Math.floor(ms / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    minutes: Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60)),
+    seconds: Math.floor((ms % (1000 * 60)) / 1000),
+  };
+}
+
+function toUTC(iso: string): Date {
+  return new Date(/Z$|[+-]\d{2}:\d{2}$/.test(iso) ? iso : iso + "Z");
+}
+
+export function relativeTime(iso: string): string {
+  const diff = Date.now() - toUTC(iso).getTime();
+  const mins = Math.floor(diff / 60_000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
+}

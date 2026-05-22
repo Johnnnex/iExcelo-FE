@@ -3,7 +3,8 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/atoms";
 import { ChangeEvent, useState } from "react";
-import { InputField } from "@/components/molecules";
+import { Modal, InputField } from "@/components/molecules";
+import { EXAM_QUESTION_OPTIONS, EXAM_TIME_OPTIONS } from "@/utils";
 
 interface TimedModeModalProps {
   isOpen: boolean;
@@ -25,29 +26,19 @@ export function TimedModeModal({
   const [numQuestions, setNumQuestions] = useState<number | null>(null);
   const [time, setTime] = useState<number | null>(null);
 
-  if (!isOpen) return null;
-
   const handleContinue = () => {
     if (numQuestions && time) {
       onContinue(numQuestions, time);
     }
   };
 
-  const allQuestionOptions = [
-    { value: 10, label: "10 questions" },
-    { value: 20, label: "20 questions" },
-    { value: 30, label: "30 questions" },
-    { value: 40, label: "40 questions" },
-    { value: 50, label: "50 questions" },
-  ];
   const questionOptions = isDemoUser
-    ? allQuestionOptions.filter((o) => o.value <= freeTierLimit)
-    : allQuestionOptions;
+    ? EXAM_QUESTION_OPTIONS.filter((o) => o.value <= freeTierLimit)
+    : EXAM_QUESTION_OPTIONS;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-auto">
-        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
+    <Modal isOpen={isOpen} onClose={onClose} className="rounded-2xl w-full max-w-md">
+      <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
           <h2 className="text-lg font-semibold text-gray-900">Timed Mode</h2>
           <button
             onClick={onClose}
@@ -117,14 +108,7 @@ export function TimedModeModal({
             </label>
             <InputField
               type="select"
-              selectOptions={[
-                { value: 15, label: "15 minutes" },
-                { value: 30, label: "30 minutes" },
-                { value: 45, label: "45 minutes" },
-                { value: 60, label: "60 minutes" },
-                { value: 90, label: "90 minutes" },
-                { value: 120, label: "120 minutes" },
-              ]}
+              selectOptions={EXAM_TIME_OPTIONS}
               onChange={(
                 e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
               ) => setTime(Number(e?.target?.value))}
@@ -139,7 +123,6 @@ export function TimedModeModal({
             </Button>
           </div>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }

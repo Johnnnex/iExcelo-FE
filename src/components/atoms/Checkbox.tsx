@@ -54,7 +54,7 @@ const CheckBox = forwardRef<HTMLLabelElement, CheckBoxProps>(
     const iconName = state === "incorrect" ? "lucide:x" : "lucide:check";
 
     return (
-      <label ref={ref} className="flex cursor-pointer items-center">
+      <label ref={ref} className="relative flex cursor-pointer items-center">
         <input
           type="checkbox"
           checked={isChecked}
@@ -63,7 +63,7 @@ const CheckBox = forwardRef<HTMLLabelElement, CheckBoxProps>(
           className="sr-only"
         />
         <div
-          className={`flex h-[1.25rem] w-[1.25rem] items-center justify-center rounded-md border bg-white transition-colors duration-200 ${borderAndTextColor}`}
+          className={`shrink-0 flex h-[1.25rem] w-[1.25rem] items-center justify-center rounded-md border bg-white transition-colors duration-200 ${borderAndTextColor}`}
         >
           {showIcon && (
             <Icon

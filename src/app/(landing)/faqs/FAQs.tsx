@@ -2,26 +2,13 @@
 
 import { CTA } from "@/components/organisms";
 import { Icon } from "@iconify/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { faqData } from "./data";
+import { FAQ_CATEGORIES, slugToTitle } from "@/utils";
 
 const FAQs = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("general");
-
-  const categories = [
-    "general",
-    "exam-revision-platform",
-    "give-back",
-    "affiliate-program",
-  ];
-
-  const formatCategoryName = (category: string) => {
-    return category
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
 
   const filteredFAQs = faqData.filter((faq) => faq.category === activeCategory);
 
@@ -57,7 +44,7 @@ const FAQs = () => {
           data-aos="fade-right"
           data-aos-duration="700"
         >
-          {categories.map((category, index) => (
+          {FAQ_CATEGORIES.map((category, index) => (
             <button
               className={`pl-[.875rem] transition-colors duration-[.4s] text-left border-l-[2px] ${
                 activeCategory === category
@@ -70,7 +57,7 @@ const FAQs = () => {
                 setOpenIndex(null);
               }}
             >
-              {formatCategoryName(category)}
+              {slugToTitle(category)}
             </button>
           ))}
         </div>

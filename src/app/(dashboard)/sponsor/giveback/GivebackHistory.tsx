@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react";
 import { CARD_SHADOW, CURRENCY_SYMBOLS, handleAxiosError } from "@/utils";
 import { useSponsorStore, useAuthStore, useUtilsStore } from "@/store";
 import { StatusChip, Button, Radio, Tab, CheckBox } from "@/components/atoms";
-import { Table } from "@/components/molecules";
+import { Modal, Table } from "@/components/molecules";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { authRequest } from "@/lib/api";
@@ -162,16 +162,9 @@ function RenewGivebackModal({
   };
 
   return (
-    <div
-      className="fixed inset-0 bg-black/50 z-[1000] flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white rounded-[1rem] w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <Modal isOpen onClose={onClose} zIndex="z-[1000]" className="rounded-[1rem] w-full max-w-lg">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[#E4E7EC]">
+        <div className="flex items-center justify-between p-6 border-b border-[#E4E7EC] sticky top-0 bg-white z-10">
           <div>
             <h2 className="text-[1.125rem] font-[600] text-[#171717]">
               Renew Giveback
@@ -524,8 +517,7 @@ function RenewGivebackModal({
             </div>
           )}
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }
 

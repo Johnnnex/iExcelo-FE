@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/atoms";
 import { useRouter } from "next/navigation";
+import { countdownFromMs } from "@/utils";
 
 export default function ExamInfo() {
   const router = useRouter();
@@ -19,19 +20,8 @@ export default function ExamInfo() {
     const targetDate = new Date(examDate).getTime();
 
     const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance > 0) {
-        setTimeLeft({
-          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-          ),
-          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((distance % (1000 * 60)) / 1000),
-        });
-      }
+      const result = countdownFromMs(targetDate - Date.now());
+      if (result) setTimeLeft(result);
     }, 1000);
 
     return () => clearInterval(interval);

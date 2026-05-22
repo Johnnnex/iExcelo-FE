@@ -3,7 +3,7 @@
 import { Button, ProgressBar, StatusChip } from "@/components/atoms";
 import { cn } from "@/lib/utils";
 import { useAuthStore, useAffiliateStore } from "@/store";
-import { CURRENCY_SYMBOLS } from "@/utils";
+import { CURRENCY_SYMBOLS, buildAffiliateLink } from "@/utils";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -40,10 +40,7 @@ export default function Affiliate() {
   }, [accessToken, selectedCurrency]);
 
   const affiliateCode = dashboard?.affiliateCode || "";
-  const affiliateLink =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/ref/${affiliateCode}`
-      : `https://iexcelo.com/ref/${affiliateCode}`;
+  const affiliateLink = buildAffiliateLink(affiliateCode);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(affiliateLink);

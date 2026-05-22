@@ -33,6 +33,13 @@ export function capitalizeWords(str: string): string {
  * Strips markdown syntax and HTML tags from a string for use in previews.
  * Handles bold, italic, code, headings, links, images, and HTML entities.
  */
+export function slugToTitle(slug: string): string {
+  return slug
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 export function stripMarkdownPreview(
   content: string,
   maxLen = 120,

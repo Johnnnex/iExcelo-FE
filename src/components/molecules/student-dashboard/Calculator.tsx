@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { safeEval } from "@/utils";
 
 const CALC_OPERATORS = ["+", "-", "*", "/"];
 
@@ -31,17 +32,6 @@ const calcButtonDefs = [
       "col-span-2 w-full rounded-[1.25rem] text-white aspect-[unset] bg-[#313131]",
   },
 ];
-
-function safeEval(expr: string): number | null {
-  if (!expr) return null;
-  try {
-    if (!/^[\d+\-*/.() ]+$/.test(expr)) return null;
-    const result = new Function(`return (${expr})`)() as number;
-    return typeof result === "number" && isFinite(result) ? result : null;
-  } catch {
-    return null;
-  }
-}
 
 function CalcExpression({ expr }: { expr: string }) {
   if (!expr) return <span className="text-[#818181]">0</span>;

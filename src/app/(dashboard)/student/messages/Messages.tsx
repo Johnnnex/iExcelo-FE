@@ -4,8 +4,11 @@ import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { Button, CheckBox } from "@/components/atoms";
-import { InputField } from "@/components/molecules";
+import { Modal, InputField } from "@/components/molecules";
 import { useAuthStore } from "@/store";
 import { useChatStore } from "@/store/chat.store";
 import { cn } from "@/lib/utils";
@@ -49,6 +52,15 @@ function Initials({ name, size = "md" }: { name: string; size?: "sm" | "md" }) {
 
 // ─── Compose modal ────────────────────────────────────────────────────────────
 
+const composeSchema = yup.object({
+  message: yup
+    .string()
+    .required("Message cannot be empty")
+    .test("no-empty-html", "Message cannot be empty", (val) =>
+      !!val && val.replace(/<[^>]*>/g, "").trim().length > 0,
+    ),
+});
+
 function ComposeModal({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const {
@@ -62,8 +74,13 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
   const [step, setStep] = useState<1 | 2>(1);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<IComposeStudent[]>([]);
-  const [message, setMessage] = useState<any>("");
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(composeSchema) });
 
   const handleQueryChange = (val: string) => {
     setQuery(val);
@@ -81,7 +98,7 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
     );
   };
 
-  const handleSend = () => {
+  const handleSend = handleSubmit(({ message }) => {
     if (!selected.length) return;
     const text =
       typeof message === "string" ? message.trim() : JSON.stringify(message);
@@ -93,7 +110,7 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
         if (selected.length === 1) router.push(`/student/messages/${firstId}`);
       },
     );
-  };
+  });
 
   const hasEmail = query.trim().includes("@");
   const noResults =
@@ -103,17 +120,9 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
   );
 
   return (
-    <div
-      className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white rounded-[.875rem] w-full max-w-[34rem] flex flex-col"
-        style={{ boxShadow: CARD_SHADOW }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* ── Header ──────────────────────────────────────────────────────── */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#F0F0F0]">
+    <Modal isOpen onClose={onClose} className="rounded-[.875rem] w-full max-w-[34rem]" overflowY="hidden">
+      {/* ── Header ──────────────────────────────────────────────────────── */}
+      <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#F0F0F0] sticky top-0 bg-white z-10">
           <div className="flex items-center gap-3">
             {step === 2 && (
               <button
@@ -263,7 +272,7 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
 
         {/* ── Step 2: Write message ────────────────────────────────────────── */}
         {step === 2 && (
-          <div className="flex flex-col gap-4 px-6 py-5">
+          <div className="flex flex-col flex-1 min-h-0 gap-4 px-6 py-5">
             {/* Recipients */}
             <div className="flex flex-wrap gap-1.5">
               {selected.map((s) => (
@@ -285,21 +294,28 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* Rich text input */}
-            <div className="rounded-[.875rem] border border-[#D6D6D6] focus-within:border-[#007FFF] transition-colors duration-200 p-3">
-              <InputField
-                type="rich-text"
-                label={null}
-                name="compose-message"
-                value={message}
-                onChange={(e: { target: { name?: string; value: any } }) =>
-                  setMessage(e.target.value)
-                }
-                richTextProps={{
-                  variant: "chat",
-                  image: { allowed: false, folder: "chat" },
-                }}
-              />
-            </div>
+            <Controller
+              name="message"
+              control={control}
+              render={({ field }) => (
+                <div className="flex-1 min-h-0 overflow-y-auto rounded-[.875rem] border border-[#D6D6D6] focus-within:border-[#007FFF] transition-colors duration-200 p-3">
+                  <InputField
+                    type="rich-text"
+                    label={null}
+                    name="compose-message"
+                    value={field.value ?? ""}
+                    onChange={(e: { target: { name?: string; value: any } }) =>
+                      field.onChange(e.target.value)
+                    }
+                    richTextProps={{
+                      variant: "chat",
+                      image: { allowed: false, folder: "chat" },
+                    }}
+                    error={errors.message?.message}
+                  />
+                </div>
+              )}
+            />
             <p className="text-[.6875rem] text-[#B0B0B0] -mt-2 text-center">
               This will be the opening message of your conversation.
             </p>
@@ -324,8 +340,7 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
             </div>
           </div>
         )}
-      </div>
-    </div>
+    </Modal>
   );
 }
 

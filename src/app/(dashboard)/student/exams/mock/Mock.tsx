@@ -9,6 +9,7 @@ import {
   TestResults,
   TestInstructions,
 } from "@/components/molecules/student-dashboard";
+import { Modal } from "@/components/molecules";
 import { Icon } from "@iconify/react";
 import { useExamProtection, useExamLeaveGuard } from "@/hooks";
 import { cn } from "@/lib/utils";
@@ -837,8 +838,7 @@ export default function Mock() {
 
       {/* ── Leave Exam Modal ── */}
       {showLeaveModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6">
+        <Modal isOpen className="rounded-2xl w-full max-w-md p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-1">
               Leave Exam?
             </h2>
@@ -859,8 +859,7 @@ export default function Mock() {
                 Leave Without Submitting
               </Button>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
     </>
   );

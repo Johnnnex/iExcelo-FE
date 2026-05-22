@@ -10,6 +10,7 @@ import {
   TestResults,
   TestInstructions,
 } from "@/components/molecules/student-dashboard";
+import { Modal } from "@/components/molecules";
 import { Icon } from "@iconify/react";
 import { useExamProtection, useExamLeaveGuard } from "@/hooks";
 import { cn } from "@/lib/utils";
@@ -217,6 +218,8 @@ export default function Timed() {
   const isMatching = question?.type === "matching";
   const isTextInput = isFillInBlank || isShortAnswer;
   const passage = question?.passageId ? getPassage(question.passageId) : null;
+  const hideScore =
+    question?.category === "theory" || question?.category === "practical";
 
   // Frozen = whole exam submitted OR this question individually confirmed
   const isCurrentFrozen =
@@ -523,6 +526,7 @@ export default function Timed() {
                           <InputField
                             type="rich-text"
                             name={`essay-${question.id}`}
+                            placeholder="Type Your Answer Here"
                             value={(answers[question.id] as string) ?? ""}
                             readOnly={isCurrentFrozen}
                             onChange={(e: { target: { name?: string; value: any } }) =>
@@ -989,17 +993,19 @@ export default function Timed() {
                       <hr className="mt-4 text-[#DCDFE4]" />
 
                       <div className="flex gap-3 my-8">
-                        <div className="flex-1 flex flex-col items-center border p-[0.75rem_0.5rem] bg-[#F3F3F3] rounded-[1rem] text-[#E32E89] border-[#E32E89] gap-1">
-                          <span className="text-[1rem] tracking-[-.32px] font-[600]">
-                            Score
-                          </span>
-                          <span className="text-[1.5rem] tracking-[-.48px] font-[500]">
-                            {isExamSubmitted && examResult
-                              ? Math.round(examResult.scorePercentage)
-                              : score}
-                            %
-                          </span>
-                        </div>
+                        {!hideScore && (
+                          <div className="flex-1 flex flex-col items-center border p-[0.75rem_0.5rem] bg-[#F3F3F3] rounded-[1rem] text-[#E32E89] border-[#E32E89] gap-1">
+                            <span className="text-[1rem] tracking-[-.32px] font-[600]">
+                              Score
+                            </span>
+                            <span className="text-[1.5rem] tracking-[-.48px] font-[500]">
+                              {isExamSubmitted && examResult
+                                ? Math.round(examResult.scorePercentage)
+                                : score}
+                              %
+                            </span>
+                          </div>
+                        )}
                         <div className="flex-1 flex flex-col items-center border p-[0.75rem_0.5rem] bg-[#F3F3F3] rounded-[1rem] text-[#E32E89] border-[#E32E89] gap-1">
                           <span className="text-[1rem] tracking-[-.32px] font-[600]">
                             Time
@@ -1094,16 +1100,20 @@ export default function Timed() {
                       <>
                         <hr className="mb-4" />
                         <div className="flex gap-3 mb-4">
-                          <div className="flex-1 flex items-center justify-between">
-                            <span className="text-sm text-gray-600">Score</span>
-                            <span className="text-lg font-bold text-[#E32E89]">
-                              {isExamSubmitted && examResult
-                                ? Math.round(examResult.scorePercentage)
-                                : score}
-                              %
-                            </span>
-                          </div>
-                          <div className="w-px bg-gray-200" />
+                          {!hideScore && (
+                            <>
+                              <div className="flex-1 flex items-center justify-between">
+                                <span className="text-sm text-gray-600">Score</span>
+                                <span className="text-lg font-bold text-[#E32E89]">
+                                  {isExamSubmitted && examResult
+                                    ? Math.round(examResult.scorePercentage)
+                                    : score}
+                                  %
+                                </span>
+                              </div>
+                              <div className="w-px bg-gray-200" />
+                            </>
+                          )}
                           <div className="flex-1 flex items-center justify-between">
                             <span className="text-sm text-gray-600">Time</span>
                             <span className="text-sm font-bold text-[#E32E89]">
@@ -1164,8 +1174,7 @@ export default function Timed() {
 
       {/* ── Confirm Submit Modal ── */}
       {showConfirmModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6">
+        <Modal isOpen className="rounded-2xl w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-1">
               <h2 className="text-lg font-semibold text-gray-900">
                 Finish Exam?
@@ -1192,14 +1201,12 @@ export default function Timed() {
                 Yes, Submit
               </Button>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* ── Leave Exam Modal ── */}
       {showLeaveModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6">
+        <Modal isOpen className="rounded-2xl w-full max-w-md p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-1">
               Leave Exam?
             </h2>
@@ -1220,15 +1227,13 @@ export default function Timed() {
                 Leave Without Submitting
               </Button>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* ── Explanation Modal ── */}
       {showFullDetails && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-auto">
-            <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
+        <Modal isOpen onClose={() => setShowFullDetails(false)} className="rounded-2xl w-full max-w-2xl">
+            <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
               <h2 className="text-lg font-semibold text-gray-900">
                 Explanation
               </h2>
@@ -1277,8 +1282,7 @@ export default function Timed() {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
     </>
   );

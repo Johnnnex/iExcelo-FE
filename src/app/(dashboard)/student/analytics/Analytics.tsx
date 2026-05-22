@@ -409,7 +409,9 @@ const Analytics = () => {
     <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
       {/* Header */}
       <section className="mb-5">
-        <h1 className="text-xl md:text-2xl font-[600] text-[#171717]">Analytics</h1>
+        <h1 className="text-xl md:text-2xl font-[600] text-[#171717]">
+          Analytics
+        </h1>
         <p className="text-gray-500 text-sm mt-1">
           Your live performance, progress and the overall performance of other
           candidates
@@ -434,7 +436,7 @@ const Analytics = () => {
             </div>
             <div className="flex mb-1 items-center gap-3">
               <p className="text-[#575757] text-sm">Overall Accuracy</p>
-              <div className="relative">
+              <div className="relative flex items-center justify-center">
                 <button
                   onClick={() => setShowAccuracyInfo((v) => !v)}
                   className="flex items-center"
@@ -612,7 +614,9 @@ const Analytics = () => {
       <section className="grid mt-5 grid-cols-1 items-stretch lg:grid-cols-3 gap-6">
         {/* Chart 2: Progress Over Time (granularity only) */}
         {!progressLoaded.current && isLoadingProgressOverTime ? (
-          <div className="lg:col-span-2"><SkeletonProgressOverTime /></div>
+          <div className="lg:col-span-2">
+            <SkeletonProgressOverTime />
+          </div>
         ) : (
           <div
             style={{ boxShadow: CARD_SHADOW }}
@@ -725,7 +729,9 @@ const Analytics = () => {
       <section className="grid mt-5 grid-cols-1 items-stretch lg:grid-cols-3 gap-6">
         {/* Chart 4: Student Ranking (date range) */}
         {!rankingLoaded.current && isLoadingRankingAnalytics ? (
-          <div className="lg:col-span-2"><SkeletonRanking /></div>
+          <div className="lg:col-span-2">
+            <SkeletonRanking />
+          </div>
         ) : (
           <div
             style={{ boxShadow: CARD_SHADOW }}

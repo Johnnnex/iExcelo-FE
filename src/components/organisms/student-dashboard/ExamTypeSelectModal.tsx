@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import { Button } from "../../atoms";
-import { InputField } from "@/components/molecules";
+import { Modal, InputField } from "@/components/molecules";
 import { useStudentStore } from "@/store";
 
 interface ExamTypeSelectModalProps {
@@ -32,14 +32,11 @@ export function ExamTypeSelectModal({
     onClose();
   };
 
-  if (!isOpen) return null;
-
   // If all exams are already paid, show a different message
   if (unpaidExamTypes.length === 0) {
     return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[200] p-4">
-        <div className="bg-white rounded-2xl w-full max-w-md">
-          <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
+      <Modal isOpen={isOpen} onClose={onClose} zIndex="z-[200]" className="rounded-2xl w-full max-w-md">
+        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
             <h2 className="text-lg font-semibold text-gray-900">All Set!</h2>
             <button
               onClick={onClose}
@@ -65,15 +62,13 @@ export function ExamTypeSelectModal({
             </p>
             <Button onClick={onClose}>Got it</Button>
           </div>
-        </div>
-      </div>
+      </Modal>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[300] p-4">
-      <div className="bg-white rounded-2xl w-full max-w-md">
-        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
+    <Modal isOpen={isOpen} onClose={onClose} zIndex="z-[300]" className="rounded-2xl w-full max-w-md">
+      <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
           <h2 className="text-lg font-semibold text-gray-900">
             Upgrade Your Plan
           </h2>
@@ -128,8 +123,7 @@ export function ExamTypeSelectModal({
               Continue
             </Button>
           </div>
-        </div>
       </div>
-    </div>
+    </Modal>
   );
 }

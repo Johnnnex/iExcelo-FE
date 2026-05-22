@@ -2,6 +2,7 @@
 
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/atoms";
+import { Modal } from "@/components/molecules/Modal";
 
 interface TestInstructionsProps {
   examType: string;
@@ -25,8 +26,7 @@ export function TestInstructions({
   isAttempting,
 }: TestInstructionsProps) {
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-2xl p-6 md:p-8">
+    <Modal isOpen className="rounded-2xl w-full max-w-2xl p-6 md:p-8">
         <h1 className="text-xl font-semibold text-blue-500 mb-6">
           Welcome, {userName}
         </h1>
@@ -104,7 +104,6 @@ export function TestInstructions({
             Attempt Test
           </Button>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "../../atoms";
-import { InputField } from "@/components/molecules";
+import { Modal, InputField } from "@/components/molecules";
 import { useUtilsStore, useStudentStore } from "@/store";
 import { authRequest } from "@/lib/api";
 import { handleAxiosError } from "@/utils";
@@ -105,16 +105,13 @@ export function CompleteProfileModal({ isOpen }: { isOpen: boolean }) {
     }
   };
 
-  if (!isOpen) return null;
-
   const isValidSelection =
     selectedSubjectIds.length >= minSubjects &&
     selectedSubjectIds.length <= maxSubjects;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-auto">
-        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
+    <Modal isOpen={isOpen} className="rounded-2xl w-full max-w-lg">
+      <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
           <h2 className="text-lg font-semibold text-gray-900">
             Complete your Profile
           </h2>
@@ -178,7 +175,6 @@ export function CompleteProfileModal({ isOpen }: { isOpen: boolean }) {
             </Button>
           </div>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }

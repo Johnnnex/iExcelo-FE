@@ -9,6 +9,7 @@ import { Button, Tab, RichText, Radio, CheckBox } from "@/components/atoms";
 import { Chart } from "@/components/molecules";
 import { useAuthStore, useStudentStore } from "@/store";
 import { formatDateTime, formatTimeFromSeconds, capitalize } from "@/utils";
+import { useExamProtection } from "@/hooks";
 import type { IDetailedResult, IQuestionStatus } from "@/types";
 
 // ── Theme colors ──────────────────────────────────────────────────────────────
@@ -160,6 +161,7 @@ const Review = () => {
   } = useStudentStore();
 
   const examId = params.examId as string;
+  useExamProtection();
 
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [showFullDetails, setShowFullDetails] = useState(false);

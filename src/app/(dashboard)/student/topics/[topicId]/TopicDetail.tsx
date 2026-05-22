@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { Icon } from "@iconify/react";
 import { RichText } from "@/components/atoms";
 import { useExamStore } from "@/store";
+import { useExamProtection } from "@/hooks";
 import Link from "next/link";
 
 function TopicDetailSkeleton() {
@@ -49,6 +50,7 @@ export default function TopicDetail() {
   const { topicId } = useParams<{ topicId: string }>();
   const { topicDetail, isLoadingTopicDetail, fetchTopicDetail } =
     useExamStore();
+  useExamProtection();
 
   useEffect(() => {
     if (topicId) fetchTopicDetail(topicId);

@@ -4,7 +4,7 @@ import { Table } from "@/components/molecules";
 import { StatusChip } from "@/components/atoms";
 import { cn } from "@/lib/utils";
 import { useAuthStore, useAffiliateStore } from "@/store";
-import { CURRENCY_SYMBOLS } from "@/utils";
+import { CURRENCY_SYMBOLS, calculateGrowth } from "@/utils";
 import { Icon } from "@iconify/react";
 import React, { useEffect } from "react";
 import StudentsSkeleton from "./StudentsSkeleton";
@@ -32,32 +32,20 @@ const Students = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, selectedCurrency]);
 
-  // Calculate metrics
-  const calculateMetric = (current: number, previous: number) => {
-    if (previous === 0) {
-      // If previous is 0 and current > 0, show 100% increase
-      if (current > 0) return { percentage: "100.0", isPositive: true };
-      // If both are 0, show 0%
-      return { percentage: "0.0", isPositive: true };
-    }
-    const change = ((current - previous) / previous) * 100;
-    return { percentage: Math.abs(change).toFixed(1), isPositive: change >= 0 };
-  };
-
-  const referralsMetric = calculateMetric(
+  const referralsMetric = calculateGrowth(
     dashboard?.totalReferrals ?? 0,
     dashboard?.previousMonth?.referrals ?? 0,
   );
-  const conversionsMetric = calculateMetric(
+  const conversionsMetric = calculateGrowth(
     dashboard?.totalConversions ?? 0,
     dashboard?.previousMonth?.conversions ?? 0,
   );
-  const pendingMetric = calculateMetric(
+  const pendingMetric = calculateGrowth(
     dashboard?.referredNotSubscribed ?? 0,
     (dashboard?.previousMonth?.referrals ?? 0) -
       (dashboard?.previousMonth?.conversions ?? 0),
   );
-  const earningsMetric = calculateMetric(
+  const earningsMetric = calculateGrowth(
     dashboard?.totalEarnings ?? 0,
     dashboard?.previousMonth?.earnings ?? 0,
   );

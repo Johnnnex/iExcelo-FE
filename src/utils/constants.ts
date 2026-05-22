@@ -62,3 +62,27 @@ export const SUBJECT_COLORS = [
 
 /** Questions per page for exam and history pagination. Must be a divisor of the backend PAGE_SIZE (100). */
 export const EXAM_PAGE_SIZE = 20;
+
+export const EXAM_QUESTION_OPTIONS = [
+  { value: 10, label: "10 questions" },
+  { value: 20, label: "20 questions" },
+  { value: 30, label: "30 questions" },
+  { value: 40, label: "40 questions" },
+  { value: 50, label: "50 questions" },
+];
+
+export const EXAM_TIME_OPTIONS = [
+  { value: 15, label: "15 minutes" },
+  { value: 30, label: "30 minutes" },
+  { value: 45, label: "45 minutes" },
+  { value: 60, label: "60 minutes" },
+  { value: 90, label: "90 minutes" },
+  { value: 120, label: "120 minutes" },
+];
+
+export const FAQ_CATEGORIES = [
+  "general",
+  "exam-revision-platform",
+  "give-back",
+  "affiliate-program",
+] as const;

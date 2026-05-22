@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/atoms";
+import { Modal } from "@/components/molecules";
 import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react";
 import { useStudentStore } from "@/store";
@@ -562,8 +563,7 @@ const Subscriptions = () => {
 
       {/* Cancel Confirmation Modal */}
       {showCancelModal && activeSubscription && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden">
+        <Modal isOpen onClose={() => setShowCancelModal(false)} className="rounded-2xl w-full max-w-md overflow-hidden">
             <div className="p-6 text-center">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-50 flex items-center justify-center">
                 <Icon
@@ -609,15 +609,13 @@ const Subscriptions = () => {
                 )}
               </button>
             </div>
-          </div>
-        </div>
-      )}
+          </Modal>
+        )}
 
       {/* Payment Modal */}
       {showPayment && selectedPlan && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-auto">
-            <div className="p-4 md:p-6 border-b border-gray-100">
+        <Modal isOpen onClose={() => setShowPayment(false)} className="rounded-2xl w-full max-w-3xl">
+            <div className="p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
               <button
                 onClick={() => setShowPayment(false)}
                 className="text-gray-400 hover:text-gray-600"
@@ -710,7 +708,7 @@ const Subscriptions = () => {
               </div>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </section>
   );

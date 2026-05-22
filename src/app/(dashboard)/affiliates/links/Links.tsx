@@ -8,14 +8,11 @@ import { Icon } from "@iconify/react";
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { QRCodeSVG } from "qrcode.react";
-
-const SHARE_ICONS = [
-  { icon: "hugeicons:facebook-02", name: "Facebook" },
-  { icon: "hugeicons:tiktok", name: "TikTok" },
-  { icon: "hugeicons:new-twitter", name: "Twitter" },
-  { icon: "hugeicons:instagram", name: "Instagram" },
-  { icon: "hugeicons:whatsapp", name: "WhatsApp" },
-];
+import {
+  SHARE_PLATFORMS,
+  buildShareUrl,
+  buildAffiliateLink,
+} from "@/utils";
 
 const Links = () => {
   const {
@@ -109,10 +106,7 @@ const Links = () => {
   );
 
   const affiliateCode = profile?.affiliateCode || "";
-  const affiliateLink =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/ref/${affiliateCode}`
-      : `https://iexcelo.com/ref/${affiliateCode}`;
+  const affiliateLink = buildAffiliateLink(affiliateCode);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(affiliateLink);
@@ -122,32 +116,13 @@ const Links = () => {
   };
 
   const handleShare = (platform: string) => {
-    const encodedLink = encodeURIComponent(affiliateLink);
-    const text = encodeURIComponent(
-      "Join iExcelo and start your learning journey!",
-    );
-
-    let url = "";
-    switch (platform) {
-      case "Facebook":
-        url = `https://www.facebook.com/sharer/sharer.php?u=${encodedLink}`;
-        break;
-      case "Twitter":
-        url = `https://twitter.com/intent/tweet?url=${encodedLink}&text=${text}`;
-        break;
-      case "WhatsApp":
-        url = `https://wa.me/?text=${text}%20${encodedLink}`;
-        break;
-      case "TikTok":
-      case "Instagram":
-        navigator.clipboard.writeText(affiliateLink);
-        toast.success("Link copied! Paste it on " + platform);
-        return;
+    if (platform === "TikTok" || platform === "Instagram") {
+      navigator.clipboard.writeText(affiliateLink);
+      toast.success("Link copied! Paste it on " + platform);
+      return;
     }
-
-    if (url) {
-      window.open(url, "_blank", "noopener,noreferrer");
-    }
+    const url = buildShareUrl(platform, affiliateLink);
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const handleCodeUpdate = async () => {
@@ -225,7 +200,7 @@ const Links = () => {
         </div>
 
         <div className="flex gap-13 w-fit mx-auto mt-6 items-center">
-          {SHARE_ICONS.map((social, index) => (
+          {SHARE_PLATFORMS.map((social, index) => (
             <button
               key={`__social__icon__${index}__`}
               onClick={() => handleShare(social.name)}

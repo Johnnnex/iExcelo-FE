@@ -23,6 +23,7 @@ import Select, {
   MultiValueGenericProps,
   MultiValueRemoveProps,
   OptionProps,
+  ValueContainerProps,
 } from "react-select";
 import { CustomDateTimePicker } from ".";
 import { TipTap, SyntheticEvent, RichTextProps } from ".";
@@ -184,6 +185,65 @@ const CustomMultiValueRemove = (props: MultiValueRemoveProps) => {
   );
 };
 
+const CustomValueContainer: FC<
+  ValueContainerProps<unknown, boolean, GroupBase<any>>
+> = ({ children, ...props }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showEllipsis, setShowEllipsis] = useState(false);
+  const count = (props.getValue() as SelectOption[]).length;
+
+  useEffect(() => {
+    if (!props.isMulti) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => {
+      const overflowing = el.scrollWidth > el.clientWidth;
+      setShowEllipsis(overflowing);
+      el.scrollLeft = el.scrollWidth - el.clientWidth;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count, props.isMulti]);
+
+  if (!props.isMulti)
+    return (
+      <components.ValueContainer {...props}>{children}</components.ValueContainer>
+    );
+
+  return (
+    <components.ValueContainer {...props}>
+      {showEllipsis && (
+        <span
+          style={{
+            fontSize: "0.75rem",
+            color: "#98A2B3",
+            flexShrink: 0,
+            userSelect: "none",
+            paddingRight: "4px",
+          }}
+        >
+          …
+        </span>
+      )}
+      <div
+        ref={scrollRef}
+        className="no-scrollbar"
+        style={{
+          display: "flex",
+          flexWrap: "nowrap",
+          overflowX: "auto",
+          overflowY: "hidden",
+          flex: 1,
+          minWidth: 0,
+          alignItems: "center",
+          scrollbarWidth: "none",
+        }}
+      >
+        {children}
+      </div>
+    </components.ValueContainer>
+  );
+};
+
 const InputField = memo(
   forwardRef<any, InputFieldProps>(
     (
@@ -339,6 +399,7 @@ const InputField = memo(
                     Option: CustomOption,
                     Control: CustomControl,
                     DropdownIndicator: CustomDropdownIndicator,
+                    ValueContainer: CustomValueContainer,
                     MultiValueContainer: CustomMultiValueContainer,
                     MultiValueLabel: CustomMultiValueLabel,
                     MultiValueRemove: CustomMultiValueRemove,
@@ -407,6 +468,7 @@ const InputField = memo(
                       color: "#344054",
                       fontWeight: 400,
                       lineHeight: "1.25rem",
+                      whiteSpace: "nowrap",
                     }),
                     control: (baseStyles, state) => ({
                       ...baseStyles,

@@ -583,7 +583,7 @@ export default function SponsorStudentAnalytics({
                 </div>
                 <div className="flex mb-1 items-center gap-3">
                   <p className="text-[#575757] text-sm">Overall Accuracy</p>
-                  <div className="relative">
+                  <div className="relative flex items-center justify-center">
                     <button onClick={() => setShowAccuracyInfo((v) => !v)}>
                       <Icon
                         icon="hugeicons:information-circle"

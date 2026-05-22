@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import { Button } from "@/components/atoms";
 import { RichText } from "@/components/atoms";
-import { InputField } from "@/components/molecules";
+import { InputField, Modal } from "@/components/molecules";
 import { useAuthStore } from "@/store";
 import { useChatStore } from "@/store/chat.store";
 import { CARD_SHADOW } from "@/utils";
@@ -816,15 +816,7 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
 
       {/* ── Flag modal ───────────────────────────────────────────────────── */}
       {flagModal && (
-        <div
-          className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
-          onClick={() => setFlagModal(null)}
-        >
-          <div
-            className="bg-white rounded-[.875rem] p-6 w-full max-w-[30rem]"
-            style={{ boxShadow: CARD_SHADOW }}
-            onClick={(e) => e.stopPropagation()}
-          >
+        <Modal isOpen onClose={() => setFlagModal(null)} className="rounded-[.875rem] p-6 w-full max-w-[30rem]">
             <div className="flex items-center gap-2.5 mb-1">
               <div className="w-8 h-8 rounded-full bg-[#FEF6E7] flex items-center justify-center flex-shrink-0">
                 <Icon
@@ -870,8 +862,7 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                 Flag Message
               </Button>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

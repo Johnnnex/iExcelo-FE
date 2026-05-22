@@ -18,9 +18,14 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className={`${geistSans.className} antialiased`} suppressHydrationWarning>
-        <UtilsProvider />
-        <ClientLayout>{children}</ClientLayout>
+      <body
+        className={`${geistSans.className} antialiased`}
+        suppressHydrationWarning
+      >
+        <main>
+          <UtilsProvider />
+          <ClientLayout>{children}</ClientLayout>
+        </main>
       </body>
     </html>
   );
