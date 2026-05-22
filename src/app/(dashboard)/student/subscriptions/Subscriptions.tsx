@@ -707,7 +707,6 @@ const Subscriptions = () => {
                 </a>
               </div>
             </div>
-          </div>
         </Modal>
       )}
     </section>

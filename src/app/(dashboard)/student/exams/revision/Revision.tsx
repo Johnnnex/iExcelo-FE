@@ -134,7 +134,8 @@ function RevisionTestContent() {
   const isTextInput = isFillInBlank || isShortAnswer;
   const passage = question?.passageId ? getPassage(question.passageId) : null;
   const hideScore =
-    question?.category === "theory" || question?.category === "practical";
+    pendingConfig?.category === "theory" ||
+    pendingConfig?.category === "practical";
 
   // Frozen = whole exam submitted OR this question individually confirmed
   const isCurrentFrozen =

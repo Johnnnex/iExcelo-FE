@@ -369,7 +369,6 @@ export default function Upgrade({ examTypeId, checkoutInfo }: UpgradeProps) {
                 </a>
               </div>
             </div>
-          </div>
         </Modal>
       )}
     </>
