@@ -330,9 +330,7 @@ function RevisionTestContent() {
     if (!question) return;
     setFullDetailsTopic(question.topicName ?? "");
     setFullDetailsTopicId(question.topicId ?? null);
-    setFullDetailsContent(
-      question.explanationLong ?? question.explanationShort ?? "",
-    );
+    setFullDetailsContent(question.explanation ?? "");
     setShowFullDetails(true);
   };
 
@@ -833,7 +831,7 @@ function RevisionTestContent() {
                     question &&
                     (question.correctAnswer ||
                       question.topicName ||
-                      question.explanationShort) && (
+                      question.explanation) && (
                       <div
                         style={{
                           boxShadow:
@@ -845,12 +843,12 @@ function RevisionTestContent() {
                           <h3 className="font-semibold text-gray-900">
                             Explanation
                           </h3>
-                          {question.explanationLong && (
+                          {question.explanation && (
                             <button
                               onClick={handleShowFullDetails}
                               className="text-[#E32E89] text-sm font-medium hover:underline flex items-center gap-1 mt-2 md:mt-0"
                             >
-                              Detailed Explanation
+                              Full Description Here
                               <Icon
                                 icon="hugeicons:arrow-right-01"
                                 className="w-4 h-4"
@@ -884,11 +882,11 @@ function RevisionTestContent() {
                           </>
                         )}
 
-                        {question.explanationShort && (
+                        {question.explanation && (
                           <>
                             <div className="h-[1px] w-full bg-[#EDEDED] my-4" />
                             <div className="text-gray-600 text-sm leading-relaxed">
-                              <RichText content={question.explanationShort} />
+                              <RichText content={question.explanation} />
                             </div>
                           </>
                         )}

@@ -492,8 +492,7 @@ export interface IDetailedResult {
   questionType: string;
   topicId: string | null;
   topicName: string | null;
-  explanationShort: string | null;
-  explanationLong: string | null;
+  explanation: string | null;
   marks: number;
   passageId: string | null;
   passage: { id: string; title: string; content: string } | null;
@@ -554,8 +553,7 @@ export interface IExamQuestion {
   correctAnswer?: string | string[] | Record<string, string>;
   topicId?: string | null;
   topicName?: string | null;
-  explanationShort?: string | null;
-  explanationLong?: string | null;
+  explanation?: string | null;
 }
 
 export interface IExamPassage {
