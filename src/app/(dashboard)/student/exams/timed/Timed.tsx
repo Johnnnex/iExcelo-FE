@@ -423,6 +423,7 @@ export default function Timed() {
             ? formatTimeUsed(examResult.timeSpentSeconds)
             : undefined
         }
+        hideScore={hideScore}
         onReviewTest={handleReviewTest}
         onReturnToMain={handleReturnToMain}
       />
@@ -886,6 +887,17 @@ export default function Timed() {
                             </Button>
                           )}
                         </div>
+
+                        {/* Mobile nav trigger — sits below submit button, hidden on desktop */}
+                        <div className="lg:hidden mt-4 flex justify-center">
+                          <button
+                            onClick={() => setShowNavigation(true)}
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F2F4F7] text-[#344054] text-sm font-medium"
+                          >
+                            <Icon icon="hugeicons:menu-02" className="w-4 h-4" />
+                            Test Navigation
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -1064,13 +1076,6 @@ export default function Timed() {
               </div>
             </div>
 
-            {/* Mobile nav toggle */}
-            <button
-              onClick={() => setShowNavigation(!showNavigation)}
-              className="fixed bottom-6 right-6 lg:hidden w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg flex items-center justify-center"
-            >
-              <Icon icon="hugeicons:menu-02" className="w-6 h-6" />
-            </button>
 
             {showNavigation && (
               <div className="fixed inset-0 bg-black/50 z-50 lg:hidden flex items-end justify-center">

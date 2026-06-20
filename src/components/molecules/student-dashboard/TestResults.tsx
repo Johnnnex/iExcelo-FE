@@ -11,6 +11,7 @@ interface TestResultsProps {
   unattempted: number;
   score: number;
   timeUsed?: string;
+  hideScore?: boolean;
   /** Omit to hide the "Review Test" button (e.g. mock exams — review happens before submit). */
   onReviewTest?: () => void;
   onReturnToMain: () => void;
@@ -24,6 +25,7 @@ export function TestResults({
   unattempted,
   score,
   timeUsed,
+  hideScore = false,
   onReviewTest,
   onReturnToMain,
 }: TestResultsProps) {
@@ -78,14 +80,16 @@ export function TestResults({
               )}
             </div>
           </div>
-          <div className="flex w-fit flex-col items-center border p-[1rem_2rem] bg-[#F3F3F3] rounded-[1rem] text-[#E32E89] border-[#E32E89] gap-2">
-            <span className="text-[1.5rem] tracking-[-.48px] leading-8 font-[600]">
-              Score
-            </span>
-            <span className="text-[2.25rem] tracking-[-.72px] leading-11 font-[500]">
-              {Math.round(score)}%
-            </span>
-          </div>
+          {!hideScore && (
+            <div className="flex w-fit flex-col items-center border p-[1rem_2rem] bg-[#F3F3F3] rounded-[1rem] text-[#E32E89] border-[#E32E89] gap-2">
+              <span className="text-[1.5rem] tracking-[-.48px] leading-8 font-[600]">
+                Score
+              </span>
+              <span className="text-[2.25rem] tracking-[-.72px] leading-11 font-[500]">
+                {Math.round(score)}%
+              </span>
+            </div>
+          )}
         </div>
 
         <hr className="my-8 text-[#EDEDED]" />

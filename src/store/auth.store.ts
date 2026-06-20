@@ -299,8 +299,7 @@ export const useAuthStore = create<IAuthStore>()(
             accessToken: newAccessToken,
             refreshToken: newRefreshToken,
           };
-        } catch (error) {
-          console.error("Token refresh failed:", error);
+        } catch {
           return null;
         }
       },

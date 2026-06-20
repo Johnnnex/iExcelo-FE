@@ -565,26 +565,33 @@ export default function Exams() {
                               {subject.questionsAttempted ?? 0}/{freeTierLimit}
                             </span>
                           ) : (
-                            <button
-                              onClick={() => handleViewTopics(subject.id)}
-                              className={cn(
-                                "flex items-center gap-1 text-xs font-[600] transition-colors",
-                                checked
-                                  ? "text-pink-500 hover:text-pink-600"
-                                  : "text-gray-400",
+                            <div className="flex items-center gap-2">
+                              {(subject.totalQuestions ?? 0) > 0 && (
+                                <span className="text-xs text-[#667085]">
+                                  {subject.totalQuestions.toLocaleString()} Qs
+                                </span>
                               )}
-                              disabled={!checked}
-                            >
-                              {isExpanded ? "Hide Topics" : "View Topics"}
-                              <Icon
-                                icon={
-                                  isExpanded
-                                    ? "hugeicons:arrow-up-01"
-                                    : "hugeicons:arrow-down-01"
-                                }
-                                className="w-3 h-3"
-                              />
-                            </button>
+                              <button
+                                onClick={() => handleViewTopics(subject.id)}
+                                className={cn(
+                                  "flex items-center gap-1 text-xs font-[600] transition-colors",
+                                  checked
+                                    ? "text-pink-500 hover:text-pink-600"
+                                    : "text-gray-400",
+                                )}
+                                disabled={!checked}
+                              >
+                                {isExpanded ? "Hide Topics" : "View Topics"}
+                                <Icon
+                                  icon={
+                                    isExpanded
+                                      ? "hugeicons:arrow-up-01"
+                                      : "hugeicons:arrow-down-01"
+                                  }
+                                  className="w-3 h-3"
+                                />
+                              </button>
+                            </div>
                           )}
                         </div>
 

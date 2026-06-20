@@ -35,7 +35,7 @@ const History = () => {
       capitalize(attempt.mode),
       formatDateTime(attempt.startedAt),
       attempt.totalQuestions,
-      attempt.scorePercentage,
+      { score: attempt.scorePercentage, category: attempt.category },
       formatTimeFromSeconds(attempt.timeSpentSeconds),
       attempt.id,
     ]) ?? [];
@@ -57,17 +57,22 @@ const History = () => {
           "Total Questions",
           {
             title: "Total Score",
-            customTableBody: (score: number) => (
-              <span
-                className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                  score < 50
-                    ? "bg-red-50 text-red-600"
-                    : "bg-green-50 text-green-700"
-                }`}
-              >
-                {score.toFixed(1)}%
-              </span>
-            ),
+            customTableBody: (cell: { score: number; category: string | null }) => {
+              const hideScore =
+                cell.category === "theory" || cell.category === "practical";
+              if (hideScore) return <span className="text-xs text-gray-400">N/A</span>;
+              return (
+                <span
+                  className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                    cell.score < 50
+                      ? "bg-red-50 text-red-600"
+                      : "bg-green-50 text-green-700"
+                  }`}
+                >
+                  {cell.score.toFixed(1)}%
+                </span>
+              );
+            },
           },
           "Time Used",
           {

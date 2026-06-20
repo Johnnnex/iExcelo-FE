@@ -30,6 +30,9 @@ export interface ISubject {
   description: string;
   examTypeId: string;
   isActive: boolean;
+  totalQuestions: number;
+  isCompulsory: boolean;
+  isAlsoPractical: boolean;
   createdAt: string;
   updatedAt: string;
 }

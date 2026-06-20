@@ -24,13 +24,23 @@ export function CompleteProfileModal({ isOpen }: { isOpen: boolean }) {
   const minSubjects = currentExamType?.minSubjectsSelectable ?? 1;
   const maxSubjects = currentExamType?.maxSubjectsSelectable ?? 9;
 
-  // Fetch subjects when modal opens
+  // Fetch subjects when modal opens; auto-select compulsory ones
   useEffect(() => {
     if (isOpen && examTypeId) {
       setLoadingSubjects(true);
-      void fetchSubjectsByExamType(examTypeId).finally(() => {
-        setLoadingSubjects(false);
-      });
+      void fetchSubjectsByExamType(examTypeId)
+        .then((fetched) => {
+          const compulsoryIds = fetched
+            .filter((s) => s.isCompulsory)
+            .map((s) => s.id);
+          if (compulsoryIds.length > 0) {
+            setSelectedSubjectIds(compulsoryIds);
+            setSelectedSubjectsString(compulsoryIds.join(","));
+          }
+        })
+        .finally(() => {
+          setLoadingSubjects(false);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, examTypeId]);
@@ -151,7 +161,9 @@ export function CompleteProfileModal({ isOpen }: { isOpen: boolean }) {
                 value={selectedSubjectsString}
                 selectOptions={subjects.map((subject: ISubject) => ({
                   value: subject.id,
-                  label: subject.name,
+                  label: subject.isCompulsory
+                    ? `${subject.name} (required)`
+                    : subject.name,
                 }))}
                 disabled={loadingSubjects}
                 onChange={(e: { target: { value: string } }) => {

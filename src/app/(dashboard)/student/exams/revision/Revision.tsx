@@ -369,6 +369,7 @@ function RevisionTestContent() {
         score={
           examResult?.scorePercentage ?? (correctCount / totalQuestions) * 100
         }
+        hideScore={hideScore}
         onReviewTest={handleReviewTest}
         onReturnToMain={handleReturnToMain}
       />
@@ -779,7 +780,7 @@ function RevisionTestContent() {
                           </div>
                         )}
 
-                        <div className="flex justify-end mt-6">
+                        <div className="flex justify-end gap-2 mt-6">
                           {isExamSubmitted ? (
                             /* Post-submission review mode */
                             currentQuestion === totalQuestions ? (
@@ -792,23 +793,33 @@ function RevisionTestContent() {
                               </Button>
                             )
                           ) : !submittedQuestions.has(currentQuestion) ? (
-                            <Button
-                              onClick={handleSubmitAnswer}
-                              disabled={(() => {
-                                const a = answers[question.id];
-                                if (a == null) return true;
-                                if (Array.isArray(a)) return a.length === 0;
-                                if (typeof a === "string")
-                                  return a.trim() === "";
-                                if (typeof a === "object")
-                                  return !Object.values(
-                                    a as Record<string, string>,
-                                  ).some((v) => v?.trim() !== "");
-                                return false;
-                              })()}
-                            >
-                              Submit Answer
-                            </Button>
+                            <>
+                              {currentQuestion < totalQuestions && (
+                                <Button
+                                  onClick={handleNextQuestion}
+                                  className="bg-white! border border-[#D0D5DD]! text-[#344054]! hover:bg-[#F9FAFB]!"
+                                >
+                                  Skip
+                                </Button>
+                              )}
+                              <Button
+                                onClick={handleSubmitAnswer}
+                                disabled={(() => {
+                                  const a = answers[question.id];
+                                  if (a == null) return true;
+                                  if (Array.isArray(a)) return a.length === 0;
+                                  if (typeof a === "string")
+                                    return a.trim() === "";
+                                  if (typeof a === "object")
+                                    return !Object.values(
+                                      a as Record<string, string>,
+                                    ).some((v) => v?.trim() !== "");
+                                  return false;
+                                })()}
+                              >
+                                Submit Answer
+                              </Button>
+                            </>
                           ) : currentQuestion === totalQuestions ? (
                             <Button
                               onClick={() => setShowConfirmModal(true)}
@@ -821,6 +832,17 @@ function RevisionTestContent() {
                               Next Question
                             </Button>
                           )}
+                        </div>
+
+                        {/* Mobile nav trigger — sits below submit button, hidden on desktop */}
+                        <div className="lg:hidden mt-4 flex justify-center">
+                          <button
+                            onClick={() => setShowNavigation(true)}
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F2F4F7] text-[#344054] text-sm font-medium"
+                          >
+                            <Icon icon="hugeicons:menu-02" className="w-4 h-4" />
+                            Test Navigation
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -983,12 +1005,6 @@ function RevisionTestContent() {
               </div>
             </div>
 
-            <button
-              onClick={() => setShowNavigation(!showNavigation)}
-              className="fixed bottom-6 right-6 lg:hidden w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg flex items-center justify-center"
-            >
-              <Icon icon="hugeicons:menu-02" className="w-6 h-6" />
-            </button>
 
             {showNavigation && (
               <div className="fixed inset-0 bg-black/50 z-50 lg:hidden flex items-end justify-center">

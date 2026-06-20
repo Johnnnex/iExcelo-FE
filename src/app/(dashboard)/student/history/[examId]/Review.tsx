@@ -200,8 +200,11 @@ const Review = () => {
     timeSpentSeconds,
     timeLimitSeconds,
     startedAt,
+    category,
     questionStatuses,
   } = examAttemptDetail;
+
+  const hideScore = category === "theory" || category === "practical";
 
   const modeInfo = getModeIcon(mode);
 
@@ -373,21 +376,23 @@ const Review = () => {
                         {totalQuestions}
                       </span>
                     </div>
-                    <div className="flex gap-[1rem] items-center">
-                      <span className="text-[#454545] leading-7 text-[1.125rem] font-[400]">
-                        Score:
-                      </span>
-                      <span
-                        className={cn(
-                          "leading-7 text-[1.125rem] font-[600]",
-                          scorePercentage >= 50
-                            ? "text-[#036B26]"
-                            : "text-[#D42620]",
-                        )}
-                      >
-                        {scorePercentage.toFixed(1)}%
-                      </span>
-                    </div>
+                    {!hideScore && (
+                      <div className="flex gap-[1rem] items-center">
+                        <span className="text-[#454545] leading-7 text-[1.125rem] font-[400]">
+                          Score:
+                        </span>
+                        <span
+                          className={cn(
+                            "leading-7 text-[1.125rem] font-[600]",
+                            scorePercentage >= 50
+                              ? "text-[#036B26]"
+                              : "text-[#D42620]",
+                          )}
+                        >
+                          {scorePercentage.toFixed(1)}%
+                        </span>
+                      </div>
+                    )}
                     <div className="flex gap-[1rem] items-center">
                       <span className="text-[#454545] leading-7 text-[1.125rem] font-[400]">
                         Exam Mode:

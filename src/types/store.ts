@@ -173,7 +173,7 @@ export interface IDashboardData {
     freeTierQuestionLimit: number;
     supportedCategories: string[];
   };
-  selectedSubjects: { id: string; name: string; questionsAttempted: number }[];
+  selectedSubjects: { id: string; name: string; totalQuestions: number; questionsAttempted: number }[];
   stats: {
     totalExamsCompleted: number;
     totalSubjectsSelected: number;
@@ -484,6 +484,7 @@ export interface IExamAttempt {
   startedAt: string;
   completedAt: string | null;
   status: string;
+  category: string | null;
 }
 
 export interface IDetailedResult {
@@ -528,6 +529,7 @@ export interface IExamAttemptDetail {
   startedAt: string;
   completedAt: string | null;
   status: string;
+  category: string | null;
   /** Lightweight status for ALL questions — used by navigator pills. */
   questionStatuses: IQuestionStatus[];
   /** First page of detailed results (20 questions). */
