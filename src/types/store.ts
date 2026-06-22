@@ -498,6 +498,8 @@ export interface IDetailedResult {
   passageId: string | null;
   passage: { id: string; title: string; content: string } | null;
   options: { id: string; text: string }[];
+  matchingPrompts?: string[];
+  matchingOptions?: string[];
   studentAnswer: string | string[] | Record<string, string> | null;
   correctAnswer: string | string[] | Record<string, string> | null;
   isCorrect: boolean | null; // null for essays (not auto-graded)
@@ -551,6 +553,9 @@ export interface IExamQuestion {
   difficulty: string;
   passageId: string | null;
   options: IExamOption[];
+  // Matching questions only (always present):
+  matchingPrompts?: string[];
+  matchingOptions?: string[];
   // Included only in revision/timed mode (not mock):
   correctAnswer?: string | string[] | Record<string, string>;
   topicId?: string | null;

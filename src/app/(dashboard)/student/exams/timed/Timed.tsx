@@ -9,6 +9,7 @@ import {
   Disclaimer,
   TestResults,
   TestInstructions,
+  MatchingQuestion,
 } from "@/components/molecules/student-dashboard";
 import { Modal } from "@/components/molecules";
 import { Icon } from "@iconify/react";
@@ -676,82 +677,26 @@ export default function Timed() {
                           </div>
                         ) : isMatching ? (
                           /* ── Matching ── */
-                          <div className="space-y-4">
-                            <p className="text-xs text-gray-500">
-                              Type the matching item for each entry.
-                            </p>
-                            {question.options.map((option) => {
-                              const answerMap =
-                                (answers[question.id] as Record<
-                                  string,
-                                  string
-                                >) ?? {};
-                              const userMatch = answerMap[option.id] ?? "";
-                              const isMatchSubmitted =
-                                submittedQuestions.has(currentQuestion);
-                              const showMatchRevealed =
-                                isMatchSubmitted || isExamSubmitted;
-                              const correctMap =
-                                (question.correctAnswer as Record<
-                                  string,
-                                  string
-                                >) ?? {};
-                              const correctMatch = correctMap[option.id] ?? "";
-                              const isOptionCorrect =
-                                isMatchSubmitted &&
-                                userMatch.trim().toLowerCase() ===
-                                  correctMatch.trim().toLowerCase();
-                              return (
-                                <div
-                                  key={option.id}
-                                  className="flex items-center gap-3"
-                                >
-                                  <span className="flex-1 text-sm text-gray-700 font-medium">
-                                    <RichText
-                                      content={option.text}
-                                      variant="inline"
-                                    />
-                                  </span>
-                                  <Icon
-                                    icon="hugeicons:arrow-right-01"
-                                    className="w-4 h-4 text-gray-400 flex-shrink-0"
-                                  />
-                                  <input
-                                    type="text"
-                                    value={userMatch}
-                                    disabled={isCurrentFrozen}
-                                    onChange={(e) => {
-                                      if (isCurrentFrozen) return;
-                                      setAnswers({
-                                        ...answers,
-                                        [question.id]: {
-                                          ...((answers[question.id] as Record<
-                                            string,
-                                            string
-                                          >) ?? {}),
-                                          [option.id]: e.target.value,
-                                        },
-                                      });
-                                    }}
-                                    placeholder="Type match…"
-                                    className={cn(
-                                      "flex-1 border rounded-lg px-3 py-2 text-sm outline-none transition-colors",
-                                      showMatchRevealed
-                                        ? isOptionCorrect
-                                          ? "border-green-400 bg-green-50 text-green-700 cursor-not-allowed"
-                                          : "border-red-400 bg-red-50 text-red-600 cursor-not-allowed"
-                                        : "border-gray-300 focus:border-blue-400",
-                                    )}
-                                  />
-                                  {showMatchRevealed && !isOptionCorrect && (
-                                    <span className="text-xs font-semibold text-green-700 flex-shrink-0">
-                                      → {correctMatch}
-                                    </span>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
+                          <MatchingQuestion
+                            prompts={question.matchingPrompts ?? []}
+                            options={question.matchingOptions ?? []}
+                            value={
+                              (answers[question.id] as Record<
+                                string,
+                                string
+                              >) ?? {}
+                            }
+                            onChange={(v) =>
+                              setAnswers({ ...answers, [question.id]: v })
+                            }
+                            revealed={isCurrentFrozen}
+                            correctAnswer={
+                              question.correctAnswer as
+                                | Record<string, string>
+                                | undefined
+                            }
+                            disabled={isCurrentFrozen}
+                          />
                         ) : (
                           /* ── Multiple choice / True-False ── */
                           <div className="space-y-3">

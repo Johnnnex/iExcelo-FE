@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react";
 import { cn } from "@/lib/utils";
 import { Button, Tab, RichText, Radio, CheckBox } from "@/components/atoms";
 import { Chart } from "@/components/molecules";
+import { MatchingQuestion } from "@/components/molecules/student-dashboard";
 import { useAuthStore, useStudentStore } from "@/store";
 import { formatDateTime, formatTimeFromSeconds, capitalize } from "@/utils";
 import { useExamProtection } from "@/hooks";
@@ -873,51 +874,17 @@ function QuestionCard({
 
         {/* ── Matching ── */}
         {isMatching && (
-          <div className="space-y-3">
-            <p className="text-xs text-gray-500 mb-2">
-              Match each item to its correct pair.
-            </p>
-            {question.options.map((option) => {
-              const studentMatchMap =
-                (studentAnswer as Record<string, string>) ?? {};
-              const correctMatchMap =
-                (correctAnswer as Record<string, string>) ?? {};
-              const studentMatch = studentMatchMap[option.id] ?? "";
-              const correctMatch = correctMatchMap[option.id] ?? "";
-              const isOptionCorrect =
-                studentMatch.trim().toLowerCase() ===
-                correctMatch.trim().toLowerCase();
-
-              return (
-                <div key={option.id} className="flex items-center gap-3">
-                  <span className="flex-1 text-sm text-gray-700 font-medium">
-                    <RichText content={option.text} variant="inline" />
-                  </span>
-                  <Icon
-                    icon="hugeicons:arrow-right-01"
-                    className="w-4 h-4 text-gray-400 flex-shrink-0"
-                  />
-                  <div
-                    className={cn(
-                      "flex-1 border rounded-lg px-3 py-2 text-sm",
-                      isOptionCorrect
-                        ? "border-green-400 bg-green-50 text-green-700"
-                        : studentMatch
-                          ? "border-red-400 bg-red-50 text-red-600"
-                          : "border-gray-200 bg-gray-50 text-gray-400 italic",
-                    )}
-                  >
-                    {studentMatch || "Not answered"}
-                  </div>
-                  {!isOptionCorrect && correctMatch && (
-                    <span className="text-xs font-semibold text-green-700 flex-shrink-0 whitespace-nowrap">
-                      → {correctMatch}
-                    </span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          <MatchingQuestion
+            prompts={question.matchingPrompts ?? []}
+            options={question.matchingOptions ?? []}
+            value={(studentAnswer as Record<string, string>) ?? {}}
+            onChange={() => {}}
+            revealed
+            correctAnswer={
+              (correctAnswer as Record<string, string>) ?? undefined
+            }
+            disabled
+          />
         )}
 
         {/* ── Multiple response (select all that apply) ── */}

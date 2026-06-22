@@ -8,6 +8,7 @@ import {
   Disclaimer,
   TestResults,
   TestInstructions,
+  MatchingQuestion,
 } from "@/components/molecules/student-dashboard";
 import { Modal } from "@/components/molecules";
 import { Icon } from "@iconify/react";
@@ -643,53 +644,19 @@ export default function Mock() {
                           </div>
                         ) : isMatching ? (
                           /* ── Matching ── */
-                          <div className="space-y-4">
-                            <p className="text-xs text-gray-500">
-                              Type the matching item for each entry.
-                            </p>
-                            {question.options.map((option) => {
-                              const answerMap =
-                                (answers[question.id] as Record<
-                                  string,
-                                  string
-                                >) ?? {};
-                              return (
-                                <div
-                                  key={option.id}
-                                  className="flex items-center gap-3"
-                                >
-                                  <span className="flex-1 text-sm text-gray-700 font-medium">
-                                    <RichText
-                                      content={option.text}
-                                      variant="inline"
-                                    />
-                                  </span>
-                                  <Icon
-                                    icon="hugeicons:arrow-right-01"
-                                    className="w-4 h-4 text-gray-400 flex-shrink-0"
-                                  />
-                                  <input
-                                    type="text"
-                                    value={answerMap[option.id] ?? ""}
-                                    onChange={(e) =>
-                                      setAnswers({
-                                        ...answers,
-                                        [question.id]: {
-                                          ...((answers[question.id] as Record<
-                                            string,
-                                            string
-                                          >) ?? {}),
-                                          [option.id]: e.target.value,
-                                        },
-                                      })
-                                    }
-                                    placeholder="Type match…"
-                                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-400 transition-colors"
-                                  />
-                                </div>
-                              );
-                            })}
-                          </div>
+                          <MatchingQuestion
+                            prompts={question.matchingPrompts ?? []}
+                            options={question.matchingOptions ?? []}
+                            value={
+                              (answers[question.id] as Record<
+                                string,
+                                string
+                              >) ?? {}
+                            }
+                            onChange={(v) =>
+                              setAnswers({ ...answers, [question.id]: v })
+                            }
+                          />
                         ) : (
                           /* ── Multiple choice / True-False ── */
                           <div className="space-y-3">
