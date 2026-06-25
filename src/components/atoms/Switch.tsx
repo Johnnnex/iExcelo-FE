@@ -72,7 +72,7 @@ const Switch: React.FC<SwitchProps> = ({
         />
         <div
           className={`relative h-[1.5rem] w-[3.125rem] overflow-hidden rounded-[1rem] transition duration-200 ease-in-out ${
-            isChecked ? "bg-[#FF6642]" : "bg-[#E4E7EC]"
+            isChecked ? "bg-[#007FFF]" : "bg-[#E4E7EC]"
           }`}
           onClick={handleToggle}
         >

@@ -169,6 +169,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
     : "";
   const email = user?.email || "";
   const initials = user?.firstName ? user.firstName[0] : "";
+  const picture = user?.picture ?? null;
   const notifPageUrl =
     user?.role === "sponsor"
       ? "/sponsor/notifications"
@@ -261,6 +262,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
             name={name}
             email={email}
             initials={initials}
+            picture={picture}
             {...(isStudent && dashboardData
               ? {
                   examTypes: dashboardData.allowedExamTypes,

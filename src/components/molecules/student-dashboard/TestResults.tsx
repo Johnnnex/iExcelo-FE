@@ -61,14 +61,18 @@ export function TestResults({
                 Answered Questions:{" "}
                 <span className="text-[#757575]">{answeredQuestions}</span>
               </p>
-              <p className="tracking-[-.4px] leading-5 text-[1.25rem] font-[600] text-[#2B2B2B]">
-                Correct Answers:{" "}
-                <span className="text-[#0F973D]">{correctAnswers}</span>
-              </p>
-              <p className="tracking-[-.4px] leading-5 text-[1.25rem] font-[600] text-[#2B2B2B]">
-                Incorrect Answers:{" "}
-                <span className="text-[#D42620]">{incorrectAnswers}</span>
-              </p>
+              {!hideScore && (
+                <p className="tracking-[-.4px] leading-5 text-[1.25rem] font-[600] text-[#2B2B2B]">
+                  Correct Answers:{" "}
+                  <span className="text-[#0F973D]">{correctAnswers}</span>
+                </p>
+              )}
+              {!hideScore && (
+                <p className="tracking-[-.4px] leading-5 text-[1.25rem] font-[600] text-[#2B2B2B]">
+                  Incorrect Answers:{" "}
+                  <span className="text-[#D42620]">{incorrectAnswers}</span>
+                </p>
+              )}
               <p className="tracking-[-.4px] leading-5 text-[1.25rem] font-[600] text-[#2B2B2B]">
                 Unattempted Questions:{" "}
                 <span className="text-[#757575]">{unattempted}</span>

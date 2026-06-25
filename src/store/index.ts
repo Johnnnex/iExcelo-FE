@@ -7,3 +7,4 @@ export * from "./affiliate.store";
 export * from "./exam.store";
 export * from "./chat.store";
 export * from "./notification.store";
+export * from "./settings.store";

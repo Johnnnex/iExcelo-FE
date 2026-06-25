@@ -9,8 +9,7 @@ export const studentSchema = yup.object().shape({
     .string()
     .email("Invalid email address")
     .required("Email is required"),
-  phoneNumber: yup.string().required("Phone number is required"),
-  countryCode: yup.string().required("Country code is required"),
+  phone: yup.string().required("Phone number is required"),
   password: yup
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -35,8 +34,7 @@ export const sponsorSchema = yup.object().shape({
     .string()
     .email("Invalid email address")
     .required("Email is required"),
-  phoneNumber: yup.string().required("Phone number is required"),
-  countryCode: yup.string().required("Country code is required"),
+  phone: yup.string().required("Phone number is required"),
   password: yup
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -55,8 +53,7 @@ export const affiliateSchema = yup.object().shape({
     .string()
     .email("Invalid email address")
     .required("Email is required"),
-  phoneNumber: yup.string().required("Phone number is required"),
-  countryCode: yup.string().required("Country code is required"),
+  phone: yup.string().required("Phone number is required"),
   password: yup
     .string()
     .min(8, "Password must be at least 8 characters")

@@ -220,8 +220,8 @@ export default function Timed() {
   const isTextInput = isFillInBlank || isShortAnswer;
   const passage = question?.passageId ? getPassage(question.passageId) : null;
   const hideScore =
-    pendingConfig?.category === "theory" ||
-    pendingConfig?.category === "practical";
+    examSession?.category === "theory" ||
+    examSession?.category === "practical";
 
   // Frozen = whole exam submitted OR this question individually confirmed
   const isCurrentFrozen =
@@ -392,6 +392,7 @@ export default function Timed() {
 
   const getButtonStyle = (num: number) => {
     if (questionResults[num]?.answered) {
+      if (hideScore) return "bg-blue-100 text-blue-600";
       return questionResults[num].correct
         ? "bg-green-100 text-green-700"
         : "bg-red-100 text-red-700";
@@ -1022,9 +1023,14 @@ export default function Timed() {
             </div>
 
 
-            {showNavigation && (
-              <div className="fixed inset-0 bg-black/50 z-50 lg:hidden flex items-end justify-center">
-                <div className="bg-white rounded-t-2xl w-full max-w-md p-4 pb-8">
+            <Modal
+              isOpen={showNavigation}
+              onClose={() => setShowNavigation(false)}
+              position="bottom"
+              overlayClassName="lg:hidden"
+              className="rounded-t-2xl w-full max-w-md p-4 pb-8"
+              overflowY="hidden"
+            >
                   <div className="bg-white rounded-xl border border-gray-100 p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-semibold text-gray-900">
@@ -1114,9 +1120,7 @@ export default function Timed() {
                       </>
                     )}
                   </div>
-                </div>
-              </div>
-            )}
+            </Modal>
           </div>
         </section>
       )}

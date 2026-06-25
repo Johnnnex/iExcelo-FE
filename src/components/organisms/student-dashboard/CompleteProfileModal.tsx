@@ -15,6 +15,7 @@ export function CompleteProfileModal({ isOpen }: { isOpen: boolean }) {
 
   const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
   const [selectedSubjectsString, setSelectedSubjectsString] = useState("");
+  const [compulsoryIds, setCompulsoryIds] = useState<string[]>([]);
   const [loadingSubjects, setLoadingSubjects] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -30,12 +31,13 @@ export function CompleteProfileModal({ isOpen }: { isOpen: boolean }) {
       setLoadingSubjects(true);
       void fetchSubjectsByExamType(examTypeId)
         .then((fetched) => {
-          const compulsoryIds = fetched
+          const ids = fetched
             .filter((s) => s.isCompulsory)
             .map((s) => s.id);
-          if (compulsoryIds.length > 0) {
-            setSelectedSubjectIds(compulsoryIds);
-            setSelectedSubjectsString(compulsoryIds.join(","));
+          setCompulsoryIds(ids);
+          if (ids.length > 0) {
+            setSelectedSubjectIds(ids);
+            setSelectedSubjectsString(ids.join(","));
           }
         })
         .finally(() => {
@@ -46,12 +48,11 @@ export function CompleteProfileModal({ isOpen }: { isOpen: boolean }) {
   }, [isOpen, examTypeId]);
 
   const handleSubjectChange = (value: string) => {
-    setSelectedSubjectsString(value);
-    const ids = value
-      .split(",")
-      .map((id) => id.trim())
-      .filter(Boolean);
-    setSelectedSubjectIds(ids);
+    const ids = value.split(",").map((id) => id.trim()).filter(Boolean);
+    // Always keep compulsory subjects selected
+    const merged = [...new Set([...compulsoryIds, ...ids])];
+    setSelectedSubjectIds(merged);
+    setSelectedSubjectsString(merged.join(","));
   };
 
   const handleSubmit = async () => {
@@ -91,7 +92,8 @@ export function CompleteProfileModal({ isOpen }: { isOpen: boolean }) {
       if (dashboardData) {
         setDashboardData({
           ...dashboardData,
-          selectedSubjects: (result.selectedSubjects as { id: string; name: string; questionsAttempted: number }[]),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          selectedSubjects: result.selectedSubjects as any,
           currentExamType: {
             ...dashboardData.currentExamType,
             hasSelectedSubjects: true,

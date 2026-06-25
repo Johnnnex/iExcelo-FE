@@ -306,8 +306,8 @@ const UpdateSub = ({ targetPlanId }: UpdateSubProps) => {
                 <span className="text-[#2B2B2B] text-[1.125rem] leading-7 font-[500]">
                   {isLoadingCardInfo ? (
                     <span className="inline-block h-5 w-24 bg-gray-200 rounded animate-pulse" />
-                  ) : cardInfo ? (
-                    `${cardInfo.brand} Card`
+                  ) : cardInfo?.last4 ? (
+                    `${cardInfo.brand ? cardInfo.brand.charAt(0).toUpperCase() + cardInfo.brand.slice(1) + " " : ""}Card`
                   ) : (
                     "Saved Card"
                   )}
@@ -315,7 +315,7 @@ const UpdateSub = ({ targetPlanId }: UpdateSubProps) => {
                 <span className="text-[#757575] leading-6 font-[400] text-[1rem]">
                   {isLoadingCardInfo ? (
                     <span className="inline-block h-4 w-40 bg-gray-100 rounded animate-pulse mt-1" />
-                  ) : cardInfo ? (
+                  ) : cardInfo?.last4 ? (
                     `*****${cardInfo.last4} | ${cardInfo.expMonth}/${cardInfo.expYear}`
                   ) : (
                     "No card info available"

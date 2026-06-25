@@ -20,6 +20,7 @@ interface ProfileDropdownProps {
   name: string;
   email: string;
   initials: string;
+  picture?: string | null;
   examTypes?: ExamTypeOption[];
   activeExamTypeId?: string | null;
   onExamTypeChange?: (examTypeId: string) => void;
@@ -32,6 +33,7 @@ export function ProfileDropdown({
   name,
   email,
   initials,
+  picture,
   examTypes,
   activeExamTypeId,
   onExamTypeChange,
@@ -75,9 +77,13 @@ export function ProfileDropdown({
     <div ref={dropdownRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-9 h-9 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+        className="w-9 h-9 rounded-full overflow-hidden bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white font-semibold text-sm hover:opacity-90 transition-opacity"
       >
-        {initials}
+        {picture ? (
+          <img src={picture} alt={name} className="w-full h-full object-cover" />
+        ) : (
+          initials
+        )}
       </button>
 
       {isOpen && (
@@ -139,15 +145,7 @@ export function ProfileDropdown({
 
           <div className="py-2">
             <Link
-              href={`${settingsBase}/profile`}
-              className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              <Icon icon="hugeicons:user" className="w-5 h-5" />
-              <span className="text-sm">Profile</span>
-            </Link>
-            <Link
-              href={`${settingsBase}/security`}
+              href={`${settingsBase}/account`}
               className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
               onClick={() => setIsOpen(false)}
             >

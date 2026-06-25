@@ -58,6 +58,81 @@ export interface IAuthStore {
   ) => Promise<void>;
   logout: () => Promise<void>;
   clearAuth: () => void;
+  setUser: (user: any) => void;
+  refreshUser: () => Promise<void>;
+}
+
+// Settings store types
+export interface IBillingTransaction {
+  id: string;
+  type: string;
+  amount: number;
+  currency: string;
+  provider: string;
+  status: string;
+  paidAt: string | null;
+  createdAt: string;
+  subscriptionId: string | null;
+  // Card info from the linked subscription (null for sponsored)
+  isSponsored: boolean;
+  cardBrand: string | null;
+  cardLast4: string | null;
+  cardExpMonth: string | null;
+  cardExpYear: string | null;
+  cardBank: string | null;
+  cardChannel: string | null;
+}
+
+export interface ISettingsStore {
+  // profile
+  updatingProfile: boolean;
+  updateProfile: (
+    data: {
+      firstName?: string;
+      lastName?: string;
+      phoneNumber?: string;
+      countryCode?: string;
+      picture?: string;
+    },
+    onSuccess?: () => void,
+  ) => Promise<void>;
+  // password
+  changingPassword: boolean;
+  changePassword: (
+    currentPassword: string,
+    newPassword: string,
+    onSuccess?: () => void,
+  ) => Promise<void>;
+  // delete account
+  deletingAccount: boolean;
+  deleteAccount: (onSuccess?: () => void) => Promise<void>;
+  // notifications
+  updatingNotifPrefs: boolean;
+  updateNotificationPreferences: (
+    data: { newsletterOptIn?: boolean; promotionsOptIn?: boolean },
+  ) => Promise<void>;
+  // set password (Google-only)
+  requestingSetPassword: boolean;
+  requestSetPassword: () => Promise<boolean | 'rate-limited'>;
+  confirmingSetPassword: boolean;
+  confirmSetPassword: (
+    code: string,
+    newPassword: string,
+    onSuccess?: () => void,
+  ) => Promise<boolean>;
+  // google
+  disconnectingGoogle: boolean;
+  disconnectGoogle: (onSuccess?: () => void) => Promise<void>;
+  // billing
+  billingHistory: IBillingTransaction[];
+  billingTotal: number;
+  billingPage: number;
+  loadingBilling: boolean;
+  fetchBillingHistory: (page?: number) => Promise<void>;
+  // card info (per exam type)
+  cardInfo: ICardInfo | null;
+  loadingCardInfo: boolean;
+  fetchCardInfo: (examTypeId: string) => Promise<void>;
 }
 
 // Utils store types
@@ -173,7 +248,7 @@ export interface IDashboardData {
     freeTierQuestionLimit: number;
     supportedCategories: string[];
   };
-  selectedSubjects: { id: string; name: string; totalQuestions: number; questionsAttempted: number }[];
+  selectedSubjects: { id: string; name: string; totalQuestions: number; practicalCount: number; questionsAttempted: number }[];
   stats: {
     totalExamsCompleted: number;
     totalSubjectsSelected: number;
@@ -460,16 +535,51 @@ export interface IActiveSubscription {
     durationDays: number;
     description: string | null;
   };
+  // Card info from DB — avoids external API call at billing page load
+  isSponsored: boolean;
+  cardBrand: string | null;
+  cardLast4: string | null;
+  cardExpMonth: string | null;
+  cardExpYear: string | null;
+  cardBank: string | null;
+  cardChannel: string | null;
 }
 
-// Card info (from Paystack subscription)
+// Summary of a single subscription (across exam types) used on the billing page
+export interface ISubscriptionSummary {
+  id: string;
+  examTypeId: string;
+  examTypeName: string | null;
+  planId: string;
+  status: string;
+  amountPaid: number;
+  currency: string;
+  paymentProvider: string;
+  startDate: string;
+  endDate: string;
+  autoRenew: boolean;
+  providerSubscriptionId: string | null;
+  cancelledAt: string | null;
+  plan: { id: string; name: string; durationDays: number } | null;
+  isSponsored: boolean;
+  cardBrand: string | null;
+  cardLast4: string | null;
+  cardExpMonth: string | null;
+  cardExpYear: string | null;
+  cardBank: string | null;
+  cardChannel: string | null;
+}
+
+// Card info (from subscription DB columns — no external API call at page load)
 export interface ICardInfo {
-  brand: string;
-  last4: string;
-  expMonth: string;
-  expYear: string;
+  brand: string | null;
+  last4: string | null;
+  expMonth: string | null;
+  expYear: string | null;
   bank: string | null;
   channel: string | null;
+  provider?: "paystack" | "stripe";
+  isSponsored: boolean;
 }
 
 // ── Exam History ────────────────────────────────────────────────────────────
@@ -592,6 +702,7 @@ export interface IFlagUpdate {
 export interface IExamSession {
   examAttemptId: string;
   mode: string;
+  category?: string; // e.g. "theory" | "practical" | "objectives" — used to hide score for non-gradable categories
   timeLimitSeconds: number | null;
   startedAt: string;
   totalCount: number; // total questions in this exam (may exceed first-page size)
@@ -681,10 +792,16 @@ export interface IExamStore {
     limit?: number,
   ) => Promise<void>;
   fetchTopicsForSubject: (subjectId: string, page?: number, limit?: number) => Promise<ITopic[]>;
-  searchTopics: (examTypeId: string, q: string) => Promise<ITopic[]>;
+  searchTopics: (
+    examTypeId: string,
+    q: string,
+    page?: number,
+    limit?: number,
+  ) => Promise<{ items: ITopic[]; total: number; hasMore: boolean }>;
   topicDetail: ITopic | null;
   isLoadingTopicDetail: boolean;
   fetchTopicDetail: (topicId: string) => Promise<void>;
+  fetchTopicDetailRaw: (topicId: string) => Promise<ITopic | null>;
 }
 
 // ── Analytics types ─────────────────────────────────────────────────────────
@@ -754,6 +871,10 @@ export interface IStudentStore {
   activeSubscription: IActiveSubscription | null;
   isLoadingSubscription: boolean;
   fetchActiveSubscription: (examTypeId: string) => Promise<void>;
+  // All subscriptions across exam types (billing overview)
+  allSubscriptions: ISubscriptionSummary[];
+  isLoadingAllSubscriptions: boolean;
+  fetchAllSubscriptions: () => Promise<void>;
   cancelSubscription: (
     examTypeId: string,
     preFlight?: () => void,

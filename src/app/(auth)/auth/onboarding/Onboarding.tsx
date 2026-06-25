@@ -31,6 +31,7 @@ export default function OnboardingPage() {
   );
 
   const [selectedSubjectsString, setSelectedSubjectsString] = useState("");
+  const [compulsoryIds, setCompulsoryIds] = useState<string[]>([]);
   const [loadingSubjects, setLoadingSubjects] = useState(false);
 
   // Create schema dynamically based on selectedUserType
@@ -74,14 +75,23 @@ export default function OnboardingPage() {
     }
   }, [token]);
 
-  // Fetch subjects when exam type changes using utils store
+  // Fetch subjects when exam type changes; auto-select + lock compulsory ones
   useEffect(() => {
-    if (examTypeId) {
-      setLoadingSubjects(true);
-      void fetchSubjectsByExamType(examTypeId).finally(() => {
-        setLoadingSubjects(false);
-      });
-    }
+    if (!examTypeId) return;
+    setLoadingSubjects(true);
+    setCompulsoryIds([]);
+    setSelectedSubjectsString("");
+    setValue("subjectIds", []);
+    void fetchSubjectsByExamType(examTypeId)
+      .then((fetched) => {
+        const ids = fetched.filter((s) => s.isCompulsory).map((s) => s.id);
+        setCompulsoryIds(ids);
+        if (ids.length > 0) {
+          setSelectedSubjectsString(ids.join(","));
+          setValue("subjectIds", ids);
+        }
+      })
+      .finally(() => setLoadingSubjects(false));
   }, [examTypeId]);
 
   useEffect(() => {
@@ -280,19 +290,25 @@ export default function OnboardingPage() {
                         value={selectedSubjectsString}
                         selectOptions={subjects.map((subject: ISubject) => ({
                           value: subject.id,
-                          label: subject.name,
+                          label: subject.isCompulsory
+                            ? `${subject.name} (required)`
+                            : subject.name,
                         }))}
                         disabled={loadingSubjects}
                         onChange={(e: {
                           target: { name?: string; value: any };
                         }) => {
                           const value = e.target.value;
-                          setSelectedSubjectsString(value);
                           const ids = value
                             .split(",")
                             .map((id: string) => id.trim())
                             .filter(Boolean);
-                          field.onChange(ids);
+                          // Always keep compulsory subjects selected
+                          const merged = [
+                            ...new Set([...compulsoryIds, ...ids]),
+                          ];
+                          setSelectedSubjectsString(merged.join(","));
+                          field.onChange(merged);
                         }}
                         error={errors.subjectIds?.message}
                       />

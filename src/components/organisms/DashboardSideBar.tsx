@@ -112,6 +112,11 @@ const defaultStudentNavItems: DashboardNavItem[] = [
     icon: "hugeicons:gift-card",
     href: "/student/earnings",
   },
+  {
+    name: "Settings",
+    icon: "hugeicons:settings-01",
+    href: "/student/settings",
+  },
 ];
 
 interface DashboardSideBarProps {

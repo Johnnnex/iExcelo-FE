@@ -4,6 +4,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm, type FieldErrors, type FieldError } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { defaultCountries, parseCountry } from "react-international-phone";
 import { InputField } from "@/components/molecules";
 import { affiliateSchema, sponsorSchema, studentSchema } from "@/schemas";
 import {
@@ -96,13 +97,30 @@ const SignUp = () => {
   const onSubmit = async (data: RegistrationFormDataTypes) => {
     if (!userType) return;
 
+    // Parse combined phone "+2348012345678" → countryCode + phoneNumber
+    const phone = (data as any).phone as string | undefined;
+    let countryCode = "";
+    let phoneNumber = phone ?? "";
+    if (phone?.startsWith("+")) {
+      const opts = defaultCountries.map((raw) => {
+        const { dialCode } = parseCountry(raw);
+        return { dialCode };
+      });
+      const match = opts.find((c) => phone.startsWith(`+${c.dialCode}`));
+      if (match) {
+        countryCode = `+${match.dialCode}`;
+        phoneNumber = phone.slice(match.dialCode.length + 1);
+      }
+    }
+
     await signup(
       {
         ...(data as RegistrationFormDataTypes),
         userType,
+        phoneNumber,
+        countryCode,
       } as any,
       () => {
-        // Redirect to email verification page
         router.push("/verify-email");
       },
     );
@@ -144,85 +162,44 @@ const SignUp = () => {
     }
 
     return groupedFields.map((group, groupIndex) => {
+      const renderField = (field: IFormField) => {
+        const fieldError = errors[field.name as SignUpFieldNameTypes]?.message as string | undefined;
+        if (field.type === "tel") {
+          return (
+            <InputField
+              key={field.name}
+              type="tel"
+              label={field.label}
+              placeholder={field.placeholder}
+              value={watch(field.name as SignUpFieldNameTypes) as string ?? ""}
+              onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+                setValue(field.name as SignUpFieldNameTypes, e.target.value, { shouldDirty: true, shouldValidate: true })
+              }
+              error={fieldError}
+            />
+          );
+        }
+        return (
+          <InputField
+            key={field.name}
+            type={field.type}
+            label={field.label}
+            placeholder={field.placeholder}
+            selectOptions={field.selectOptions}
+            error={fieldError}
+            {...register(field.name as SignUpFieldNameTypes)}
+          />
+        );
+      };
+
       if (group.length === 2 && group[0].gridColumn === "half") {
         return (
           <div key={groupIndex} className="grid grid-cols-2 gap-4">
-            {group.map((field) => (
-              <InputField
-                key={field.name}
-                type={field.type}
-                label={field.label}
-                placeholder={field.placeholder}
-                selectOptions={field.selectOptions}
-                error={
-                  (field.type === "tel"
-                    ? errors[field?.telProps?.selectProps?.name!]?.message ||
-                      errors[field?.telProps?.inputProps?.name!]?.message
-                    : errors[field?.name]?.message) as string
-                }
-                {...(field.type !== "tel"
-                  ? register(field.name as SignUpFieldNameTypes)
-                  : {})}
-                {...(field.type === "tel" && {
-                  telProps: {
-                    ...field.telProps,
-                    selectProps: {
-                      ...field.telProps?.selectProps,
-                      ...register(
-                        field?.telProps?.selectProps
-                          ?.name as SignUpFieldNameTypes,
-                      ),
-                    },
-                    inputProps: {
-                      ...field.telProps?.inputProps,
-                      ...register(
-                        field?.telProps?.inputProps
-                          ?.name as SignUpFieldNameTypes,
-                      ),
-                    },
-                  },
-                })}
-              />
-            ))}
+            {group.map(renderField)}
           </div>
         );
       }
-
-      return group.map((field) => (
-        <InputField
-          key={field.name}
-          type={field.type}
-          label={field.label}
-          placeholder={field.placeholder}
-          selectOptions={field.selectOptions}
-          error={
-            (field.type === "tel"
-              ? errors[field?.telProps?.selectProps?.name!]?.message ||
-                errors[field?.telProps?.inputProps?.name!]?.message
-              : errors[field?.name]?.message) as string
-          }
-          {...(field.type !== "tel"
-            ? register(field.name as SignUpFieldNameTypes)
-            : {})}
-          {...(field.type === "tel" && {
-            telProps: {
-              ...field.telProps,
-              selectProps: {
-                ...field.telProps?.selectProps,
-                ...register(
-                  field?.telProps?.selectProps?.name as SignUpFieldNameTypes,
-                ),
-              },
-              inputProps: {
-                ...field.telProps?.inputProps,
-                ...register(
-                  field?.telProps?.inputProps?.name as SignUpFieldNameTypes,
-                ),
-              },
-            },
-          })}
-        />
-      ));
+      return group.map(renderField);
     });
   };
 

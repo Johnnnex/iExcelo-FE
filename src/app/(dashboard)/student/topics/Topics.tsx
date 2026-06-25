@@ -65,13 +65,15 @@ function PageSkeleton() {
 }
 
 function Spinner({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-  const dim = size === "sm" ? 16 : size === "lg" ? 32 : 20;
+  const cls =
+    size === "lg"
+      ? "w-9 h-9 border-[3px]"
+      : size === "sm"
+        ? "w-5 h-5 border-2"
+        : "w-7 h-7 border-[3px]";
   return (
-    <Icon
-      icon="svg-spinners:ring-resize"
-      width={dim}
-      height={dim}
-      color="#007FFF"
+    <div
+      className={`${cls} rounded-full border-[#007FFF] border-t-transparent animate-spin`}
     />
   );
 }
@@ -95,7 +97,11 @@ export default function Topics() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<ITopic[] | null>(null);
+  const [searchTotal, setSearchTotal] = useState(0);
+  const [searchPage, setSearchPage] = useState(1);
+  const [searchHasMore, setSearchHasMore] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [isLoadingMoreSearch, setIsLoadingMoreSearch] = useState(false);
   const [expandedSubjects, setExpandedSubjects] = useState<Set<string>>(
     new Set(),
   );
@@ -121,14 +127,31 @@ export default function Topics() {
   const handleSearch = async () => {
     if (!searchQuery.trim() || !examTypeId) return;
     setIsSearching(true);
-    const results = await searchTopics(examTypeId, searchQuery.trim());
-    setSearchResults(results);
+    const { items, total, hasMore } = await searchTopics(examTypeId, searchQuery.trim(), 1);
+    setSearchResults(items);
+    setSearchTotal(total);
+    setSearchPage(1);
+    setSearchHasMore(hasMore);
     setIsSearching(false);
+  };
+
+  const handleLoadMoreSearch = async () => {
+    if (isLoadingMoreSearch || !searchHasMore || !examTypeId) return;
+    setIsLoadingMoreSearch(true);
+    const nextPage = searchPage + 1;
+    const { items, hasMore } = await searchTopics(examTypeId, searchQuery.trim(), nextPage);
+    setSearchResults((prev) => [...(prev ?? []), ...items]);
+    setSearchPage(nextPage);
+    setSearchHasMore(hasMore);
+    setIsLoadingMoreSearch(false);
   };
 
   const handleClearSearch = () => {
     setSearchQuery("");
     setSearchResults(null);
+    setSearchTotal(0);
+    setSearchPage(1);
+    setSearchHasMore(false);
   };
 
   const toggleSubject = async (subjectId: string) => {
@@ -239,7 +262,7 @@ export default function Topics() {
       {searchResults !== null ? (
         <div>
           <p className="text-sm text-gray-500 mb-4">
-            {searchResults.length} result{searchResults.length !== 1 ? "s" : ""}{" "}
+            {searchTotal} result{searchTotal !== 1 ? "s" : ""}{" "}
             for &quot;{searchQuery}&quot;
           </p>
           {searchResults.length === 0 ? (
@@ -247,6 +270,17 @@ export default function Topics() {
           ) : (
             <div className="space-y-3">
               {searchResults.map(renderTopicCard)}
+              {searchHasMore && !isLoadingMoreSearch && (
+                <TopicSentinel
+                  key={`search-sentinel-p${searchPage}`}
+                  onVisible={handleLoadMoreSearch}
+                />
+              )}
+              {isLoadingMoreSearch && (
+                <div className="flex justify-center py-4">
+                  <Spinner />
+                </div>
+              )}
             </div>
           )}
         </div>

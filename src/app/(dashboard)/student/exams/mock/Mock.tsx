@@ -280,6 +280,10 @@ export default function Mock() {
         incorrectAnswers={examResult?.wrongAnswers ?? 0}
         unattempted={examResult?.unanswered ?? totalQuestions - answeredCount}
         score={examResult?.scorePercentage ?? 0}
+        hideScore={
+          examSession?.category === "theory" ||
+          examSession?.category === "practical"
+        }
         timeUsed={
           examResult?.timeSpentSeconds != null
             ? formatTimeUsed(examResult.timeSpentSeconds)
@@ -724,9 +728,14 @@ export default function Mock() {
               <Icon icon="hugeicons:menu-02" className="w-6 h-6" />
             </button>
 
-            {showNavigation && (
-              <div className="fixed inset-0 bg-black/50 z-50 lg:hidden flex items-end justify-center">
-                <div className="bg-white rounded-t-2xl w-full max-w-md p-4 pb-8">
+            <Modal
+              isOpen={showNavigation}
+              onClose={() => setShowNavigation(false)}
+              position="bottom"
+              overlayClassName="lg:hidden"
+              className="rounded-t-2xl w-full max-w-md p-4 pb-8"
+              overflowY="hidden"
+            >
                   <div className="bg-white rounded-xl border border-gray-100 p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-semibold text-gray-900">
@@ -796,9 +805,7 @@ export default function Mock() {
                       </>
                     )}
                   </div>
-                </div>
-              </div>
-            )}
+            </Modal>
           </div>
         </section>
       )}

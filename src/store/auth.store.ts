@@ -62,6 +62,15 @@ export const useAuthStore = create<IAuthStore>()(
           const { accessToken, refreshToken, user, profile } =
             response.data.data;
 
+          // Admin accounts must not access the student frontend
+          if (!Object.values(UserType).includes(user?.role)) {
+            toast.error(
+              "This account doesn't have access to this platform. Please use the admin panel.",
+            );
+            callback?.(false, null);
+            return;
+          }
+
           set({
             user,
             accessToken,
@@ -165,6 +174,15 @@ export const useAuthStore = create<IAuthStore>()(
 
           const { accessToken, refreshToken, user, profile } =
             response.data.data;
+
+          // Admin accounts must not access the student frontend
+          if (!Object.values(UserType).includes(user?.role)) {
+            set({ tempToken: null });
+            toast.error(
+              "This account doesn't have access to this platform. Please use the admin panel.",
+            );
+            return;
+          }
 
           set({
             user,
@@ -391,6 +409,18 @@ export const useAuthStore = create<IAuthStore>()(
           userType: null,
           signupEmail: null,
         });
+      },
+
+      setUser: (user) => set({ user }),
+
+      refreshUser: async () => {
+        try {
+          const res = await authRequest({ method: "GET", url: "/auth/me" });
+          const user = res.data.data;
+          if (user) set({ user });
+        } catch {
+          // Silently fail — stale user state is acceptable vs showing an error
+        }
       },
     }),
     {

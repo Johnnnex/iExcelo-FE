@@ -357,7 +357,7 @@ const Review = () => {
                         {formatDateTime(startedAt)}
                       </span>
                     </div>
-                    <div className="flex gap-[1rem] items-center">
+                    <div className="flex gap-[1rem] items-start">
                       <span className="text-[#454545] leading-7 text-[1.125rem] font-[400]">
                         Time Used:
                       </span>
@@ -420,6 +420,17 @@ const Review = () => {
                         {timeLimitDisplay}
                       </span>
                     </div>
+
+                    {category && (
+                      <div className="flex gap-[1rem] items-center">
+                        <span className="text-[#454545] leading-7 text-[1.125rem] font-[400]">
+                          Category:
+                        </span>
+                        <span className="text-[#2B2B2B] leading-7 text-[1.125rem] font-[500] capitalize">
+                          {category}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -500,16 +511,20 @@ const Review = () => {
                         value: correctAnswers + wrongAnswers + essayQuestions,
                       },
                       { name: "Unanswered", value: unanswered },
-                      {
-                        name: "Correct Answers",
-                        value: correctAnswers,
-                        color: COLOR_CORRECT,
-                      },
-                      {
-                        name: "Incorrect Answers",
-                        value: wrongAnswers,
-                        color: COLOR_INCORRECT,
-                      },
+                      ...(!hideScore
+                        ? [
+                            {
+                              name: "Correct Answers",
+                              value: correctAnswers,
+                              color: COLOR_CORRECT,
+                            },
+                            {
+                              name: "Incorrect Answers",
+                              value: wrongAnswers,
+                              color: COLOR_INCORRECT,
+                            },
+                          ]
+                        : []),
                       ...(essayQuestions > 0
                         ? [
                             {
@@ -1052,65 +1067,60 @@ function QuestionCard({
         )}
 
         {/* ── Explanation card (same blue box as revision mode) ── */}
-        {!isEssay &&
-          (question.topicName ||
-            question.explanation) && (
-            <div
-              style={{
-                borderColor: "#258BE4",
-              }}
-              className="rounded-xl border mt-6 p-[1.25rem_1.375rem_1.5rem_1.25rem] bg-[#DBEDFF] overflow-hidden"
-            >
-              <div className="flex flex-col md:flex-row items-start md:justify-between">
-                <h3 className="font-semibold text-gray-900">Explanation</h3>
-                {question.explanation && (
-                  <button
-                    onClick={onShowFullDetails}
-                    className="text-[#E32E89] text-sm font-medium hover:underline flex items-center gap-1 mt-2 md:mt-0"
-                  >
-                    Full Description Here
-                    <Icon icon="hugeicons:arrow-right-01" className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-
-              {question.topicName && (
-                <>
-                  <div className="h-[1px] w-full bg-[#EDEDED] my-4" />
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-gray-700">
-                      {question.topicName}
-                    </p>
-                    {question.topicId && (
-                      <Link
-                        href={`/student/topics/${question.topicId}`}
-                        target="_blank"
-                        className="text-blue-500 hover:text-blue-700 text-xs font-medium flex items-center gap-1"
-                      >
-                        View Topic
-                        <Icon
-                          icon="hugeicons:arrow-right-01"
-                          className="w-3 h-3"
-                        />
-                      </Link>
-                    )}
-                  </div>
-                </>
-              )}
-
+        {!isEssay && (question.topicName || question.explanation) && (
+          <div
+            style={{
+              borderColor: "#258BE4",
+            }}
+            className="rounded-xl border mt-6 p-[1.25rem_1.375rem_1.5rem_1.25rem] bg-[#DBEDFF] overflow-hidden"
+          >
+            <div className="flex flex-col md:flex-row items-start md:justify-between">
+              <h3 className="font-semibold text-gray-900">Explanation</h3>
               {question.explanation && (
-                <>
-                  <div className="h-[1px] w-full bg-[#EDEDED] my-4" />
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    <RichText
-                      content={question.explanation}
-                      variant="inline"
-                    />
-                  </p>
-                </>
+                <button
+                  onClick={onShowFullDetails}
+                  className="text-[#E32E89] text-sm font-medium hover:underline flex items-center gap-1 mt-2 md:mt-0"
+                >
+                  Full Description Here
+                  <Icon icon="hugeicons:arrow-right-01" className="w-4 h-4" />
+                </button>
               )}
             </div>
-          )}
+
+            {question.topicName && (
+              <>
+                <div className="h-[1px] w-full bg-[#EDEDED] my-4" />
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-semibold text-gray-700">
+                    {question.topicName}
+                  </p>
+                  {question.topicId && (
+                    <Link
+                      href={`/student/topics/${question.topicId}`}
+                      target="_blank"
+                      className="text-blue-500 hover:text-blue-700 text-xs font-medium flex items-center gap-1"
+                    >
+                      View Topic
+                      <Icon
+                        icon="hugeicons:arrow-right-01"
+                        className="w-3 h-3"
+                      />
+                    </Link>
+                  )}
+                </div>
+              </>
+            )}
+
+            {question.explanation && (
+              <>
+                <div className="h-[1px] w-full bg-[#EDEDED] my-4" />
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  <RichText content={question.explanation} variant="inline" />
+                </p>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

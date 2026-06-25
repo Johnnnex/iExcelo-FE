@@ -2,12 +2,9 @@
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
-import {
-  RevisionModeModal,
-  TimedModeModal,
-} from "@/components/organisms/student-dashboard";
+import { ExamModeModal } from "@/components/molecules/student-dashboard";
 import { Button, CheckBox, Radio } from "@/components/atoms";
-import { InputField, Modal } from "@/components/molecules";
+import { InputField } from "@/components/molecules";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { capitalize } from "@/utils";
@@ -78,6 +75,7 @@ export default function Exams() {
   const examTypeId = dashboardData?.currentExamType?.id ?? "";
   const examTypeName = dashboardData?.currentExamType?.name ?? "";
   const isDemoUser = !dashboardData?.currentExamType?.isPaid;
+  const isSponsored = dashboardData?.student?.isSponsored ?? false;
   const freeTierLimit =
     dashboardData?.currentExamType?.freeTierQuestionLimit ?? 50;
   const supportedCategories = dashboardData?.currentExamType
@@ -96,9 +94,7 @@ export default function Exams() {
     "mixed" | "fresh" | "flagged" | "weak"
   >("mixed");
   const [searchQuery, setSearchQuery] = useState("");
-  const [showRevisionModal, setShowRevisionModal] = useState(false);
-  const [showTimedModal, setShowTimedModal] = useState(false);
-  const [showMockModal, setShowMockModal] = useState(false);
+  const [showExamModal, setShowExamModal] = useState(false);
   const [showExamTypeDropdown, setShowExamTypeDropdown] = useState(false);
   const [expandedSubjectTopics, setExpandedSubjectTopics] = useState<
     string | null
@@ -108,6 +104,13 @@ export default function Exams() {
     string | null
   >(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Subjects visible under the current category filter
+  // Practical category: only show subjects that actually have practical questions
+  const visibleSubjects =
+    selectedCategory === "practical"
+      ? registeredSubjects.filter((s) => (s.practicalCount ?? 0) > 0)
+      : registeredSubjects;
 
   // Fetch mock config whenever exam type changes
   useEffect(() => {
@@ -143,17 +146,30 @@ export default function Exams() {
   }
 
   const filteredSubjects = searchQuery
-    ? registeredSubjects.filter((s) =>
+    ? visibleSubjects.filter((s) =>
         s.name.toLowerCase().includes(searchQuery.toLowerCase()),
       )
-    : registeredSubjects;
+    : visibleSubjects;
 
   const allSelected =
-    registeredSubjects.length > 0 &&
-    registeredSubjects.every((s) => selectedSubjectIds.includes(s.id));
+    visibleSubjects.length > 0 &&
+    visibleSubjects.every((s) => selectedSubjectIds.includes(s.id));
+
+  // Total Qs for the "All" pill — sum of visible subjects' Q counts
+  const visibleQTotal = visibleSubjects.reduce(
+    (sum, s) => sum + (s.totalQuestions ?? 0),
+    0,
+  );
 
   const handleSelectAll = (checked: boolean) => {
-    setSelectedSubjectIds(checked ? registeredSubjects.map((s) => s.id) : []);
+    setSelectedSubjectIds(checked ? visibleSubjects.map((s) => s.id) : []);
+  };
+
+  const handleCategoryChange = (cat: string) => {
+    setSelectedCategory(cat);
+    setSelectedSubjectIds([]);
+    setSelectedTopicIds([]);
+    setExpandedSubjectTopics(null);
   };
 
   const handleSubjectToggle = (subjectId: string, checked: boolean) => {
@@ -199,9 +215,7 @@ export default function Exams() {
 
   const handleStartExam = () => {
     if (selectedSubjectIds.length === 0) return;
-    if (selectedMode === "revision") setShowRevisionModal(true);
-    else if (selectedMode === "timed") setShowTimedModal(true);
-    else if (selectedMode === "mock") setShowMockModal(true);
+    setShowExamModal(true);
   };
 
   const buildPendingConfig = (subjectIds: string[]) => ({
@@ -216,34 +230,30 @@ export default function Exams() {
     ...(selectedTopicIds.length > 0 && { selectedTopicIds }),
   });
 
-  const handleContinueRevision = (numQuestions: number) => {
-    setPendingConfig({
-      ...buildPendingConfig(selectedSubjectIds),
-      mode: "revision",
-      questionCount: numQuestions,
-    });
-    setShowRevisionModal(false);
-    router.push("/student/exams/revision");
-  };
-
-  const handleContinueTimed = (numQuestions: number, time: number) => {
-    setPendingConfig({
-      ...buildPendingConfig(selectedSubjectIds),
-      mode: "timed",
-      questionCount: numQuestions,
-      timeLimitSeconds: time * 60,
-    });
-    setShowTimedModal(false);
-    router.push("/student/exams/timed");
-  };
-
-  const handleContinueMock = () => {
-    setPendingConfig({
-      ...buildPendingConfig(selectedSubjectIds),
-      mode: "mock",
-    });
-    setShowMockModal(false);
-    router.push("/student/exams/mock");
+  const handleExamModalContinue = (numQuestions?: number, time?: number) => {
+    setShowExamModal(false);
+    if (selectedMode === "revision" && numQuestions) {
+      setPendingConfig({
+        ...buildPendingConfig(selectedSubjectIds),
+        mode: "revision",
+        questionCount: numQuestions,
+      });
+      router.push("/student/exams/revision");
+    } else if (selectedMode === "timed" && numQuestions && time) {
+      setPendingConfig({
+        ...buildPendingConfig(selectedSubjectIds),
+        mode: "timed",
+        questionCount: numQuestions,
+        timeLimitSeconds: time * 60,
+      });
+      router.push("/student/exams/timed");
+    } else if (selectedMode === "mock") {
+      setPendingConfig({
+        ...buildPendingConfig(selectedSubjectIds),
+        mode: "mock",
+      });
+      router.push("/student/exams/mock");
+    }
   };
 
   const mockDuration = mockConfig
@@ -319,16 +329,19 @@ export default function Exams() {
                   icon={"hugeicons:square-lock-01"}
                 />
                 <span className="font-[400] text-[.875rem] leading-5">
-                  Subscribe to unlock all questions for this exam. Try our demo
-                  with {freeTierLimit} sample questions first!
+                  {isSponsored
+                    ? `You're on a sponsored demo. Your sponsor can unlock the full question bank for you.`
+                    : `Subscribe to unlock all questions for this exam. Try our demo with ${freeTierLimit} sample questions first!`}
                 </span>
               </div>
-              <Link href={`/student/upgrade?examTypeId=${examTypeId}`}>
-                <Button className="text-[.875rem]">
-                  <Icon className="w-5 h-5" icon={"hugeicons:sparkles"} />
-                  Subscribe Now
-                </Button>
-              </Link>
+              {!isSponsored && (
+                <Link href={`/student/upgrade?examTypeId=${examTypeId}`}>
+                  <Button className="text-[.875rem]">
+                    <Icon className="w-5 h-5" icon={"hugeicons:sparkles"} />
+                    Subscribe Now
+                  </Button>
+                </Link>
+              )}
             </div>
           )}
 
@@ -339,12 +352,12 @@ export default function Exams() {
                 <div
                   key={cat}
                   className="flex-1 cursor-pointer"
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => handleCategoryChange(cat)}
                 >
                   <Radio
                     name="question-category"
                     value={selectedCategory === cat}
-                    onChange={() => setSelectedCategory(cat)}
+                    onChange={() => handleCategoryChange(cat)}
                     customLabel={
                       <span className="ml-3 block font-[500] text-[1rem]">
                         {capitalize(cat)}
@@ -538,6 +551,9 @@ export default function Exams() {
                         </span>
                       }
                     />
+                    <span className="text-xs text-[#667085]">
+                      {visibleQTotal.toLocaleString()} Qs
+                    </span>
                   </div>
 
                   {filteredSubjects.map((subject) => {
@@ -561,16 +577,19 @@ export default function Exams() {
                             }
                           />
                           {isDemoUser ? (
-                            <span className="text-xs text-[#865503] bg-[#FEF6E7] px-2 py-0.5 rounded-full font-[500]">
-                              {subject.questionsAttempted ?? 0}/{freeTierLimit}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-[#865503] bg-[#FEF6E7] px-2 py-0.5 rounded-full font-[500]">
+                                {subject.questionsAttempted ?? 0}/{freeTierLimit}
+                              </span>
+                              <span className="text-xs text-[#667085]">
+                                {(subject.totalQuestions ?? 0).toLocaleString()} Qs
+                              </span>
+                            </div>
                           ) : (
                             <div className="flex items-center gap-2">
-                              {(subject.totalQuestions ?? 0) > 0 && (
-                                <span className="text-xs text-[#667085]">
-                                  {subject.totalQuestions.toLocaleString()} Qs
-                                </span>
-                              )}
+                              <span className="text-xs text-[#667085]">
+                                {(subject.totalQuestions ?? 0).toLocaleString()} Qs
+                              </span>
                               <button
                                 onClick={() => handleViewTopics(subject.id)}
                                 className={cn(
@@ -658,104 +677,21 @@ export default function Exams() {
         </div>
       </section>
 
-      <RevisionModeModal
-        isOpen={showRevisionModal}
-        onClose={() => setShowRevisionModal(false)}
-        onContinue={handleContinueRevision}
+      <ExamModeModal
+        isOpen={showExamModal}
+        onClose={() => setShowExamModal(false)}
+        mode={selectedMode as "revision" | "timed" | "mock"}
+        examTypeName={examTypeName}
         subjects={registeredSubjects
           .filter((s) => selectedSubjectIds.includes(s.id))
           .map((s) => s.name)}
         isDemoUser={isDemoUser}
         freeTierLimit={freeTierLimit}
+        onContinue={handleExamModalContinue}
+        mockConfig={mockConfig}
+        isLoadingMockConfig={isLoadingMockConfig}
+        mockDuration={mockDuration}
       />
-
-      <TimedModeModal
-        isOpen={showTimedModal}
-        onClose={() => setShowTimedModal(false)}
-        onContinue={handleContinueTimed}
-        subjects={registeredSubjects
-          .filter((s) => selectedSubjectIds.includes(s.id))
-          .map((s) => s.name)}
-        isDemoUser={isDemoUser}
-        freeTierLimit={freeTierLimit}
-      />
-
-      {showMockModal && (
-        <Modal isOpen onClose={() => setShowMockModal(false)} className="rounded-2xl w-full max-w-md">
-          <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
-              <h2 className="text-lg font-semibold text-gray-900">Mock Mode</h2>
-              <button
-                onClick={() => setShowMockModal(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <Icon icon="hugeicons:cancel-01" className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="p-4 md:p-6">
-              <div className="border border-[#41BCE2] rounded-xl p-4 mb-6 bg-[#F1FCFF]">
-                <div className="flex items-start gap-2 mb-3">
-                  <Icon
-                    icon="hugeicons:book-open-02"
-                    className="w-7.5 h-7.5"
-                    color="#41BCE2"
-                  />
-                  <div className="flex flex-col gap-[1rem]">
-                    <h4 className="font-[400] text-[1rem] text-[#575757] leading-[1.5rem]">
-                      {examTypeName} Subjects
-                    </h4>
-                    <div className="space-y-2">
-                      {registeredSubjects
-                        .filter((s) => selectedSubjectIds.includes(s.id))
-                        .map((subject) => (
-                          <p
-                            key={subject.id}
-                            className="text-[#2B2B2B] text-[1.125rem] leading-[1.75rem] font-[500]"
-                          >
-                            {subject.name}
-                          </p>
-                        ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="bg-pink-50 border border-pink-100 rounded-xl p-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Icon
-                      icon="hugeicons:notebook-02"
-                      className="w-5 h-5 text-pink-500"
-                    />
-                    <span className="text-xs text-gray-500">
-                      Total Questions
-                    </span>
-                  </div>
-                  <p className="text-xl font-bold text-gray-900 pl-7">
-                    {isLoadingMockConfig
-                      ? "..."
-                      : (mockConfig?.standardQuestionCount ?? 60)}
-                  </p>
-                </div>
-                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Icon
-                      icon="hugeicons:clock-01"
-                      className="w-5 h-5 text-blue-500"
-                    />
-                    <span className="text-xs text-gray-500">Exam Duration</span>
-                  </div>
-                  <p className="text-xl font-bold text-gray-900 pl-7">
-                    {isLoadingMockConfig ? "..." : mockDuration}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-end">
-                <Button onClick={handleContinueMock}>Continue</Button>
-              </div>
-            </div>
-        </Modal>
-      )}
     </>
   );
 }

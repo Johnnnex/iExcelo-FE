@@ -3,6 +3,7 @@ import {
   IDashboardData,
   ISubjectScores,
   IActiveSubscription,
+  ISubscriptionSummary,
   ICheckoutInfo,
   ICardInfo,
   IExamAttempt,
@@ -30,6 +31,8 @@ export const useStudentStore = create<IStudentStore>()(
       isLoadingSubjectScores: false,
       activeSubscription: null,
       isLoadingSubscription: false,
+      allSubscriptions: [] as ISubscriptionSummary[],
+      isLoadingAllSubscriptions: false,
       checkoutInfo: null,
       isLoadingCheckoutInfo: false,
       cardInfo: null,
@@ -74,6 +77,8 @@ export const useStudentStore = create<IStudentStore>()(
           isLoadingSubjectScores: false,
           activeSubscription: null,
           isLoadingSubscription: false,
+          allSubscriptions: [],
+          isLoadingAllSubscriptions: false,
           checkoutInfo: null,
           isLoadingCheckoutInfo: false,
           cardInfo: null,
@@ -262,6 +267,21 @@ export const useStudentStore = create<IStudentStore>()(
         } catch (error) {
           set({ isLoadingSubscription: false });
           handleAxiosError(error, "Failed to load subscription");
+        }
+      },
+
+      fetchAllSubscriptions: async () => {
+        set({ isLoadingAllSubscriptions: true });
+        try {
+          const res = await authRequest({
+            method: "GET",
+            url: "/subscriptions/my-subscriptions",
+          });
+          const subs = (res as any).data?.data as ISubscriptionSummary[];
+          set({ allSubscriptions: subs ?? [], isLoadingAllSubscriptions: false });
+        } catch (error) {
+          set({ isLoadingAllSubscriptions: false });
+          handleAxiosError(error, "Failed to load subscriptions");
         }
       },
 

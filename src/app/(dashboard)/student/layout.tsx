@@ -66,9 +66,13 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     dashboardData &&
     dashboardData?.currentExamType?.hasSelectedSubjects === false;
 
-  // Don't render until authorized
+  // Show a neutral loading screen while stores hydrate or auth is being checked
   if (!isAuthorized) {
-    return null;
+    return (
+      <div className="flex h-screen items-center justify-center bg-white">
+        <div className="w-8 h-8 border-2 border-[#007FFF] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
   return (
@@ -96,7 +100,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
           <section className="flex-1 flex flex-col">
             <DashboardHeader onMenuClick={() => setMobileMenuOpen(true)} />
-            <main className="flex-1 overflow-y-auto will-change-transform">{children}</main>
+            <main className="flex-1 overflow-y-auto">{children}</main>
           </section>
         </section>
 

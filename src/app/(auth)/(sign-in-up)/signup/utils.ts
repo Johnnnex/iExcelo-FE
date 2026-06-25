@@ -16,12 +16,6 @@ export function getFormFieldsByType(
   countries: ICountry[],
   examTypes: IExamType[],
 ): Record<"student" | "sponsor" | "affiliate", IFormField[]> {
-  // Convert countries to country code options
-  const countryCodeOptions: SelectOption[] = countries.map((country) => ({
-    value: country.code,
-    label: country.codeLabel,
-  }));
-
   // Convert exam types to select options
   const examTypeOptions: SelectOption[] = examTypes.map((examType) => ({
     value: examType.id,
@@ -60,22 +54,11 @@ export function getFormFieldsByType(
         gridColumn: "full",
       },
       {
-        name: "phoneNumber",
+        name: "phone",
         type: "tel",
         label: "Phone Number",
-        placeholder: "Enter your phone number",
+        placeholder: "801 234 5678",
         gridColumn: "full",
-        selectOptions: countryCodeOptions,
-        telProps: {
-          inputProps: {
-            name: "phoneNumber",
-            placeholder: "Enter your phone number",
-          },
-          selectProps: {
-            name: "countryCode",
-            placeholder: countryCodeOptions[0]?.label || "+234",
-          },
-        },
       },
       {
         name: "password",
@@ -134,22 +117,11 @@ export function getFormFieldsByType(
         gridColumn: "full",
       },
       {
-        name: "phoneNumber",
+        name: "phone",
         type: "tel",
         label: "Phone Number",
-        placeholder: "Enter your phone number",
+        placeholder: "801 234 5678",
         gridColumn: "full",
-        selectOptions: countryCodeOptions,
-        telProps: {
-          inputProps: {
-            name: "phoneNumber",
-            placeholder: "Enter your phone number",
-          },
-          selectProps: {
-            name: "countryCode",
-            placeholder: countryCodeOptions[0]?.label || "+234",
-          },
-        },
       },
       {
         name: "password",
@@ -189,22 +161,11 @@ export function getFormFieldsByType(
         gridColumn: "full",
       },
       {
-        name: "phoneNumber",
+        name: "phone",
         type: "tel",
         label: "Phone Number",
-        placeholder: "Enter your phone number",
+        placeholder: "801 234 5678",
         gridColumn: "full",
-        selectOptions: countryCodeOptions,
-        telProps: {
-          inputProps: {
-            name: "phoneNumber",
-            placeholder: "Enter your phone number",
-          },
-          selectProps: {
-            name: "countryCode",
-            placeholder: countryCodeOptions[0]?.label || "+234",
-          },
-        },
       },
       {
         name: "password",

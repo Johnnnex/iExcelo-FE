@@ -124,6 +124,7 @@ export const useExamStore = create<IExamStore>()((set, get) => ({
         examTypeName: pendingConfig.examTypeName,
         subjectNames: pendingConfig.subjectNames,
         flaggedQuestionIds: data.flaggedQuestionIds ?? [],
+        category: pendingConfig.category ?? data.category,
       };
 
       // Seed the page cache with the first-page questions returned by startExam.
@@ -347,17 +348,22 @@ export const useExamStore = create<IExamStore>()((set, get) => ({
     }
   },
 
-  searchTopics: async (examTypeId, q) => {
+  searchTopics: async (examTypeId, q, page = 1, limit = 20) => {
     try {
       const res: any = await authRequest({
         method: "GET",
         url: `/exams/topics/search`,
-        params: { examTypeId, q },
+        params: { examTypeId, q, page, limit },
       });
-      return (res.data.data ?? []) as ITopic[];
+      const data = res.data.data ?? {};
+      return {
+        items: (data.items ?? []) as ITopic[],
+        total: (data.total ?? 0) as number,
+        hasMore: (data.hasMore ?? false) as boolean,
+      };
     } catch (e) {
       handleAxiosError(e, "Failed to search topics");
-      return [];
+      return { items: [], total: 0, hasMore: false };
     }
   },
 
@@ -373,6 +379,19 @@ export const useExamStore = create<IExamStore>()((set, get) => ({
       handleAxiosError(e, "Failed to load topic");
     } finally {
       set({ isLoadingTopicDetail: false });
+    }
+  },
+
+  fetchTopicDetailRaw: async (topicId) => {
+    try {
+      const res: any = await authRequest({
+        method: "GET",
+        url: `/exams/topics/${topicId}`,
+      });
+      return (res.data.data ?? null) as ITopic | null;
+    } catch (e) {
+      handleAxiosError(e, "Failed to load topic");
+      return null;
     }
   },
 }));

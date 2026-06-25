@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { Button, CheckBox, Radio, RichText } from "@/components/atoms";
 import { InputField } from "@/components/molecules";
 import { useExamStore, useAuthStore, useStudentStore } from "@/store";
+import { TopicWindow } from "./TopicWindow";
 import type { IQuestionResponse, IFlagUpdate } from "@/types";
 
 interface QuestionResult {
@@ -81,13 +82,11 @@ function RevisionTestContent() {
   const [showResults, setShowResults] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isExamSubmitted, setIsExamSubmitted] = useState(false);
-  const [showFullDetails, setShowFullDetails] = useState(false);
-  const [fullDetailsTopic, setFullDetailsTopic] = useState("");
-  const [fullDetailsTopicId, setFullDetailsTopicId] = useState<string | null>(
-    null,
-  );
-  const [fullDetailsContent, setFullDetailsContent] = useState("");
   const [showInstructions, setShowInstructions] = useState(true);
+  // Multi-window topic panels
+  const [openTopicIds, setOpenTopicIds] = useState<string[]>([]);
+  const topZCounter = useRef(50);
+  const [zMap, setZMap] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
   useExamProtection(!isExamSubmitted);
   // Guard: show our own modal instead of browser dialog when back button is pressed
@@ -135,8 +134,8 @@ function RevisionTestContent() {
   const isTextInput = isFillInBlank || isShortAnswer;
   const passage = question?.passageId ? getPassage(question.passageId) : null;
   const hideScore =
-    pendingConfig?.category === "theory" ||
-    pendingConfig?.category === "practical";
+    examSession?.category === "theory" ||
+    examSession?.category === "practical";
 
   // Frozen = whole exam submitted OR this question individually confirmed
   const isCurrentFrozen =
@@ -327,12 +326,15 @@ function RevisionTestContent() {
     return String.fromCharCode(65 + idx);
   };
 
-  const handleShowFullDetails = () => {
-    if (!question) return;
-    setFullDetailsTopic(question.topicName ?? "");
-    setFullDetailsTopicId(question.topicId ?? null);
-    setFullDetailsContent(question.explanation ?? "");
-    setShowFullDetails(true);
+  const handleViewTopic = (topicId: string) => {
+    topZCounter.current += 1;
+    if (openTopicIds.includes(topicId)) {
+      // Already open — just bring it to front
+      setZMap((prev) => ({ ...prev, [topicId]: topZCounter.current }));
+      return;
+    }
+    setZMap((prev) => ({ ...prev, [topicId]: topZCounter.current }));
+    setOpenTopicIds((prev) => [...prev, topicId]);
   };
 
   const handleAttemptTest = async () => {
@@ -343,6 +345,7 @@ function RevisionTestContent() {
 
   const getButtonStyle = (num: number) => {
     if (questionResults[num]?.answered) {
+      if (hideScore) return "bg-blue-100 text-blue-600";
       return questionResults[num].correct
         ? "bg-green-100 text-green-700"
         : "bg-red-100 text-red-700";
@@ -810,12 +813,12 @@ function RevisionTestContent() {
                           <h3 className="font-semibold text-gray-900">
                             Explanation
                           </h3>
-                          {question.explanation && (
+                          {question.topicId && (
                             <button
-                              onClick={handleShowFullDetails}
+                              onClick={() => handleViewTopic(question.topicId!)}
                               className="text-[#E32E89] text-sm font-medium hover:underline flex items-center gap-1 mt-2 md:mt-0"
                             >
-                              Full Description Here
+                              View Topic
                               <Icon
                                 icon="hugeicons:arrow-right-01"
                                 className="w-4 h-4"
@@ -907,7 +910,7 @@ function RevisionTestContent() {
                           </div>
                         </div>
                       )}
-                      <div className="grid grid-cols-8 gap-2 mb-6">
+                      <div className={cn("grid grid-cols-8 gap-2 mb-6", hideScore && "mt-6")}>
                         {Array.from(
                           { length: totalQuestions },
                           (_, i) => i + 1,
@@ -988,7 +991,7 @@ function RevisionTestContent() {
                             </span>
                           </div>
                         )}
-                        <div className="grid grid-cols-8 gap-2 mb-6">
+                        <div className={cn("grid grid-cols-8 gap-2 mb-6", hideScore && "mt-4")}>
                           {Array.from(
                             { length: totalQuestions },
                             (_, i) => i + 1,
@@ -1093,60 +1096,20 @@ function RevisionTestContent() {
         </Modal>
       )}
 
-      {/* ── Explanation Modal ── */}
-      {showFullDetails && (
-        <Modal isOpen onClose={() => setShowFullDetails(false)} className="rounded-2xl w-full max-w-2xl">
-            <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Explanation
-              </h2>
-              <button
-                onClick={() => setShowFullDetails(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <Icon icon="hugeicons:cancel-01" className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="p-4 md:p-6">
-              {fullDetailsTopic && (
-                <div className="mb-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
-                    Topic
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-xl font-bold text-gray-900">
-                      {fullDetailsTopic}
-                    </h3>
-                    {fullDetailsTopicId && (
-                      <Link
-                        href={`/student/topics/${fullDetailsTopicId}`}
-                        target="_blank"
-                        className="text-blue-500 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
-                      >
-                        View Topic
-                        <Icon
-                          icon="hugeicons:arrow-right-01"
-                          className="w-3.5 h-3.5"
-                        />
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              )}
-              <div className="text-gray-700 leading-relaxed">
-                <RichText content={fullDetailsContent} />
-              </div>
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={() => setShowFullDetails(false)}
-                  className="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-        </Modal>
-      )}
+      {/* ── Draggable Resizable Topic Windows ── */}
+      {openTopicIds.map((topicId, i) => (
+        <TopicWindow
+          key={topicId}
+          topicId={topicId}
+          index={i}
+          zIndex={zMap[topicId] ?? 50 + i}
+          onClose={() => setOpenTopicIds((prev) => prev.filter((id) => id !== topicId))}
+          onFocus={() => {
+            topZCounter.current += 1;
+            setZMap((prev) => ({ ...prev, [topicId]: topZCounter.current }));
+          }}
+        />
+      ))}
     </>
   );
 }
