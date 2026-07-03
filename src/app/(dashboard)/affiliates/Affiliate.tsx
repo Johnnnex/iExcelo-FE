@@ -18,15 +18,12 @@ export default function Affiliate() {
     commissions,
     isLoadingCommissions,
     earningsByPlan,
-    availableCurrencies,
     selectedCurrency,
-    setSelectedCurrency,
     fetchDashboard,
     fetchCommissions,
     fetchEarningsByPlan,
   } = useAffiliateStore();
 
-  const [currencyOpen, setCurrencyOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const currencySymbol = CURRENCY_SYMBOLS[selectedCurrency] || "$";
@@ -80,42 +77,9 @@ export default function Affiliate() {
             <div className="p-[.375rem_.5rem] rounded-[1rem] bg-[#F0F7FF] w-fit text-[#0063AD] font-[500] leading-5 text-[.875rem]">
               Affiliate ID: {affiliateCode || "..."}
             </div>
-
-            {/* Currency Selector */}
-            {availableCurrencies.length > 0 && (
-              <div className="relative">
-                <button
-                  onClick={() => setCurrencyOpen(!currencyOpen)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-[1rem] bg-white/20 text-white text-sm font-[500] hover:bg-white/30 transition-colors"
-                >
-                  {selectedCurrency}
-                  <Icon
-                    icon="hugeicons:arrow-down-01"
-                    className="w-3.5 h-3.5"
-                  />
-                </button>
-                {currencyOpen && (
-                  <div className="absolute left-0 top-full mt-1 w-28 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-10">
-                    {availableCurrencies.map((cur) => (
-                      <button
-                        key={cur}
-                        onClick={() => {
-                          setSelectedCurrency(cur);
-                          setCurrencyOpen(false);
-                        }}
-                        className={`w-full text-left px-3 py-1.5 text-sm transition-colors ${
-                          cur === selectedCurrency
-                            ? "bg-[#F3F3F3] text-[#A12161] font-medium"
-                            : "text-gray-600 hover:bg-gray-50"
-                        }`}
-                      >
-                        {CURRENCY_SYMBOLS[cur] || ""} {cur}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+            <div className="p-[.375rem_.5rem] rounded-[1rem] bg-white/20 w-fit text-white font-[500] leading-5 text-[.875rem]">
+              {selectedCurrency}
+            </div>
           </div>
         </div>
       </section>

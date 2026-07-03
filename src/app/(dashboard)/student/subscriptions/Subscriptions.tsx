@@ -190,11 +190,11 @@ const Subscriptions = () => {
   const handleSelectPlan = (planId: string) => {
     if (!lastExamTypeId || !checkoutInfo) return;
 
-    if (activeSubscription) {
+    if (activeSubscription && activeSubscription.status === "active") {
       // Has active sub → go to update page
       router.push(`/student/subscriptions/update/${planId}`);
     } else {
-      // Demo/free user → show payment modal
+      // No sub, cancelled, or suspended → new subscription flow
       setSelectedPlanId(planId);
       setShowPayment(true);
     }
@@ -366,10 +366,10 @@ const Subscriptions = () => {
                 <div className="flex items-center">
                   <span className="text-[#2B2B2B] leading-9 text-[1.75rem] font-[500] tracking-[-.65px]">
                     {currencySymbol}
-                    {activeSubscription.amountPaid.toLocaleString()}
+                    {(activeSubscription.amountPaid ?? 0).toLocaleString()}
                   </span>
                   <span className="text-[#757575] leading-6 font-[400] text-[1rem]">
-                    {activeSubscription.plan
+                    {activeSubscription.plan?.durationDays
                       ? `/${durationLabel(activeSubscription.plan.durationDays)}`
                       : ""}
                   </span>

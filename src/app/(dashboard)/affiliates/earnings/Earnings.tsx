@@ -11,9 +11,11 @@ import {
   formatPeriodLabel,
 } from "@/utils";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import EarningsSkeleton from "./EarningsSkeleton";
+import { WithdrawModal } from "@/app/(dashboard)/affiliates/settings/payouts/WithdrawModal";
 
 const Earnings = () => {
   const { accessToken } = useAuthStore();
@@ -27,23 +29,20 @@ const Earnings = () => {
     payoutsTotal,
     payoutsPage,
     isLoadingPayouts,
-    isWithdrawing,
     selectedCurrency,
     fetchDashboard,
     fetchEarningsOverTime,
     fetchEarningsByPlan,
     fetchPayouts,
-    requestWithdrawal,
   } = useAffiliateStore();
 
   const currencySymbol = CURRENCY_SYMBOLS[selectedCurrency] || "$";
 
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [periodOpen, setPeriodOpen] = useState(false);
   const [granularity, setGranularity] = useState<"day" | "week" | "month">(
     "week",
   );
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [showWithdrawInput, setShowWithdrawInput] = useState(false);
   const [isChartLoading, setIsChartLoading] = useState(false);
 
   const activeOption =
@@ -82,19 +81,6 @@ const Earnings = () => {
     value: Number(item.totalEarnings) || 0,
     fill: BRAND_COLORS[index % BRAND_COLORS.length],
   }));
-
-  const handleWithdraw = () => {
-    if (showWithdrawInput) {
-      const amount = parseFloat(withdrawAmount);
-      if (!amount || amount <= 0) return;
-      requestWithdrawal(amount, () => {
-        setWithdrawAmount("");
-        setShowWithdrawInput(false);
-      });
-    } else {
-      setShowWithdrawInput(true);
-    }
-  };
 
   const payoutsPerPage = 10;
   const payoutsTotalPages = Math.ceil(payoutsTotal / payoutsPerPage);
@@ -137,45 +123,20 @@ const Earnings = () => {
             </h3>
           </div>
           <div className="flex flex-col gap-[1rem]">
-            {showWithdrawInput && (
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  value={withdrawAmount}
-                  onChange={(e) => setWithdrawAmount(e.target.value)}
-                  placeholder="Enter amount"
-                  className="flex-1 p-3 rounded-[.5rem] text-[.875rem] outline-none"
-                />
-                <button
-                  onClick={() => {
-                    setShowWithdrawInput(false);
-                    setWithdrawAmount("");
-                  }}
-                  className="p-3 rounded-[.5rem] text-white text-sm"
-                >
-                  Cancel
-                </button>
-              </div>
-            )}
             <button
-              onClick={handleWithdraw}
-              disabled={isWithdrawing || (dashboard?.pendingBalance ?? 0) <= 0}
-              className="w-full disabled:text-[#A6A6A6] text-[1rem] font-[600] leading-6 text-black flex justify-center items-center gap-[.5rem] p-3 rounded-[.5rem] bg-white disabled:bg-[#D6D6D6]"
+              onClick={() => setShowWithdrawModal(true)}
+              className="w-full text-[1rem] font-[600] leading-6 text-black flex justify-center items-center gap-[.5rem] p-3 rounded-[.5rem] bg-white hover:bg-[#F2F4F7] transition-colors"
             >
-              {isWithdrawing ? (
-                <Icon icon="svg-spinners:ring-resize" className="w-5 h-5" />
-              ) : (
-                <Icon
-                  className="text-inherit w-6 h-6"
-                  icon={"hugeicons:money-04"}
-                />
-              )}
-              {isWithdrawing ? "Processing..." : "Withdraw"}
+              <Icon className="text-inherit w-6 h-6" icon="hugeicons:money-04" />
+              Withdraw
             </button>
-            <button className="flex text-white text-[1rem] font-[600] leading-6 gap-[.5rem] items-center w-fit mx-auto">
-              <Icon className="h-6 w-6" icon={"hugeicons:plus-sign-circle"} />
+            <Link
+              href="/affiliates/settings/payouts"
+              className="flex text-white text-[1rem] font-[600] leading-6 gap-[.5rem] items-center w-fit mx-auto hover:underline"
+            >
+              <Icon className="h-6 w-6" icon="hugeicons:plus-sign-circle" />
               Add payout account
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -482,6 +443,12 @@ const Earnings = () => {
           </div>
         </div>
       </section>
+
+      <WithdrawModal
+        isOpen={showWithdrawModal}
+        onClose={() => setShowWithdrawModal(false)}
+        settingsPath="/affiliates/settings/payouts"
+      />
     </section>
   );
 };

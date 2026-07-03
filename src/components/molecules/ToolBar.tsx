@@ -19,6 +19,15 @@ const CHAT_BUTTONS = [
   "link-01",
 ];
 
+type ToolBarButton = {
+  svg?: string;
+  label?: string;
+  title?: string;
+  action: () => void;
+  isActive: () => boolean;
+  canRun: () => boolean;
+};
+
 interface ToolBarProps {
   editor: Editor;
   onImageUpload?: (file: File) => Promise<string | null>;
@@ -30,7 +39,7 @@ const ToolBar = ({ editor, onImageUpload, variant = "full" }: ToolBarProps) => {
 
   if (!editor) return null;
 
-  const buttons = [
+  const buttons: ToolBarButton[] = [
     {
       svg: "text-bold",
       action: () => editor.chain().focus().toggleBold().run(),
@@ -101,7 +110,21 @@ const ToolBar = ({ editor, onImageUpload, variant = "full" }: ToolBarProps) => {
         }
       },
       isActive: () => editor.isActive("link"),
-      canRun: () => editor.can().setLink || editor.isActive("link"),
+      canRun: () => !!editor.can().setLink || editor.isActive("link"),
+    },
+    {
+      label: "x₂",
+      title: "Subscript",
+      action: () => editor.chain().focus().toggleSubscript().run(),
+      isActive: () => editor.isActive("subscript"),
+      canRun: () => true,
+    },
+    {
+      label: "x²",
+      title: "Superscript",
+      action: () => editor.chain().focus().toggleSuperscript().run(),
+      isActive: () => editor.isActive("superscript"),
+      canRun: () => true,
     },
     {
       svg: "undo",
@@ -119,7 +142,7 @@ const ToolBar = ({ editor, onImageUpload, variant = "full" }: ToolBarProps) => {
 
   const visibleButtons =
     variant === "chat"
-      ? buttons.filter((b) => CHAT_BUTTONS.includes(b.svg))
+      ? buttons.filter((b) => b.svg !== undefined && CHAT_BUTTONS.includes(b.svg))
       : buttons;
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,18 +159,21 @@ const ToolBar = ({ editor, onImageUpload, variant = "full" }: ToolBarProps) => {
       {visibleButtons.map((button, index) => (
         <button
           key={index}
+          title={button.title}
           onClick={(e) => {
             e.preventDefault();
             button.action();
           }}
           disabled={!button.canRun()}
-          className={`flex h-[32px] w-[32px] items-center justify-center rounded-[6px] transition-all duration-[.4s] ${
+          className={`flex h-[32px] items-center justify-center rounded-[6px] transition-all duration-[.4s] ${
+            button.label ? "w-auto px-1.5 text-xs font-bold" : "w-[32px]"
+          } ${
             button.isActive()
               ? "bg-[#007fff10] text-[#007fff]"
               : "bg-white text-[#98A2B3]"
           }`}
         >
-          <Icon icon={`hugeicons:${button.svg}`} />
+          {button.label ? button.label : <Icon icon={`hugeicons:${button.svg}`} />}
         </button>
       ))}
 

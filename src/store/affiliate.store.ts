@@ -4,8 +4,11 @@ import {
   IAffiliateCommission,
   IAffiliateReferral,
   IEarningsByPlan,
+  IEarningsByCurrency,
   IEarningsOverTime,
   IAffiliatePayout,
+  IPayoutAccount,
+  ICurrencyBalance,
 } from "@/types";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -22,6 +25,7 @@ export const useAffiliateStore = create<IAffiliateStore>()(
       // Currency
       availableCurrencies: [],
       selectedCurrency: "NGN",
+      currencyManuallySet: false,
 
       // Dashboard
       dashboard: null,
@@ -43,6 +47,9 @@ export const useAffiliateStore = create<IAffiliateStore>()(
       earningsByPlan: [],
       isLoadingEarningsByPlan: false,
 
+      // Earnings by currency
+      earningsByCurrency: [] as IEarningsByCurrency[],
+
       // Earnings over time
       earningsOverTime: [],
       isLoadingEarningsOverTime: false,
@@ -52,6 +59,15 @@ export const useAffiliateStore = create<IAffiliateStore>()(
       payoutsTotal: 0,
       payoutsPage: 1,
       isLoadingPayouts: false,
+
+      // Payout accounts
+      payoutAccounts: [] as IPayoutAccount[],
+      isLoadingPayoutAccounts: false,
+      isManagingPayoutAccount: false,
+
+      // Currency balances
+      currencyBalances: [] as ICurrencyBalance[],
+      isLoadingBalances: false,
 
       // Actions
       isWithdrawing: false,
@@ -67,12 +83,15 @@ export const useAffiliateStore = create<IAffiliateStore>()(
           commissions: [],
           referrals: [],
           earningsByPlan: [],
+          earningsByCurrency: [],
           earningsOverTime: [],
           payouts: [],
+          payoutAccounts: [],
+          currencyBalances: [],
         }),
 
       setCurrencies: (currencies) => set({ availableCurrencies: currencies }),
-      setSelectedCurrency: (currency) => set({ selectedCurrency: currency }),
+      setSelectedCurrency: (currency) => set({ selectedCurrency: currency, currencyManuallySet: true }),
 
       fetchCurrencies: async () => {
         try {
@@ -86,9 +105,8 @@ export const useAffiliateStore = create<IAffiliateStore>()(
           } | null;
           if (data) {
             set({ availableCurrencies: data.currencies });
-            // Only set default currency if user hasn't manually selected one yet
-            const current = get().selectedCurrency;
-            if (!current || current === "NGN") {
+            // Only override if user has never explicitly chosen a currency
+            if (!get().currencyManuallySet) {
               set({ selectedCurrency: data.defaultCurrency });
             }
           }
@@ -183,6 +201,22 @@ export const useAffiliateStore = create<IAffiliateStore>()(
         }
       },
 
+      // Earnings by currency — drives the currency selector
+      fetchEarningsByCurrency: async () => {
+        try {
+          const res = await authRequest({
+            method: "GET",
+            url: "/affiliates/earnings-by-currency",
+          });
+          const data = (res as any).data?.data as IEarningsByCurrency[];
+          if (data?.length) {
+            set({ earningsByCurrency: data });
+          }
+        } catch (error) {
+          handleAxiosError(error, "Failed to load currency data");
+        }
+      },
+
       // Earnings over time — backend owns the date range, we just pass granularity + timezone
       fetchEarningsOverTime: async (_startDate, _endDate, granularity) => {
         set({ isLoadingEarningsOverTime: true });
@@ -231,22 +265,95 @@ export const useAffiliateStore = create<IAffiliateStore>()(
       },
 
       // Withdrawal
-      requestWithdrawal: async (amount, callback) => {
+      requestWithdrawal: async (amount, currency, payoutAccountId, callback) => {
         set({ isWithdrawing: true });
         try {
           await authRequest({
             method: "POST",
             url: "/affiliates/withdraw",
-            data: { amount },
+            data: { amount, currency, payoutAccountId },
           });
           set({ isWithdrawing: false });
           toast.success("Withdrawal requested successfully");
           get().fetchDashboard();
           get().fetchPayouts();
+          get().fetchBalances();
           callback?.();
         } catch (error) {
           set({ isWithdrawing: false });
           handleAxiosError(error, "Failed to request withdrawal");
+        }
+      },
+
+      // Payout accounts
+      fetchPayoutAccounts: async () => {
+        set({ isLoadingPayoutAccounts: true });
+        try {
+          const res = await authRequest({ method: "GET", url: "/affiliates/payout-accounts" });
+          const data = (res as any).data?.data as IPayoutAccount[];
+          set({ payoutAccounts: data || [], isLoadingPayoutAccounts: false });
+        } catch (error) {
+          set({ isLoadingPayoutAccounts: false });
+          handleAxiosError(error, "Failed to load payout accounts");
+        }
+      },
+
+      addPayoutAccount: async (data, callback) => {
+        set({ isManagingPayoutAccount: true });
+        try {
+          await authRequest({ method: "POST", url: "/affiliates/payout-accounts", data });
+          set({ isManagingPayoutAccount: false });
+          toast.success("Payout account added");
+          get().fetchPayoutAccounts();
+          callback?.();
+        } catch (error) {
+          set({ isManagingPayoutAccount: false });
+          handleAxiosError(error, "Failed to add payout account");
+        }
+      },
+
+      removePayoutAccount: async (accountId) => {
+        set({ isManagingPayoutAccount: true });
+        try {
+          await authRequest({ method: "DELETE", url: `/affiliates/payout-accounts/${accountId}` });
+          set((s) => ({
+            payoutAccounts: s.payoutAccounts.filter((a) => a.id !== accountId),
+            isManagingPayoutAccount: false,
+          }));
+          toast.success("Payout account removed");
+        } catch (error) {
+          set({ isManagingPayoutAccount: false });
+          handleAxiosError(error, "Failed to remove payout account");
+        }
+      },
+
+      setDefaultPayoutAccount: async (accountId) => {
+        set({ isManagingPayoutAccount: true });
+        try {
+          await authRequest({ method: "PATCH", url: `/affiliates/payout-accounts/${accountId}/default` });
+          set((s) => ({
+            payoutAccounts: s.payoutAccounts.map((a) => ({
+              ...a,
+              isDefault: a.id === accountId,
+            })),
+            isManagingPayoutAccount: false,
+          }));
+        } catch (error) {
+          set({ isManagingPayoutAccount: false });
+          handleAxiosError(error, "Failed to update default account");
+        }
+      },
+
+      // Per-currency balances
+      fetchBalances: async () => {
+        set({ isLoadingBalances: true });
+        try {
+          const res = await authRequest({ method: "GET", url: "/affiliates/balances" });
+          const data = (res as any).data?.data as ICurrencyBalance[];
+          set({ currencyBalances: data || [], isLoadingBalances: false });
+        } catch (error) {
+          set({ isLoadingBalances: false });
+          handleAxiosError(error, "Failed to load balances");
         }
       },
 
@@ -303,6 +410,7 @@ export const useAffiliateStore = create<IAffiliateStore>()(
         profile: state.profile,
         hydrated: state.hydrated,
         selectedCurrency: state.selectedCurrency,
+        currencyManuallySet: state.currencyManuallySet,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated();

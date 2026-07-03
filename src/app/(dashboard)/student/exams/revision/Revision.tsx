@@ -209,7 +209,17 @@ function RevisionTestContent() {
 
   const handleNextQuestion = () => {
     if (currentQuestion < totalQuestions) {
-      setCurrentQuestion(currentQuestion + 1);
+      const next = currentQuestion + 1;
+      setCurrentQuestion(next);
+      prefetchAround(next - 1);
+    }
+  };
+
+  const handlePreviousQuestion = () => {
+    if (currentQuestion > 1) {
+      const prev = currentQuestion - 1;
+      setCurrentQuestion(prev);
+      prefetchAround(prev - 1);
     }
   };
 
@@ -728,58 +738,68 @@ function RevisionTestContent() {
                           </div>
                         )}
 
-                        <div className="flex justify-end gap-2 mt-6">
-                          {isExamSubmitted ? (
-                            /* Post-submission review mode */
-                            currentQuestion === totalQuestions ? (
-                              <Button onClick={handleReturnToMain}>
-                                Return to Main Window
+                        <div className="flex justify-between items-center mt-6">
+                          <Button
+                            variant="outlined"
+                            onClick={handlePreviousQuestion}
+                            disabled={currentQuestion === 1}
+                            className="bg-white! border border-[#D0D5DD]! text-[#344054]! hover:bg-[#F9FAFB]!"
+                          >
+                            Previous
+                          </Button>
+                          <div className="flex gap-2">
+                            {isExamSubmitted ? (
+                              /* Post-submission review mode */
+                              currentQuestion === totalQuestions ? (
+                                <Button onClick={handleReturnToMain}>
+                                  Return to Main Window
+                                </Button>
+                              ) : (
+                                <Button onClick={handleNextQuestion}>
+                                  Next Question
+                                </Button>
+                              )
+                            ) : !submittedQuestions.has(currentQuestion) ? (
+                              <>
+                                {currentQuestion < totalQuestions && (
+                                  <Button
+                                    onClick={handleNextQuestion}
+                                    className="bg-white! border border-[#D0D5DD]! text-[#344054]! hover:bg-[#F9FAFB]!"
+                                  >
+                                    Skip
+                                  </Button>
+                                )}
+                                <Button
+                                  onClick={handleSubmitAnswer}
+                                  disabled={(() => {
+                                    const a = answers[question.id];
+                                    if (a == null) return true;
+                                    if (Array.isArray(a)) return a.length === 0;
+                                    if (typeof a === "string")
+                                      return a.trim() === "";
+                                    if (typeof a === "object")
+                                      return !Object.values(
+                                        a as Record<string, string>,
+                                      ).some((v) => v?.trim() !== "");
+                                    return false;
+                                  })()}
+                                >
+                                  Submit Answer
+                                </Button>
+                              </>
+                            ) : currentQuestion === totalQuestions ? (
+                              <Button
+                                onClick={() => setShowConfirmModal(true)}
+                                loading={isSubmittingExam}
+                              >
+                                End and Review
                               </Button>
                             ) : (
                               <Button onClick={handleNextQuestion}>
                                 Next Question
                               </Button>
-                            )
-                          ) : !submittedQuestions.has(currentQuestion) ? (
-                            <>
-                              {currentQuestion < totalQuestions && (
-                                <Button
-                                  onClick={handleNextQuestion}
-                                  className="bg-white! border border-[#D0D5DD]! text-[#344054]! hover:bg-[#F9FAFB]!"
-                                >
-                                  Skip
-                                </Button>
-                              )}
-                              <Button
-                                onClick={handleSubmitAnswer}
-                                disabled={(() => {
-                                  const a = answers[question.id];
-                                  if (a == null) return true;
-                                  if (Array.isArray(a)) return a.length === 0;
-                                  if (typeof a === "string")
-                                    return a.trim() === "";
-                                  if (typeof a === "object")
-                                    return !Object.values(
-                                      a as Record<string, string>,
-                                    ).some((v) => v?.trim() !== "");
-                                  return false;
-                                })()}
-                              >
-                                Submit Answer
-                              </Button>
-                            </>
-                          ) : currentQuestion === totalQuestions ? (
-                            <Button
-                              onClick={() => setShowConfirmModal(true)}
-                              loading={isSubmittingExam}
-                            >
-                              End and Review
-                            </Button>
-                          ) : (
-                            <Button onClick={handleNextQuestion}>
-                              Next Question
-                            </Button>
-                          )}
+                            )}
+                          </div>
                         </div>
 
                         {/* Mobile nav trigger — sits below submit button, hidden on desktop */}

@@ -198,7 +198,7 @@ const UpdateSub = ({ targetPlanId }: UpdateSubProps) => {
     );
   }
 
-  const currentPlanPrice = `${currencySymbol}${activeSubscription.amountPaid.toLocaleString()}`;
+  const currentPlanPrice = `${currencySymbol}${(activeSubscription.amountPaid ?? 0).toLocaleString()}`;
   const targetPlanPrice = `${currencySymbol}${targetPlan.price.toLocaleString()}`;
 
   return (
@@ -233,13 +233,13 @@ const UpdateSub = ({ targetPlanId }: UpdateSubProps) => {
               </div>
               <div className="p-6">
                 <h3 className="text-[#212636] text-[1.5rem] font-[600] leading-8 tracking-[-.48px] mb-1">
-                  {activeSubscription.plan.name}
+                  {activeSubscription.plan?.name ?? "Current Plan"}
                 </h3>
                 <h5 className="text-[#2B2B2B] text-[1.125rem] leading-7 font-[500]">
                   {currentPlanPrice}
                 </h5>
                 <p className="text-[#757575] text-[1rem] font-[400] leading-6">
-                  every {durationLabel(activeSubscription.plan.durationDays)}
+                  every {durationLabel(activeSubscription.plan?.durationDays ?? 30)}
                 </p>
               </div>
             </div>

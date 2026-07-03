@@ -10,32 +10,31 @@ import { CARD_SHADOW } from "@/utils";
 const settingsNavItems = [
   {
     label: "Account",
-    href: "/student/settings/account",
+    href: "/affiliates/settings/account",
     icon: "hugeicons:user-circle",
   },
   {
     label: "Notifications",
-    href: "/student/settings/notification",
+    href: "/affiliates/settings/notification",
     icon: "hugeicons:notification-01",
   },
   {
     label: "Password & Security",
-    href: "/student/settings/password",
+    href: "/affiliates/settings/password",
     icon: "hugeicons:lock-key",
   },
   {
-    label: "Billing",
-    href: "/student/settings/billing",
-    icon: "hugeicons:credit-card",
-  },
-  {
     label: "Payout Accounts",
-    href: "/student/settings/payouts",
+    href: "/affiliates/settings/payouts",
     icon: "hugeicons:bank",
   },
 ];
 
-export default function SettingsLayout({ children }: { children: ReactNode }) {
+export default function AffiliateSettingsLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const pathname = usePathname();
 
   return (

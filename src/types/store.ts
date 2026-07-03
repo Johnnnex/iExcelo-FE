@@ -419,7 +419,6 @@ export interface IAffiliateProfile {
   totalEarnings: number;
   pendingBalance: number;
   totalConversions: number;
-  totalPaidOut: number;
 }
 
 // Affiliate dashboard response
@@ -478,18 +477,46 @@ export interface IAffiliateCommission {
   };
 }
 
+// Payout account (bank account for withdrawal)
+export interface IPayoutAccount {
+  id: string;
+  currency: string;
+  bankName: string;
+  accountNumber: string;
+  accountName: string;
+  bankCode: string | null;
+  isDefault: boolean;
+  createdAt: string;
+}
+
+// Per-currency available withdrawal balance
+export interface ICurrencyBalance {
+  currency: string;
+  available: number;
+  totalEarned: number;
+}
+
 // Affiliate payout
 export interface IAffiliatePayout {
   id: string;
   amount: number;
+  currency: string;
   status: string;
   createdAt: string;
   processedAt: string | null;
+  failureReason: string | null;
+  payoutAccount: IPayoutAccount | null;
 }
 
 // Earnings by plan (for pie chart)
 export interface IEarningsByPlan {
   planName: string;
+  totalEarnings: string;
+  count: string;
+}
+
+export interface IEarningsByCurrency {
+  currency: string;
   totalEarnings: string;
   count: string;
 }
@@ -1080,6 +1107,7 @@ export interface IAffiliateStore {
   // Currency
   availableCurrencies: string[];
   selectedCurrency: string;
+  currencyManuallySet: boolean;
   setCurrencies: (currencies: string[]) => void;
   setSelectedCurrency: (currency: string) => void;
   fetchCurrencies: () => Promise<void>;
@@ -1108,6 +1136,10 @@ export interface IAffiliateStore {
   isLoadingEarningsByPlan: boolean;
   fetchEarningsByPlan: () => Promise<void>;
 
+  // Earnings by currency (drives currency selector)
+  earningsByCurrency: IEarningsByCurrency[];
+  fetchEarningsByCurrency: () => Promise<void>;
+
   // Earnings over time
   earningsOverTime: IEarningsOverTime[];
   isLoadingEarningsOverTime: boolean;
@@ -1124,9 +1156,38 @@ export interface IAffiliateStore {
   isLoadingPayouts: boolean;
   fetchPayouts: (page?: number, limit?: number) => Promise<void>;
 
+  // Payout accounts
+  payoutAccounts: IPayoutAccount[];
+  isLoadingPayoutAccounts: boolean;
+  fetchPayoutAccounts: () => Promise<void>;
+  addPayoutAccount: (
+    data: {
+      currency: string;
+      bankName: string;
+      accountNumber: string;
+      accountName: string;
+      bankCode?: string;
+      setAsDefault?: boolean;
+    },
+    callback?: () => void,
+  ) => Promise<void>;
+  removePayoutAccount: (accountId: string) => Promise<void>;
+  setDefaultPayoutAccount: (accountId: string) => Promise<void>;
+  isManagingPayoutAccount: boolean;
+
+  // Per-currency balances
+  currencyBalances: ICurrencyBalance[];
+  isLoadingBalances: boolean;
+  fetchBalances: () => Promise<void>;
+
   // Actions
   isWithdrawing: boolean;
-  requestWithdrawal: (amount: number, callback?: () => void) => Promise<void>;
+  requestWithdrawal: (
+    amount: number,
+    currency: string,
+    payoutAccountId: string,
+    callback?: () => void,
+  ) => Promise<void>;
   isUpdatingCode: boolean;
   checkCodeAvailability: (code: string) => Promise<{
     available: boolean;

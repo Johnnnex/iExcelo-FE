@@ -1,6 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { cn } from "@/lib/utils";
 
@@ -62,7 +63,7 @@ export function RichText({
           [remarkMath, { singleDollarTextMath: true }],
           remarkGfm,
         ]}
-        rehypePlugins={[[rehypeKatex, { strict: false }]]}
+        rehypePlugins={[rehypeRaw, [rehypeKatex, { strict: false }]]}
         components={{
           img: ({ src, alt }) =>
             src ? (

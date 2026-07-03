@@ -9,6 +9,7 @@ import Link from "@tiptap/extension-link";
 import { Markdown } from "tiptap-markdown";
 import OrderedList from "@tiptap/extension-ordered-list";
 import Underline from "@tiptap/extension-underline";
+import { SubscriptMarkdown, SuperscriptMarkdown } from "./SubSuperExtensions";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, forwardRef, FocusEvent, HTMLAttributes } from "react";
@@ -109,6 +110,8 @@ const TipTap = forwardRef<HTMLDivElement, TipTapProps>(
         CodeBlock,
         Image,
         Markdown,
+        SubscriptMarkdown,
+        SuperscriptMarkdown,
       ],
       content: value,
       onUpdate: ({ editor }) => {
@@ -137,6 +140,7 @@ const TipTap = forwardRef<HTMLDivElement, TipTapProps>(
         },
       },
       immediatelyRender: false,
+      shouldRerenderOnTransaction: true,
       editable: !readOnly,
     });
 

@@ -149,7 +149,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
   const { user } = useAuthStore();
   const { lastExamTypeId, switchExamType, dashboardData, profile } =
     useStudentStore();
-  const { availableCurrencies, selectedCurrency, setSelectedCurrency } =
+  const { earningsByCurrency, selectedCurrency, setSelectedCurrency } =
     useAffiliateStore();
   const { unreadCount, fetchRecentNotifications } = useNotificationStore();
 
@@ -270,15 +270,24 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                   onExamTypeChange: switchExamType,
                 }
               : {})}
-            {...(isAffiliate && availableCurrencies.length
-              ? {
-                  currencies: availableCurrencies.map((code) => ({
-                    code,
-                    name: code,
-                  })),
-                  activeCurrency: selectedCurrency,
-                  onCurrencyChange: setSelectedCurrency,
-                }
+            {...(isAffiliate
+              ? (() => {
+                  const earned = earningsByCurrency.map((e) => ({
+                    code: e.currency,
+                    name: e.currency,
+                  }));
+                  const options =
+                    selectedCurrency && !earned.some((c) => c.code === selectedCurrency)
+                      ? [{ code: selectedCurrency, name: selectedCurrency }, ...earned]
+                      : earned;
+                  return options.length
+                    ? {
+                        currencies: options,
+                        activeCurrency: selectedCurrency,
+                        onCurrencyChange: setSelectedCurrency,
+                      }
+                    : {};
+                })()
               : {})}
           />
         </div>

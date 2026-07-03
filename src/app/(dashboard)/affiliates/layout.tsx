@@ -49,6 +49,7 @@ export default function AffiliateLayout({ children }: { children: ReactNode }) {
     profile,
     hydrated: profileHydrated,
     fetchCurrencies,
+    fetchEarningsByCurrency,
   } = useAffiliateStore();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -79,10 +80,11 @@ export default function AffiliateLayout({ children }: { children: ReactNode }) {
     setIsAuthorized(true);
   }, [authHydrated, profileHydrated]);
 
-  // Fetch available currencies once authorized
+  // Fetch currency data once authorized
   useEffect(() => {
     if (!isAuthorized) return;
     fetchCurrencies();
+    fetchEarningsByCurrency();
   }, [isAuthorized]);
 
   // Don't render until authorized
@@ -100,8 +102,9 @@ export default function AffiliateLayout({ children }: { children: ReactNode }) {
         showUpgrade={false}
       />
 
-      <section className="flex-1 flex flex-col">
+      <section className="flex-1 flex flex-col overflow-hidden">
         <DashboardHeader onMenuClick={() => setMobileMenuOpen(true)} />
+
         <main className="flex-1 overflow-y-auto">{children}</main>
       </section>
     </section>

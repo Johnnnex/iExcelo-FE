@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/atoms";
-import { useCheckoutStore } from "@/store";
+import { useCheckoutStore, useStudentStore } from "@/store";
 
 interface SubscriptionConfirmedProps {
   sessionId?: string;
@@ -18,11 +18,20 @@ export default function SubscriptionConfirmed({
 }: SubscriptionConfirmedProps) {
   const router = useRouter();
   const { verificationState, verifyPayment } = useCheckoutStore();
+  const { fetchDashboard } = useStudentStore();
 
   useEffect(() => {
     verifyPayment({ sessionId, reference });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId, reference]);
+
+  // Repull dashboard once payment is confirmed so data is fresh on arrival
+  useEffect(() => {
+    if (verificationState === "success") {
+      fetchDashboard();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [verificationState]);
 
   if (verificationState === "loading" || verificationState === "idle") {
     return (

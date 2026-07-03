@@ -31,8 +31,11 @@ const Referrals = () => {
     isLoadingReferrals,
     isUpdatingCode,
     selectedCurrency,
+    setSelectedCurrency,
+    earningsByCurrency,
     fetchDashboard,
     fetchReferrals,
+    fetchEarningsByCurrency,
     updateAffiliateCode,
     checkCodeAvailability,
   } = useAffiliateStore();
@@ -62,13 +65,19 @@ const Referrals = () => {
       ? `${window.location.origin}/ref/${affiliateCode}`
       : `https://iexcelo.com/ref/${affiliateCode}`;
 
-  // Fetch for all students — they all have a code now
+  useEffect(() => {
+    if (!accessToken) return;
+    fetchEarningsByCurrency();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken]);
+
+  // Re-fetch referral data when currency changes
   useEffect(() => {
     if (!accessToken) return;
     fetchDashboard();
     fetchReferrals(1, 10);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
+  }, [accessToken, selectedCurrency]);
 
   // Cleanup debounce timer
   useEffect(() => {
@@ -205,7 +214,7 @@ const Referrals = () => {
   return (
     <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
       {/* Header */}
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div>
           <h1 className="text-xl md:text-2xl font-[600] text-[#171717]">
             Referrals & Invites
@@ -215,10 +224,29 @@ const Referrals = () => {
             commissions.
           </p>
         </div>
-        <Button onClick={() => setShowShareModal(true)}>
-          <Icon icon="hugeicons:gift" className="w-4 h-4 md:w-5 md:h-5" />
-          Invite
-        </Button>
+        <div className="flex items-center gap-3 flex-wrap">
+          {earningsByCurrency.length > 1 && (
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {earningsByCurrency.map((e) => (
+                <button
+                  key={e.currency}
+                  onClick={() => setSelectedCurrency(e.currency)}
+                  className={`px-3 py-[.3125rem] rounded-full text-[.75rem] font-[600] border transition-colors whitespace-nowrap ${
+                    selectedCurrency === e.currency
+                      ? "bg-[#007FFF] border-[#007FFF] text-white"
+                      : "border-[#D0D5DD] text-[#344054] hover:bg-[#F9FAFB]"
+                  }`}
+                >
+                  {CURRENCY_SYMBOLS[e.currency] ?? ""} {e.currency}
+                </button>
+              ))}
+            </div>
+          )}
+          <Button onClick={() => setShowShareModal(true)}>
+            <Icon icon="hugeicons:gift" className="w-4 h-4 md:w-5 md:h-5" />
+            Invite
+          </Button>
+        </div>
       </div>
 
       {/* Soft nudge — only shown when student hasn't subscribed yet */}
