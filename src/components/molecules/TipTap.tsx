@@ -122,6 +122,12 @@ const TipTap = forwardRef<HTMLDivElement, TipTapProps>(
         attributes: {
           class: `outline-none text-[16px] font-[400] leading-[24px] bg-white p-[1px_14px_10px_14px] rounded-[8px] min-h-[100px] w-full`,
         },
+        transformPastedHTML: (html) =>
+          html
+            .replace(/<!--StartFragment-->|<!--EndFragment-->/gi, "")
+            .replace(/<\/?o:[^>]*(\/)?>/gi, "")
+            .replace(/<\/?w:[^>]*(\/)?>/gi, "")
+            .replace(/<!--\[if[^\]]*\]>[\s\S]*?<!\[endif\]-->/gi, ""),
         handleDrop: (_view, event) => {
           if (!imageAllowed || !editor) return false;
           const file = (event as DragEvent).dataTransfer?.files?.[0];
