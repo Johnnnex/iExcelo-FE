@@ -180,21 +180,26 @@ export default function OnboardingPage() {
   ];
 
   return (
-    <section className="flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-xl rounded-2xl bg-white p-6 md:p-8 shadow-md">
-        <h1 className="text-2xl font-semibold text-[#101828] mb-2">
+    <div
+      style={{
+        boxShadow:
+          "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
+      }}
+      className="rounded-[1rem] max-w-[38rem] w-[95%] mx-auto bg-white p-[2.5rem_2rem]"
+    >
+        <h2 className="mb-[.5rem] leading-[2rem] text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
           Let&apos;s complete your setup
-        </h1>
-        <p className="text-sm text-[#667085] mb-6">
+        </h2>
+        <p className="text-[.875rem] leading-[1.5rem] text-[#667085] mb-[2rem]">
           We&apos;ll ask a few quick questions so we can personalise your
           iExcelo experience.
         </p>
 
-        <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleFormSubmit(onSubmit)} className="flex flex-col gap-y-[1rem]">
           {/* User Type Picker - show if no userType is set and no selectedUserType is set */}
           {!userType && !selectedUserType && (
-            <div className="space-y-3 mb-6">
-              <label className="block text-sm font-medium text-[#344054]">
+            <div className="space-y-[1rem] mb-[1rem]">
+              <label className="block text-[.875rem] font-[500] text-[#344054]">
                 How will you like to use iExcelo?
               </label>
               {userTypeOptions.map((option) => (
@@ -202,29 +207,28 @@ export default function OnboardingPage() {
                   key={option.userType}
                   type="button"
                   onClick={() => setSelectedUserType(option.userType)}
-                  className={`flex w-full items-center justify-between rounded-xl border p-4 cursor-pointer transition-all ${
-                    selectedUserType === option.userType
-                      ? "border-[#007FFF] bg-[#F0F7FF]"
-                      : "border-[#D0D5DD] bg-white hover:bg-gray-50"
-                  }`}
+                  style={{
+                    boxShadow:
+                      "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
+                  }}
+                  className="flex w-full items-center justify-between rounded-[1.75rem] bg-white p-[1.5rem_2rem] cursor-pointer duration-[.4s] transition-all"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-[.625rem]">
                     <div
-                      className={`flex p-2 rounded-full transition-all ${
+                      className={`${
                         selectedUserType === option.userType
-                          ? "bg-[#007FFF] text-white"
+                          ? "bg-[#E6F2FF] text-[#007FFF]"
                           : "bg-[#F3F3F3] text-[#101928]"
-                      }`}
+                      } flex p-[.75rem] rounded-[50%] transition-all duration-[.4s] items-center justify-center`}
                     >
                       <Icon
                         height="1.25rem"
                         width="1.25rem"
                         color="inherit"
-                        className="md:h-6 md:w-6"
                         icon={option.icon}
                       />
                     </div>
-                    <span className="md:text-[1rem] text-sm font-medium text-[#2B2B2B]">
+                    <span className="text-[1.125rem] text-left tracking-[-.4px] leading-[1.75rem] font-[500] text-[#2B2B2B]">
                       {option.title}
                     </span>
                   </div>
@@ -372,24 +376,23 @@ export default function OnboardingPage() {
           )}
 
           {selectedUserType === UserType.AFFILIATE && (
-            <p className="text-sm text-[#667085]">
+            <p className="text-[.875rem] leading-[1.5rem] text-[#667085]">
               Your affiliate account is ready! Click continue to access your
               dashboard and start earning commissions.
             </p>
           )}
 
-          <div className="mt-8 flex justify-end">
+          <div className="mt-[1rem]">
             <Button
               type="submit"
               loading={isSubmitting}
               disabled={!selectedUserType}
-              className="px-8 justify-center"
+              className="w-full justify-center"
             >
               Continue to dashboard
             </Button>
           </div>
         </form>
-      </div>
-    </section>
+    </div>
   );
 }

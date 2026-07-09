@@ -194,7 +194,7 @@ const SignUp = () => {
 
       if (group.length === 2 && group[0].gridColumn === "half") {
         return (
-          <div key={groupIndex} className="grid grid-cols-2 gap-4">
+          <div key={groupIndex} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {group.map(renderField)}
           </div>
         );
@@ -290,7 +290,7 @@ const SignUp = () => {
           Continue
         </Button>
 
-        <div className="mt-[3rem] p-[1rem_1.75rem] w-fit rounded-[1.875rem] bg-white text-[.875rem] leading-[1.25rem] font-[400] text-[#454545]">
+        <div className="mt-[3rem] mx-auto p-[1rem_1.75rem] w-fit rounded-[1.875rem] bg-white text-[.875rem] leading-[1.25rem] font-[400] text-[#454545]">
           <span>Already have an account? </span>
           <Link
             href="/login"

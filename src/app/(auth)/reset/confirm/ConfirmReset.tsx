@@ -57,7 +57,7 @@ export default function ConfirmReset() {
           boxShadow:
             "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
         }}
-        className="rounded-[1rem] bg-white p-[2.5rem_2rem]"
+        className="rounded-[1rem] max-w-[34rem] w-[95%] mx-auto bg-white p-[2.5rem_2rem]"
       >
         <h2 className="mb-[1rem] leading-[2rem] text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
           Password Reset Successful
@@ -82,7 +82,7 @@ export default function ConfirmReset() {
         boxShadow:
           "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
       }}
-      className="rounded-[1rem] bg-white p-[2.5rem_2rem]"
+      className="rounded-[1rem] max-w-[34rem] w-[95%] mx-auto bg-white p-[2.5rem_2rem]"
     >
       <h2 className="mb-[.5rem] leading-[2rem] text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
         Set New Password

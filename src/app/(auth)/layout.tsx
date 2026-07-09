@@ -31,7 +31,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <header className="p-[3.75rem] absolute top-0 left-0">
+      <header className="p-[1rem] md:p-[3.75rem] absolute top-0 left-0">
         <Link href={"/"}>
           <SVGClient src="/svg/logo.svg" />
         </Link>

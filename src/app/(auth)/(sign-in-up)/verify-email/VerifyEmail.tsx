@@ -171,71 +171,74 @@ export default function VerifyEmailPage() {
   const canResend = countdown === 0 && !isResending;
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#2B2B2B] mb-2">
+    <div>
+      <div
+        style={{
+          boxShadow:
+            "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
+        }}
+        className="rounded-[1rem] bg-white p-[2.5rem_2rem]"
+      >
+        <h2 className="mb-[.5rem] leading-[2rem] text-center text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
           Verify Your Email
-        </h1>
-        <p className="text-sm text-[#667085]">
-          We sent a 6-digit verification code to{" "}
-          <span className="font-semibold text-[#2B2B2B]">{signupEmail}</span>.
-          Enter the code below to verify your account.
+        </h2>
+        <p className="text-[.875rem] leading-[1.5rem] text-[#667085] mb-[2rem] text-center">
+          We sent a 6-digit code to{" "}
+          <span className="font-[600] text-[#2B2B2B]">{signupEmail}</span>.
+          Enter it below to verify your account.
         </p>
-      </div>
 
-      <div className="space-y-6">
-        {/* OTP Input Boxes */}
-        <div className="flex gap-3 justify-center">
-          {otp.map((digit, index) => (
-            <input
-              key={index}
-              ref={(el) => {
-                inputRefs.current[index] = el;
-              }}
-              type="text"
-              inputMode="numeric"
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              onPaste={index === 0 ? handlePaste : undefined}
-              className="w-12 h-14 text-center text-xl font-semibold border border-[#D0D5DD] rounded-lg focus:border-[#007FFF] focus:outline-none transition-colors"
-              aria-label={`Digit ${index + 1}`}
-            />
-          ))}
-        </div>
+        <div className="space-y-6">
+          <div className="flex gap-3 justify-center">
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                ref={(el) => {
+                  inputRefs.current[index] = el;
+                }}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={index === 0 ? handlePaste : undefined}
+                className="w-12 h-14 text-center text-xl font-[600] border border-[#D0D5DD] rounded-lg focus:border-[#007FFF] focus:outline-none transition-colors"
+                aria-label={`Digit ${index + 1}`}
+              />
+            ))}
+          </div>
 
-        {/* Verify Button */}
-        <Button
-          onClick={handleVerify}
-          disabled={isVerifying || otp.join("").length !== 6}
-          className="w-full justify-center"
-          loading={isVerifying}
-        >
-          Verify Email
-        </Button>
+          <Button
+            onClick={handleVerify}
+            disabled={isVerifying || otp.join("").length !== 6}
+            className="w-full justify-center"
+            loading={isVerifying}
+          >
+            Verify Email
+          </Button>
 
-        {/* Resend Code */}
-        <div className="text-center">
-          <p className="text-sm text-[#667085] mb-2">
-            Didn&apos;t receive the code?
-          </p>
-          {countdown > 0 ? (
-            <p className="text-sm text-[#667085]">
-              Can resend in{" "}
-              <span className="font-semibold text-[#2B2B2B]">
-                {formatTime(countdown)}
-              </span>
+          <div className="text-center">
+            <p className="text-[.875rem] text-[#667085] mb-[.5rem]">
+              Didn&apos;t receive the code?
             </p>
-          ) : (
-            <button
-              onClick={handleResend}
-              disabled={!canResend}
-              className="text-sm font-semibold text-[#007FFF] hover:text-[#0052CC] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {isResending ? "Sending..." : "Resend Code"}
-            </button>
-          )}
+            {countdown > 0 ? (
+              <p className="text-[.875rem] text-[#667085]">
+                Can resend in{" "}
+                <span className="font-[600] text-[#2B2B2B]">
+                  {formatTime(countdown)}
+                </span>
+              </p>
+            ) : (
+              <button
+                onClick={handleResend}
+                disabled={!canResend}
+                className="text-[.875rem] font-[600] text-[#007FFF] hover:underline disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {isResending ? "Sending..." : "Resend Code"}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
