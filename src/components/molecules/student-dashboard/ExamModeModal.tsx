@@ -76,8 +76,8 @@ export function ExamModeModal({
       className="rounded-2xl w-full max-w-md"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
-        <h2 className="text-lg font-semibold text-gray-900">
+      <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900">
           {MODE_TITLE[mode]}
         </h2>
         <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
@@ -85,7 +85,7 @@ export function ExamModeModal({
         </button>
       </div>
 
-      <div className="p-4 md:p-6">
+      <div className="p-4 sm:p-6">
         {/* Demo user warning */}
         {isDemoUser && mode !== "mock" && (
           <div className="bg-[#FEF6E7] border-l-4 border-[#F3A218] mb-4 p-[.75rem_1rem]">
@@ -94,7 +94,7 @@ export function ExamModeModal({
                 icon="hugeicons:information-circle"
                 className="w-5 h-5 text-[#F3A218] flex-shrink-0 mt-0.5"
               />
-              <p className="text-[.875rem] font-[600] leading-5 text-[#2B2B2B]">
+              <p className="text-[.8125rem] sm:text-[.875rem] font-[600] leading-5 text-[#2B2B2B]">
                 You only have access to {freeTierLimit} Questions!
               </p>
             </div>
@@ -102,22 +102,22 @@ export function ExamModeModal({
         )}
 
         {/* Subjects card */}
-        <div className="border border-[#41BCE2] rounded-xl p-4 mb-6 bg-[#F1FCFF]">
+        <div className="border border-[#41BCE2] rounded-xl p-3 sm:p-4 mb-5 sm:mb-6 bg-[#F1FCFF]">
           <div className="flex items-start gap-2">
             <Icon
               icon="hugeicons:book-open-02"
-              className="w-7.5 h-7.5 shrink-0"
+              className="w-6 h-6 sm:w-7.5 sm:h-7.5 shrink-0 mt-0.5"
               color="#41BCE2"
             />
-            <div className="flex flex-col gap-[1rem]">
-              <h4 className="font-[400] text-[1rem] text-[#575757] leading-[1.5rem]">
+            <div className="flex flex-col gap-2 sm:gap-4 min-w-0">
+              <h4 className="font-[400] text-[.875rem] sm:text-[1rem] text-[#575757] leading-[1.5rem]">
                 {examTypeName} Subjects
               </h4>
-              <div className="space-y-2">
+              <div className="space-y-1.5 sm:space-y-2">
                 {subjects.map((subject) => (
                   <p
                     key={subject}
-                    className="text-[#2B2B2B] text-[1.125rem] leading-[1.75rem] font-[500]"
+                    className="text-[#2B2B2B] text-[.9375rem] sm:text-[1.125rem] leading-[1.5rem] sm:leading-[1.75rem] font-[500] break-words"
                   >
                     {subject}
                   </p>
@@ -129,8 +129,8 @@ export function ExamModeModal({
 
         {/* Mode-specific content */}
         {mode === "revision" && (
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="mb-5 sm:mb-6">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
               Number of questions you want to answer
             </label>
             <InputField
@@ -156,7 +156,7 @@ export function ExamModeModal({
         {mode === "timed" && (
           <>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                 Number of questions you want to answer
               </label>
               <InputField
@@ -169,8 +169,8 @@ export function ExamModeModal({
                 placeholder="Select no. of questions"
               />
             </div>
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="mb-5 sm:mb-6">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                 Time
               </label>
               <InputField
@@ -187,41 +187,39 @@ export function ExamModeModal({
         )}
 
         {mode === "mock" && (
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-pink-50 border border-pink-100 rounded-xl p-4">
-              <div className="flex items-center gap-2 mb-1">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-5 sm:mb-6">
+            <div className="bg-pink-50 border border-pink-100 rounded-xl p-3 sm:p-4">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
                 <Icon
                   icon="hugeicons:notebook-02"
-                  className="w-5 h-5 text-pink-500"
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-pink-500 shrink-0"
                 />
-                <span className="text-xs text-gray-500">Total Questions</span>
+                <span className="text-[.6875rem] sm:text-xs text-gray-500">Total Questions</span>
               </div>
-              <p className="text-xl font-bold text-gray-900 pl-7">
+              <p className="text-lg sm:text-xl font-bold text-gray-900 pl-[1.375rem] sm:pl-7">
                 {isLoadingMockConfig
                   ? "..."
                   : (mockConfig?.standardQuestionCount ?? 60)}
               </p>
             </div>
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-              <div className="flex items-center gap-2 mb-1">
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 sm:p-4">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
                 <Icon
                   icon="hugeicons:clock-01"
-                  className="w-5 h-5 text-blue-500"
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 shrink-0"
                 />
-                <span className="text-xs text-gray-500">Exam Duration</span>
+                <span className="text-[.6875rem] sm:text-xs text-gray-500">Exam Duration</span>
               </div>
-              <p className="text-xl font-bold text-gray-900 pl-7">
+              <p className="text-lg sm:text-xl font-bold text-gray-900 pl-[1.375rem] sm:pl-7">
                 {isLoadingMockConfig ? "..." : mockDuration}
               </p>
             </div>
           </div>
         )}
 
-        <div className="flex justify-end">
-          <Button onClick={handleContinue} disabled={isContinueDisabled}>
-            Continue
-          </Button>
-        </div>
+        <Button onClick={handleContinue} disabled={isContinueDisabled} className="w-full justify-center">
+          Continue
+        </Button>
       </div>
     </Modal>
   );

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -90,7 +89,10 @@ const SignUp = () => {
 
   const onFormError = (errs: FieldErrors) => {
     if (errs.agreeToTerms) {
-      toast.error((errs.agreeToTerms as FieldError).message ?? "You must agree to the terms");
+      toast.error(
+        (errs.agreeToTerms as FieldError).message ??
+          "You must agree to the terms",
+      );
     }
   };
 
@@ -163,7 +165,8 @@ const SignUp = () => {
 
     return groupedFields.map((group, groupIndex) => {
       const renderField = (field: IFormField) => {
-        const fieldError = errors[field.name as SignUpFieldNameTypes]?.message as string | undefined;
+        const fieldError = errors[field.name as SignUpFieldNameTypes]
+          ?.message as string | undefined;
         if (field.type === "tel") {
           return (
             <InputField
@@ -171,9 +174,16 @@ const SignUp = () => {
               type="tel"
               label={field.label}
               placeholder={field.placeholder}
-              value={watch(field.name as SignUpFieldNameTypes) as string ?? ""}
-              onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-                setValue(field.name as SignUpFieldNameTypes, e.target.value, { shouldDirty: true, shouldValidate: true })
+              value={
+                (watch(field.name as SignUpFieldNameTypes) as string) ?? ""
+              }
+              onChange={(
+                e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+              ) =>
+                setValue(field.name as SignUpFieldNameTypes, e.target.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
               }
               error={fieldError}
             />
@@ -194,7 +204,10 @@ const SignUp = () => {
 
       if (group.length === 2 && group[0].gridColumn === "half") {
         return (
-          <div key={groupIndex} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div
+            key={groupIndex}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+          >
             {group.map(renderField)}
           </div>
         );
@@ -210,16 +223,16 @@ const SignUp = () => {
   if (step === 1) {
     return (
       <div>
-        <div className="mb-[3rem]">
-          <h1 className="mb-[.5rem] text-[1.75rem] md:text-[2rem] font-[600] text-[#2B2B2B] tracking-[-.64px] leading-[2.5rem]">
+        <div className="mb-[2rem] sm:mb-[3rem]">
+          <h1 className="mb-[.5rem] text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] font-[600] text-[#2B2B2B] tracking-[-.64px] leading-[1.75rem] sm:leading-[2.5rem]">
             How will you like to use iExcelo?
           </h1>
-          <p className="text-[1.125rem] leading-[1.75rem] font-[400] text-[#757575]">
+          <p className="text-[.875rem] sm:text-[1.125rem] leading-[1.5rem] sm:leading-[1.75rem] font-[400] text-[#757575]">
             Lets get you started.
           </p>
         </div>
 
-        <div className="space-y-[1rem] mb-[2rem]">
+        <div className="space-y-[.75rem] sm:space-y-[1rem] mb-[1.5rem] sm:mb-[2rem]">
           {[
             {
               icon: "hugeicons:mortarboard-01",
@@ -247,7 +260,7 @@ const SignUp = () => {
                 boxShadow:
                   "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
               }}
-              className={`flex w-full items-center justify-between rounded-[1.75rem] bg-white p-[1.5rem_2rem] cursor-pointer duration-[.4s] transition-all`}
+              className={`flex w-full items-center justify-between rounded-[1.75rem] bg-white p-[.875rem_1.25rem] sm:p-[1.5rem_2rem] cursor-pointer duration-[.4s] transition-all`}
             >
               <div className="flex items-center gap-[.625rem]">
                 <div
@@ -255,7 +268,7 @@ const SignUp = () => {
                     userType === buttonContents?.userType
                       ? "bg-[#E6F2FF] text-[#007FFF]"
                       : "bg-[#F3F3F3] text-[#101928]"
-                  } flex p-[.75rem] rounded-[50%] transition-all duration-[.4s] items-center justify-center`}
+                  } flex p-[.5rem] sm:p-[.75rem] rounded-[50%] transition-all duration-[.4s] items-center justify-center`}
                 >
                   <Icon
                     height={"1.25rem"}
@@ -264,7 +277,7 @@ const SignUp = () => {
                     icon={buttonContents?.icon}
                   />
                 </div>
-                <span className="text-[1.25rem] text-left tracking-[-.4px] leading-[1.75rem] font-[500] text-[#2B2B2B]">
+                <span className="text-[.875rem] sm:text-[1.25rem] text-left tracking-[-.4px] leading-[1.5rem] sm:leading-[1.75rem] font-[500] text-[#2B2B2B]">
                   {buttonContents?.title}
                 </span>
               </div>
@@ -324,9 +337,9 @@ const SignUp = () => {
           boxShadow:
             "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
         }}
-        className="rounded-[1rem] bg-white p-[2.5rem_2rem]"
+        className="rounded-[1rem] bg-white p-[1.25rem_1rem] sm:p-[2.5rem_2rem]"
       >
-        <h2 className="mb-[2rem] leading-[2rem] text-center text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
+        <h2 className="mb-[1.5rem] sm:mb-[2rem] leading-[1.75rem] sm:leading-[2rem] text-center text-[1.25rem] sm:text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
           Create an account to continue
         </h2>
 
@@ -340,7 +353,7 @@ const SignUp = () => {
             className="flex w-full items-center justify-center gap-[1rem] rounded-[0.375rem] border-[1.5px] border-[#D0D5DD] bg-white p-[1rem] cursor-pointer transition-all hover:bg-gray-50"
           >
             <SVGClient src="/svg/google.svg" />
-            <span className="font-[600] text-[1rem] leading-[1.5rem] text-[#2B2B2B]">
+            <span className="font-[600] text-[.875rem] sm:text-[1rem] leading-[1.5rem] text-[#2B2B2B]">
               Continue with Google
             </span>
           </button>

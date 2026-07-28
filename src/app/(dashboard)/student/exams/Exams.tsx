@@ -28,7 +28,7 @@ function SubjectListSkeleton() {
 
 function ExamsPageSkeleton() {
   return (
-    <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto animate-pulse">
+    <section className="px-[.875rem] sm:px-[1.25rem] xl:px-[2rem] py-[1.25rem] mx-auto animate-pulse">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <div className="h-7 bg-gray-200 rounded w-40" />
         <div className="h-6 bg-gray-200 rounded w-32" />
@@ -42,14 +42,17 @@ function ExamsPageSkeleton() {
       >
         <div className="flex flex-wrap gap-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-20 w-[17.75rem] bg-gray-100 rounded-xl" />
+            <div key={i} className="h-20 w-full sm:w-[17.75rem] bg-gray-100 rounded-xl" />
           ))}
         </div>
         <div className="h-[1px] bg-[#EDEDED] w-full" />
         <div
-          style={{ boxShadow: "0 0 0 1px #DCDFE4" }}
-          className="p-[1rem] md:p-[1.375rem] rounded-[1rem] space-y-4"
+          className="[box-shadow:0_0_0_1px_#DCDFE4] p-[1rem] md:p-[1.375rem] rounded-[1rem] max-sm:[box-shadow:none] max-sm:p-0 max-sm:rounded-none"
         >
+          <div className="flex gap-2 mb-6 sm:mb-10 lg:max-w-[60%]">
+            <div className="flex-1 h-12 bg-gray-100 rounded-full" />
+            <div className="h-12 w-24 bg-gray-200 rounded-lg" />
+          </div>
           <SubjectListSkeleton />
         </div>
       </div>
@@ -265,7 +268,7 @@ export default function Exams() {
 
   return (
     <>
-      <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
+      <section className="px-[.875rem] sm:px-[1.25rem] xl:px-[2rem] py-[1.25rem] mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
           <div className="flex items-center gap-4" ref={dropdownRef}>
             <div className="relative">
@@ -322,7 +325,7 @@ export default function Exams() {
           className="bg-white p-[1rem] md:p-[1.375rem] rounded-[1rem]"
         >
           {isDemoUser && (
-            <div className="p-4 border border-[#FFD6A7] bg-[#FEF6E7] rounded-[9999999px] flex items-center justify-between mb-8">
+            <div className="p-4 border border-[#FFD6A7] bg-[#FEF6E7] rounded-xl sm:rounded-[9999999px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-8">
               <div className="flex items-center gap-2 text-[#865503]">
                 <Icon
                   className="w-4 h-4 text-current"
@@ -335,8 +338,8 @@ export default function Exams() {
                 </span>
               </div>
               {!isSponsored && (
-                <Link href={`/student/upgrade?examTypeId=${examTypeId}`}>
-                  <Button className="text-[.875rem]">
+                <Link href={`/student/upgrade?examTypeId=${examTypeId}`} className="w-full sm:w-auto">
+                  <Button className="text-[.875rem] w-full sm:w-auto justify-center">
                     <Icon className="w-5 h-5" icon={"hugeicons:sparkles"} />
                     Subscribe Now
                   </Button>
@@ -347,11 +350,11 @@ export default function Exams() {
 
           {/* Category filter — only when exam type supports more than one category */}
           {hasMultipleCategories && (
-            <div className="flex mb-8 gap-6">
+            <div className="flex flex-col sm:flex-row mb-8 gap-3 sm:gap-6">
               {supportedCategories.map((cat) => (
                 <div
                   key={cat}
-                  className="flex-1 cursor-pointer"
+                  className="sm:flex-1 cursor-pointer"
                   onClick={() => handleCategoryChange(cat)}
                 >
                   <Radio
@@ -359,7 +362,7 @@ export default function Exams() {
                     value={selectedCategory === cat}
                     onChange={() => handleCategoryChange(cat)}
                     customLabel={
-                      <span className="ml-3 block font-[500] text-[1rem]">
+                      <span className="ml-2 sm:ml-3 block font-[500] text-[.875rem] sm:text-[1rem]">
                         {capitalize(cat)}
                       </span>
                     }
@@ -405,7 +408,7 @@ export default function Exams() {
                   disabled={isLocked}
                   onClick={() => !isLocked && setSelectedMode(mode.id)}
                   className={cn(
-                    "flex items-start w-[17.75rem] gap-3 py-3 relative px-2.75 rounded-xl text-left transition-all",
+                    "flex items-start w-full sm:w-[17.75rem] gap-3 py-3 relative px-2.75 rounded-xl text-left transition-all",
                   )}
                 >
                   <div className="pt-[.375rem]">
@@ -449,11 +452,10 @@ export default function Exams() {
           </div>
           <div className="my-[2rem] h-[1px] bg-[#EDEDED] w-full" />
           <div
-            style={{ boxShadow: "0 0 0 1px #DCDFE4" }}
-            className="p-[1rem] md:p-[1.375rem] rounded-[1rem]"
+            className="[box-shadow:0_0_0_1px_#DCDFE4] p-[1rem] md:p-[1.375rem] rounded-[1rem] max-sm:[box-shadow:none] max-sm:p-0 max-sm:rounded-none"
           >
-            <div className="flex flex-col xl:flex-row justify-between items-center gap-4 mb-10">
-              <div className="flex items-center md:w-fit flex-col md:flex-row gap-2">
+            <div className="flex items-stretch gap-2 mb-6 sm:mb-10 lg:max-w-[60%]">
+              <div className="flex-1">
                 <InputField
                   type="text"
                   label={null}
@@ -462,16 +464,13 @@ export default function Exams() {
                   onChange={(
                     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
                   ) => setSearchQuery(e.target.value)}
-                  className="flex-1 h-12 w-full xl:w-[19.25rem] border rounded-full border-[#A6A6A6] text-[#A6A6A6] px-4"
+                  className="h-12 w-full border rounded-full border-[#A6A6A6] text-[#A6A6A6] px-4"
                 />
-                <Button className="w-full md:w-fit justify-center">
-                  <Icon
-                    icon="hugeicons:search-01"
-                    className="w-5 hidden md:block h-5"
-                  />
-                  Search
-                </Button>
               </div>
+              <Button className="shrink-0 justify-center h-12">
+                <Icon icon="hugeicons:search-01" className="w-5 h-5" />
+                <span className="hidden sm:inline">Search</span>
+              </Button>
             </div>
 
             {/* Question filter — premium users only, not applicable to mock mode */}
@@ -616,7 +615,7 @@ export default function Exams() {
 
                         {/* Topic accordion — paid users only */}
                         {!isDemoUser && isExpanded && (
-                          <div className="ml-7 mt-2 mb-3 border-l-2 border-[#E5E7EB] pl-4 space-y-2">
+                          <div className="ml-4 max-[360px]:ml-2 sm:ml-7 mt-2 mb-3 border-l-2 border-[#E5E7EB] pl-4 space-y-2">
                             {isLoadingTopics ? (
                               <div className="flex flex-col gap-2 animate-pulse">
                                 {Array.from({ length: 3 }).map((_, i) => (

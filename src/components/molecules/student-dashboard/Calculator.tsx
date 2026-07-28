@@ -148,7 +148,7 @@ export function Calculator() {
     <div className="mt-8">
       <button
         onClick={() => setShowCalculator((prev) => !prev)}
-        className="text-[#E32E89] text-[1rem] leading-6 font-[600] underline"
+        className="hidden lg:block text-[#E32E89] text-[1rem] leading-6 font-[600] underline"
       >
         {showCalculator ? "Hide Calculator" : "Use Calculator"}
       </button>

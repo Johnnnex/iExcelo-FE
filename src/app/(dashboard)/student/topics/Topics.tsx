@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
-import { Button, RichText } from "@/components/atoms";
+import { Button } from "@/components/atoms";
 import { InputField } from "@/components/molecules";
 import { useStudentStore, useExamStore } from "@/store";
 import { useAuthStore } from "@/store";
@@ -42,22 +42,22 @@ function TopicSentinel({ onVisible }: { onVisible: () => void }) {
 }
 
 function PageSkeleton() {
+  const widths = [140, 100, 160, 120];
   return (
     <div className="animate-pulse space-y-3">
       {Array.from({ length: 4 }).map((_, i) => (
         <div
           key={i}
-          style={{
-            boxShadow:
-              "0 0 0 1px rgba(0,0,0,0.06), 0 5px 22px 0 rgba(0,0,0,0.04)",
-          }}
-          className="bg-white rounded-xl p-4 md:p-5 flex items-center justify-between"
+          style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.06), 0 5px 22px 0 rgba(0,0,0,0.04)" }}
+          className="bg-white rounded-xl overflow-hidden"
         >
-          <div>
-            <div className="h-4 bg-gray-200 rounded w-36 mb-1.5" />
-            <div className="h-3 bg-gray-100 rounded w-16" />
+          <div className="flex items-center justify-between p-4 md:p-5">
+            <div>
+              <div className="h-4 bg-gray-200 rounded mb-1.5" style={{ width: widths[i] }} />
+              <div className="h-3 bg-gray-100 rounded w-16" />
+            </div>
+            <div className="h-5 w-5 bg-gray-200 rounded" />
           </div>
-          <div className="h-5 w-5 bg-gray-200 rounded" />
         </div>
       ))}
     </div>
@@ -186,33 +186,33 @@ export default function Topics() {
       style={{
         boxShadow: "0 0 0 1px rgba(0,0,0,0.06), 0 5px 22px 0 rgba(0,0,0,0.04)",
       }}
-      className="bg-white rounded-xl p-4"
+      className="bg-white rounded-xl p-3 sm:p-4"
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1">
-          <h4 className="font-semibold text-gray-900 mb-1">{topic.name}</h4>
+      <div className="flex items-start justify-between gap-2 sm:gap-3">
+        <div className="flex-1 min-w-0">
+          <h4 className="font-semibold text-[.9375rem] sm:text-base text-gray-900 mb-1 leading-snug">{topic.name}</h4>
           {topic.subjectName && (
-            <p className="text-xs text-gray-400 mb-2">{topic.subjectName}</p>
+            <p className="text-[.6875rem] sm:text-xs text-gray-400 mb-1.5 sm:mb-2">{topic.subjectName}</p>
           )}
           {topic.content && (
-            <div className="text-sm text-gray-600 line-clamp-3">
-              <RichText content={topic.content} variant="inline" />
-            </div>
+            <p className="text-[.8125rem] sm:text-sm text-gray-600 line-clamp-2 sm:line-clamp-3 break-words">
+              {stripMarkdownPreview(topic.content, 200, true)}
+            </p>
           )}
         </div>
         <Link
           href={`/student/topics/${topic.id}`}
-          className="shrink-0 flex items-center gap-1 text-[#007FFF] text-sm font-medium hover:underline"
+          className="shrink-0 flex items-center gap-1 text-[#007FFF] text-xs sm:text-sm font-semibold hover:underline mt-0.5"
         >
           Read
-          <Icon icon="hugeicons:arrow-right-01" className="w-4 h-4" />
+          <Icon icon="hugeicons:arrow-right-01" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </Link>
       </div>
     </div>
   );
 
   return (
-    <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
+    <section className="px-[.875rem] sm:px-[1.25rem] xl:px-[2rem] py-[1.25rem] mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <h1 className="text-lg md:text-xl font-bold text-gray-900">Topics</h1>
         <span className="bg-[#F3F3F3] w-fit text-[#A12161] text-xs font-semibold px-3 py-2 rounded-full">
@@ -220,26 +220,28 @@ export default function Topics() {
         </span>
       </div>
 
-      {/* Search — matches Exams.tsx pattern */}
-      <div className="flex items-center md:w-fit flex-col md:flex-row gap-2 mb-8">
-        <InputField
-          type="text"
-          label={null}
-          placeholder="Search topics..."
-          value={searchQuery}
-          onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-            setSearchQuery(e.target.value)
-          }
-          onKeyDown={(e: React.KeyboardEvent) =>
-            e.key === "Enter" && handleSearch()
-          }
-          className="flex-1 h-12 w-full xl:w-[19.25rem] border rounded-full border-[#A6A6A6] text-[#A6A6A6] px-4"
-        />
+      {/* Search */}
+      <div className="flex items-stretch gap-2 mb-8 lg:max-w-[60%]">
+        <div className="flex-1">
+          <InputField
+            type="text"
+            label={null}
+            placeholder="Search topics..."
+            value={searchQuery}
+            onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+              setSearchQuery(e.target.value)
+            }
+            onKeyDown={(e: React.KeyboardEvent) =>
+              e.key === "Enter" && handleSearch()
+            }
+            className="h-12 w-full border rounded-full border-[#A6A6A6] text-[#A6A6A6] px-4"
+          />
+        </div>
         {searchResults !== null ? (
           <Button
             variant="outlined"
             onClick={handleClearSearch}
-            className="w-full md:w-fit justify-center"
+            className="shrink-0 justify-center h-12"
           >
             Clear
           </Button>
@@ -247,13 +249,10 @@ export default function Topics() {
           <Button
             onClick={handleSearch}
             loading={isSearching}
-            className="w-full md:w-fit justify-center"
+            className="shrink-0 justify-center h-12"
           >
-            <Icon
-              icon="hugeicons:search-01"
-              className="w-5 h-5 hidden md:block"
-            />
-            Search
+            <Icon icon="hugeicons:search-01" className={cn("w-5 h-5", isSearching && "hidden sm:block")} />
+            <span className="hidden sm:inline">Search</span>
           </Button>
         )}
       </div>
@@ -261,7 +260,7 @@ export default function Topics() {
       {/* Search results */}
       {searchResults !== null ? (
         <div>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-[.8125rem] sm:text-sm text-gray-500 mb-3 sm:mb-4">
             {searchTotal} result{searchTotal !== 1 ? "s" : ""}{" "}
             for &quot;{searchQuery}&quot;
           </p>

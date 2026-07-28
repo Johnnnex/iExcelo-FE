@@ -8,7 +8,6 @@ import { RichText } from "@/components/atoms";
 import { InputField, Modal } from "@/components/molecules";
 import { useAuthStore } from "@/store";
 import { useChatStore } from "@/store/chat.store";
-import { CARD_SHADOW } from "@/utils";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import type { IChatMessage, ChatDeliveryStatus } from "@/types";
@@ -75,7 +74,7 @@ function InitialsAvatar({ name }: { name: string }) {
   const parts = name.trim().split(" ");
   const ini = (parts[0]?.[0] ?? "") + (parts[1]?.[0] ?? "");
   return (
-    <div className="w-8 h-8 rounded-full bg-[#DBEDFF] text-[#007FFF] flex items-center justify-center text-xs font-[700] flex-shrink-0 select-none">
+    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#DBEDFF] text-[#007FFF] flex items-center justify-center text-[.5rem] sm:text-xs font-[700] flex-shrink-0 select-none">
       {ini.toUpperCase()}
     </div>
   );
@@ -92,7 +91,7 @@ function PresenceLabel({
 }) {
   if (state === "typing")
     return (
-      <span className="text-xs text-[#007FFF] font-[400] flex items-center! w-fit gap-1">
+      <span className="text-[.625rem] sm:text-xs text-[#007FFF] font-[400] flex items-center! w-fit gap-1">
         <span className="flex gap-[2px]">
           {[0, 1, 2].map((i) => (
             <span
@@ -107,13 +106,13 @@ function PresenceLabel({
     );
   if (state === "online")
     return (
-      <span className="text-xs text-[#099137] font-[400] leading-4 flex items-center gap-1">
+      <span className="text-[.625rem] sm:text-xs text-[#099137] font-[400] leading-4 flex items-center gap-1">
         <span className="w-1.5 h-1.5 rounded-full bg-[#099137] inline-block" />
         Online
       </span>
     );
   return (
-    <span className="text-xs text-[#A3A3A3] font-[400] leading-4">
+    <span className="text-[.625rem] sm:text-xs text-[#A3A3A3] font-[400] leading-4">
       {formatLastSeen(lastSeenAt)}
     </span>
   );
@@ -482,18 +481,18 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
   return (
     <div className="h-full flex flex-col bg-white overflow-hidden">
       {/* ── Header ──────────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-4 px-6 py-4 border-b border-[#EDEDED] bg-white flex-shrink-0">
+      <div className="flex items-center gap-1.5 sm:gap-3 md:gap-4 px-3 sm:px-5 md:px-6 py-2 sm:py-3 md:py-4 border-b border-[#EDEDED] bg-white flex-shrink-0">
         <button
           onClick={() => router.push("/student/messages")}
-          className="w-9 h-9 rounded-full flex items-center justify-center text-[#757575] hover:text-[#2B2B2B] hover:bg-[#F5F5F5] transition-colors flex-shrink-0"
+          className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center text-[#757575] hover:text-[#2B2B2B] hover:bg-[#F5F5F5] transition-colors flex-shrink-0"
         >
-          <Icon icon="hugeicons:arrow-left-02" className="w-5 h-5" />
+          <Icon icon="hugeicons:arrow-left-02" className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
         <InitialsAvatar name={partnerName} />
 
-        <div className="flex-1 min-w-0">
-          <h2 className="font-[600] text-[1rem] text-[#171717] leading-6 truncate">
+        <div className="flex-1 min-w-0 flex flex-col gap-[.0625rem] sm:gap-0.5">
+          <h2 className="font-[600] text-[.875rem] sm:text-[.9375rem] md:text-[1rem] text-[#171717] leading-[1.15] truncate">
             {partnerName}
           </h2>
           <PresenceLabel
@@ -509,7 +508,7 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
         {isScrolledUp && (
           <button
             onClick={scrollToBottom}
-            className="absolute bottom-4 right-4 z-10 w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#007FFF] transition-all"
+            className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center text-[#007FFF] transition-all"
             style={{
               boxShadow:
                 "0 0 0 1px rgba(0,0,0,0.08), 0 4px 16px 0 rgba(0,0,0,0.12)",
@@ -520,20 +519,20 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                 {scrollPendingCount > 99 ? "99+" : scrollPendingCount}
               </span>
             )}
-            <Icon icon="hugeicons:arrow-down-double" className="w-5 h-5" />
+            <Icon icon="hugeicons:arrow-down-double" className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         )}
         <div
           ref={scrollRef}
-          className="h-full overflow-y-auto px-4 md:px-8 py-6 flex flex-col gap-0.5"
+          className="h-full overflow-y-auto px-2 sm:px-3 md:px-8 py-3 sm:py-4 md:py-6 flex flex-col gap-0.5"
         >
           {/* Load more */}
           {messagesHasMore[chatroomId] && (
-            <div className="flex justify-center mb-4">
+            <div className="flex justify-center mb-3 sm:mb-4">
               <button
                 onClick={() => fetchMessages(chatroomId, messages[0]?.id)}
                 disabled={isLoadingMessages[chatroomId]}
-                className="text-[.8125rem] text-[#007FFF] font-[500] hover:underline disabled:opacity-50"
+                className="text-[.75rem] sm:text-[.8125rem] text-[#007FFF] font-[500] hover:underline disabled:opacity-50"
               >
                 {isLoadingMessages[chatroomId]
                   ? "Loading..."
@@ -543,7 +542,7 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
           )}
 
           {isLoadingMessages[chatroomId] && messages.length === 0 && (
-            <div className="flex justify-center py-12">
+            <div className="flex justify-center py-8 sm:py-12">
               <Icon
                 icon="svg-spinners:ring-resize"
                 className="w-8 h-8 text-[#007FFF]"
@@ -554,7 +553,7 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
           {grouped.map(([day, dayMsgs]) => (
             <React.Fragment key={day}>
               {/* Day separator */}
-              <div className="flex items-center gap-3 my-5">
+              <div className="flex items-center gap-3 my-3 sm:my-5">
                 <div className="flex-1 h-px bg-[#EDEDED]" />
                 <span className="text-[.6875rem] text-[#A3A3A3] font-[500] px-3 py-1 bg-[#F5F5F5] rounded-full whitespace-nowrap">
                   {day}
@@ -570,12 +569,12 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                   i < dayMsgs.length - 1 ? dayMsgs[i + 1].senderId : null;
                 const isFirst = prevSender !== msg.senderId;
                 const isLast = nextSender !== msg.senderId;
-                const marginBottom = isLast ? "mb-3" : "mb-0.5";
+                const marginBottom = isLast ? "mb-1.5 sm:mb-3" : "mb-0.5";
 
                 return (
                   <React.Fragment key={msg.tempId ?? msg.id}>
                     {anchor && anchor.id === msg.id && (
-                      <div className="flex items-center gap-3 my-3">
+                      <div className="flex items-center gap-3 my-2 sm:my-3">
                         <div className="flex-1 h-px bg-[#E32E89]/30" />
                         <span className="text-[.625rem] text-[#E32E89] font-[600] px-3 py-0.5 bg-[#FFF0F7] rounded-full whitespace-nowrap">
                           {anchor.count === 1
@@ -587,15 +586,15 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                     )}
                     <div
                       className={cn(
-                        "flex items-end gap-2",
+                        "flex items-end gap-1 sm:gap-2",
                         isMine ? "flex-row-reverse" : "flex-row",
                         marginBottom,
                       )}
                       onMouseEnter={() => setHoveredId(msg.tempId ?? msg.id)}
                       onMouseLeave={() => setHoveredId(null)}
                     >
-                      {/* Partner avatar */}
-                      <div className="w-8 flex-shrink-0">
+                      {/* Partner avatar — zero width for own messages so bubble hugs the right wall */}
+                      <div className={cn("flex-shrink-0", !isMine ? "w-7 sm:w-8" : "w-0")}>
                         {!isMine && isLast && (
                           <InitialsAvatar name={partnerName} />
                         )}
@@ -604,7 +603,7 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                       {/* Bubble column */}
                       <div
                         className={cn(
-                          "flex flex-col max-w-[70%] md:max-w-[60%]",
+                          "flex flex-col max-w-[84%] sm:max-w-[72%] md:max-w-[60%]",
                           isMine ? "items-end" : "items-start",
                         )}
                       >
@@ -624,7 +623,7 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                             />
                             <span className="text-[.625rem] text-[#F3A218] font-[500]">
                               Flagged
-                              {msg.flagReason ? ` · ${msg.flagReason}` : ""}
+                              {msg.flagReason ? ` · ${msg.flagReason.length > 80 ? msg.flagReason.slice(0, 80) + "…" : msg.flagReason}` : ""}
                             </span>
                           </div>
                         )}
@@ -655,7 +654,7 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                         {/* Bubble */}
                         <div
                           className={cn(
-                            "px-4 py-2.5 text-[.875rem] leading-[1.6] max-w-full",
+                            "px-3 sm:px-4 py-2 sm:py-2.5 text-[.8125rem] sm:text-[.875rem] leading-[1.6] max-w-full",
                             isMine && [
                               msg.failed
                                 ? "bg-red-100 text-red-800"
@@ -731,8 +730,8 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                         </div>
                       </div>
 
-                      {/* Flag button — partner messages only, hover */}
-                      <div className="w-7 flex-shrink-0 flex items-center justify-center">
+                      {/* Flag button — partner messages only, hover; zero-width spacer for own messages */}
+                      <div className={cn("flex-shrink-0 flex items-center justify-center", !isMine ? "w-5 sm:w-6 md:w-7" : "w-0")}>
                         {!isMine && (
                           <button
                             onClick={() => {
@@ -746,10 +745,10 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                               setFlagModal({ messageId: msg.id, reason: "" });
                             }}
                             className={cn(
-                              "w-7 h-7 rounded-full flex items-center justify-center transition-all duration-150",
+                              "w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center transition-all duration-150",
                               hoveredId === (msg.tempId ?? msg.id)
                                 ? "opacity-100"
-                                : "opacity-0 pointer-events-none",
+                                : "sm:opacity-0 sm:pointer-events-none",
                               msg.isFlagged
                                 ? "text-[#F3A218] bg-[#FEF6E7] cursor-default"
                                 : "text-[#C0C0C0] bg-[#F5F5F5] hover:bg-[#FEF6E7] hover:text-[#F3A218] cursor-pointer",
@@ -762,7 +761,7 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                           >
                             <Icon
                               icon="hugeicons:flag-02"
-                              className="w-3.5 h-3.5"
+                              className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5"
                             />
                           </button>
                         )}
@@ -779,10 +778,10 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
 
       {/* ── Compose ─────────────────────────────────────────────────────── */}
       <div
-        className="flex-shrink-0 border-t border-[#EDEDED] bg-white p-4"
+        className="flex-shrink-0 border-t border-[#EDEDED] bg-white p-3 sm:p-4"
         onKeyDown={handleKeyDown}
       >
-        <div className="flex items-end gap-3 rounded-[.875rem] border border-[#D6D6D6] focus-within:border-[#007FFF] transition-colors duration-200 p-3">
+        <div className="flex items-end gap-2 sm:gap-3 rounded-[.875rem] border border-[#D6D6D6] focus-within:border-[#007FFF] transition-colors duration-200 p-2 sm:p-3">
           <div className="flex-1 min-w-0">
             <InputField
               type="rich-text"
@@ -806,17 +805,17 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
             className="flex-shrink-0 self-end"
           >
             <Icon icon="hugeicons:sent" className="w-4 h-4" />
-            Send
+            <span className="hidden sm:inline">Send</span>
           </Button>
         </div>
-        <p className="text-[.6875rem] text-[#B0B0B0] mt-2 text-center">
+        <p className="hidden sm:block text-[.6875rem] text-[#B0B0B0] mt-2 text-center">
           Ctrl + Enter to send
         </p>
       </div>
 
       {/* ── Flag modal ───────────────────────────────────────────────────── */}
       {flagModal && (
-        <Modal isOpen onClose={() => setFlagModal(null)} className="rounded-[.875rem] p-6 w-full max-w-[30rem]">
+        <Modal isOpen onClose={() => setFlagModal(null)} className="rounded-[.875rem] p-4 sm:p-6 w-full max-w-[30rem]">
             <div className="flex items-center gap-2.5 mb-1">
               <div className="w-8 h-8 rounded-full bg-[#FEF6E7] flex items-center justify-center flex-shrink-0">
                 <Icon
@@ -824,11 +823,11 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
                   className="w-4 h-4 text-[#F3A218]"
                 />
               </div>
-              <h3 className="font-[600] text-[1rem] text-[#171717]">
+              <h3 className="font-[600] text-[.9375rem] sm:text-[1rem] text-[#171717]">
                 Flag Message
               </h3>
             </div>
-            <p className="text-[.875rem] text-[#757575] mb-4 leading-5">
+            <p className="text-[.8125rem] sm:text-[.875rem] text-[#757575] mb-4 leading-5">
               This message will be reported to admin. They&apos;ll review it and
               take action where necessary. Add an optional note.
             </p>
@@ -845,18 +844,18 @@ export default function ChatRoom({ chatroomId }: { chatroomId: string }) {
               }
               rows={3}
             />
-            <div className="flex justify-end gap-3 mt-4">
+            <div className="flex flex-col sm:flex-row sm:justify-end gap-2 sm:gap-3 mt-4">
               <Button
                 variant="outlined"
                 onClick={() => setFlagModal(null)}
-                className="w-fit"
+                className="w-full sm:w-auto justify-center"
               >
                 Cancel
               </Button>
               <Button
                 onClick={confirmFlag}
                 loading={isFlagging}
-                className="w-fit"
+                className="w-full sm:w-auto justify-center"
               >
                 <Icon icon="hugeicons:flag-02" className="w-4 h-4" />
                 Flag Message

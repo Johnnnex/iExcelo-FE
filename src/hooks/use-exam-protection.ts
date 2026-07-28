@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-export function useExamProtection(active: boolean = true) {
+export function useExamProtection(active: boolean = true, warnOnLeave: boolean = true) {
   useEffect(() => {
     if (!active) return;
     // Disable right-click context menu
@@ -63,7 +63,7 @@ export function useExamProtection(active: boolean = true) {
     };
 
     // Add event listeners
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    if (warnOnLeave) window.addEventListener("beforeunload", handleBeforeUnload);
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("selectstart", handleSelectStart);
     document.addEventListener("copy", handleCopy);
@@ -77,7 +77,7 @@ export function useExamProtection(active: boolean = true) {
 
     // Cleanup
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (warnOnLeave) window.removeEventListener("beforeunload", handleBeforeUnload);
       document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("selectstart", handleSelectStart);
       document.removeEventListener("copy", handleCopy);
@@ -87,5 +87,5 @@ export function useExamProtection(active: boolean = true) {
       document.body.style.userSelect = "";
       document.body.style.webkitUserSelect = "";
     };
-  }, [active]);
+  }, [active, warnOnLeave]);
 }

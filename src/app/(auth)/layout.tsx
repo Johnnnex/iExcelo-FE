@@ -41,7 +41,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
           background:
             "radial-gradient(149.9% 125.17% at 22.8% 0%, #F2E2F5 5.59%, #ECFCFF 64.15%, #FFF 100%)",
         }}
-        className="min-h-[100vh] py-[5rem] flex items-center justify-center"
+        className="min-h-[100vh] py-[5rem] flex items-center justify-center overflow-x-hidden"
       >
         {children}
       </main>

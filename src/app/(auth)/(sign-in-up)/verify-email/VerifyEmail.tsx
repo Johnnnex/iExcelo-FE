@@ -177,19 +177,19 @@ export default function VerifyEmailPage() {
           boxShadow:
             "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
         }}
-        className="rounded-[1rem] bg-white p-[2.5rem_2rem]"
+        className="rounded-[1rem] bg-white p-[1.25rem_1rem] sm:p-[2.5rem_2rem]"
       >
-        <h2 className="mb-[.5rem] leading-[2rem] text-center text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
+        <h2 className="mb-[.5rem] leading-[1.75rem] sm:leading-[2rem] text-center text-[1.25rem] sm:text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
           Verify Your Email
         </h2>
-        <p className="text-[.875rem] leading-[1.5rem] text-[#667085] mb-[2rem] text-center">
+        <p className="text-[.8125rem] sm:text-[.875rem] leading-[1.5rem] text-[#667085] mb-[1.5rem] sm:mb-[2rem] text-center">
           We sent a 6-digit code to{" "}
           <span className="font-[600] text-[#2B2B2B]">{signupEmail}</span>.
           Enter it below to verify your account.
         </p>
 
         <div className="space-y-6">
-          <div className="flex gap-3 justify-center">
+          <div className="flex gap-[.375rem] sm:gap-3 justify-center">
             {otp.map((digit, index) => (
               <input
                 key={index}
@@ -203,7 +203,7 @@ export default function VerifyEmailPage() {
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 onPaste={index === 0 ? handlePaste : undefined}
-                className="w-12 h-14 text-center text-xl font-[600] border border-[#D0D5DD] rounded-lg focus:border-[#007FFF] focus:outline-none transition-colors"
+                className="w-[2.25rem] h-[3rem] sm:w-12 sm:h-14 text-center text-[1rem] sm:text-xl font-[600] border border-[#D0D5DD] rounded-lg focus:border-[#007FFF] focus:outline-none transition-colors"
                 aria-label={`Digit ${index + 1}`}
               />
             ))}

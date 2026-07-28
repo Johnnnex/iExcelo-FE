@@ -56,22 +56,22 @@ const Radio = forwardRef<HTMLLabelElement, RadioProps>(
           : "bg-[#39F]";
 
     return (
-      <label ref={ref} className="flex w-fit cursor-pointer items-center">
+      <label ref={ref} className="relative flex w-fit cursor-pointer items-center">
         {/* Hidden Radio */}
         <input
           type="radio"
           name={name}
           checked={isChecked}
           onChange={handleSelect}
-          className="sr-only"
+          className="absolute opacity-0 w-0 h-0 overflow-hidden pointer-events-none"
         />
         {/* Styled Radio */}
         <div
-          className={`flex h-[1.5rem] w-[1.5rem] items-center justify-center rounded-full border-[1.5px] bg-white transition-colors duration-[.4s] ${borderColor}`}
+          className={`flex h-[1.25rem] w-[1.25rem] sm:h-[1.5rem] sm:w-[1.5rem] items-center justify-center rounded-full border-[1.5px] bg-white transition-colors duration-[.4s] ${borderColor}`}
         >
           {showDot && (
             <span
-              className={`aspect-square h-[.625rem] w-[.625rem] rounded-[50%] ${dotColor}`}
+              className={`aspect-square h-[.5rem] w-[.5rem] sm:h-[.625rem] sm:w-[.625rem] rounded-[50%] ${dotColor}`}
             />
           )}
         </div>

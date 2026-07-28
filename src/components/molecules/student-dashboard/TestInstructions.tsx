@@ -26,47 +26,47 @@ export function TestInstructions({
   isAttempting,
 }: TestInstructionsProps) {
   return (
-    <Modal isOpen className="rounded-2xl w-full max-w-2xl p-6 md:p-8">
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">
+    <Modal isOpen className="rounded-2xl w-full max-w-2xl p-4 sm:p-6 md:p-8">
+        <h1 className="text-base sm:text-xl font-semibold text-blue-500 mb-4 sm:mb-6">
           Welcome, {userName}
         </h1>
-        <hr className="mb-6 text-[#DCDFE4]" />
+        <hr className="mb-4 sm:mb-6 text-[#DCDFE4]" />
 
-        <h2 className="text-lg font-bold text-gray-900 mb-1">
+        <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-1">
           Test Instructions
         </h2>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-gray-500 mb-4 sm:mb-6">
           Please read carefully before starting
         </p>
 
-        <div className="space-y-3 mb-6">
-          <div className="flex gap-4">
-            <span className="text-sm text-gray-500 w-24">Exam Type:</span>
+        <div className="space-y-3 mb-4 sm:mb-6">
+          <div className="flex gap-3">
+            <span className="text-sm text-gray-500 w-20 sm:w-24 shrink-0">Exam Type:</span>
             <span className="text-sm font-medium text-gray-900">
               {examType}
             </span>
           </div>
-          <div className="flex gap-4">
-            <span className="text-sm text-gray-500 w-24">Subject:</span>
+          <div className="flex gap-3">
+            <span className="text-sm text-gray-500 w-20 sm:w-24 shrink-0">Subject:</span>
             <span className="text-sm font-medium text-gray-900">
               {subjects.join(", ")}
             </span>
           </div>
-          <div className="flex gap-4">
-            <span className="text-sm text-gray-500 w-24">Duration:</span>
+          <div className="flex gap-3">
+            <span className="text-sm text-gray-500 w-20 sm:w-24 shrink-0">Duration:</span>
             <span className="text-sm font-medium text-gray-900">
               {duration}
             </span>
           </div>
-          <div className="flex gap-4">
-            <span className="text-sm text-gray-500 w-24">Question:</span>
+          <div className="flex gap-3">
+            <span className="text-sm text-gray-500 w-20 sm:w-24 shrink-0">Questions:</span>
             <span className="text-sm font-medium text-gray-900">
               {questionCount} Questions
             </span>
           </div>
         </div>
 
-        <div className="space-y-2 mb-8">
+        <div className="space-y-2 mb-6 sm:mb-8">
           <div className="flex items-start gap-2 text-red-500">
             <Icon
               icon="hugeicons:checkmark-circle-02"
@@ -96,11 +96,11 @@ export function TestInstructions({
           </div>
         </div>
 
-        <div className="flex justify-end gap-3">
-          <Button variant="outlined" onClick={onGoBack}>
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3">
+          <Button variant="outlined" onClick={onGoBack} className="justify-center">
             Go back
           </Button>
-          <Button onClick={onAttemptTest} loading={isAttempting}>
+          <Button onClick={onAttemptTest} loading={isAttempting} className="justify-center">
             Attempt Test
           </Button>
         </div>

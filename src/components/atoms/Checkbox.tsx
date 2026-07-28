@@ -60,7 +60,7 @@ const CheckBox = forwardRef<HTMLLabelElement, CheckBoxProps>(
           checked={isChecked}
           required={isRequired}
           onChange={handleToggle}
-          className="sr-only"
+          className="absolute opacity-0 w-0 h-0 overflow-hidden pointer-events-none"
         />
         <div
           className={`shrink-0 flex h-[1.25rem] w-[1.25rem] items-center justify-center rounded-md border bg-white transition-colors duration-200 ${borderAndTextColor}`}

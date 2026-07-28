@@ -96,9 +96,9 @@ const Login = () => {
           boxShadow:
             "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
         }}
-        className="rounded-[1rem] bg-white p-[2.5rem_2rem]"
+        className="rounded-[1rem] bg-white p-[1.25rem_1rem] sm:p-[2.5rem_2rem]"
       >
-        <h2 className="mb-[2rem] leading-[2rem] text-center text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
+        <h2 className="mb-[1.5rem] sm:mb-[2rem] leading-[1.75rem] sm:leading-[2rem] text-center text-[1.25rem] sm:text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
           Log in to iExcelo
         </h2>
 
@@ -112,7 +112,7 @@ const Login = () => {
             className="flex w-full items-center justify-center gap-[1rem] rounded-[0.375rem] border-[1.5px] border-[#D0D5DD] bg-white p-[1rem] cursor-pointer transition-all hover:bg-gray-50"
           >
             <SVGClient src="/svg/google.svg" />
-            <span className="font-[600] text-[1rem] leading-[1.5rem] text-[#2B2B2B]">
+            <span className="font-[600] text-[.875rem] sm:text-[1rem] leading-[1.5rem] text-[#2B2B2B]">
               Continue with Google
             </span>
           </button>

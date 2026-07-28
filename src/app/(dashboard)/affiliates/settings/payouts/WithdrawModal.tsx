@@ -191,24 +191,24 @@ export function WithdrawModal({ isOpen, onClose, settingsPath }: WithdrawModalPr
       overflowY="hidden"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-5 border-b border-[#F2F4F7] shrink-0">
+      <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#F2F4F7] shrink-0">
         <div>
-          <h2 className="text-[1.0625rem] font-[600] text-[#101828]">Withdraw Earnings</h2>
-          <p className="text-[.8125rem] text-[#667085] mt-[.125rem]">
+          <h2 className="text-[.9375rem] sm:text-[1.0625rem] font-[600] text-[#101828]">Withdraw Earnings</h2>
+          <p className="text-[.75rem] sm:text-[.8125rem] text-[#667085] mt-[.125rem]">
             Select a currency balance to withdraw from.
           </p>
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="w-8 h-8 rounded-full hover:bg-[#F2F4F7] flex items-center justify-center transition-colors"
+          className="w-8 h-8 rounded-full hover:bg-[#F2F4F7] flex items-center justify-center transition-colors shrink-0"
         >
           <Icon icon="hugeicons:cancel-01" className="w-5 h-5 text-[#667085]" />
         </button>
       </div>
 
       {/* Content */}
-      <div className="p-5 overflow-y-auto flex-1">
+      <div className="p-4 sm:p-5 overflow-y-auto flex-1">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <Icon icon="svg-spinners:ring-resize" className="w-8 h-8 text-[#007FFF]" />
@@ -227,11 +227,11 @@ export function WithdrawModal({ isOpen, onClose, settingsPath }: WithdrawModalPr
                   className="rounded-[.75rem] bg-white p-4 flex items-center justify-between gap-4"
                 >
                   <div>
-                    <p className="text-[.8125rem] font-[500] text-[#667085]">{bal.currency}</p>
-                    <p className="text-[1.375rem] font-[700] text-[#101828] leading-tight">
+                    <p className="text-[.75rem] sm:text-[.8125rem] font-[500] text-[#667085]">{bal.currency}</p>
+                    <p className="text-[1.125rem] sm:text-[1.375rem] font-[700] text-[#101828] leading-tight">
                       {fmt(bal.available, bal.currency)}
                     </p>
-                    <p className="text-[.75rem] text-[#98A2B3]">
+                    <p className="text-[.6875rem] sm:text-[.75rem] text-[#98A2B3]">
                       Total earned: {fmt(bal.totalEarned, bal.currency)}
                     </p>
                   </div>
@@ -266,17 +266,17 @@ export function WithdrawModal({ isOpen, onClose, settingsPath }: WithdrawModalPr
       </div>
 
       {/* Footer */}
-      <div className="shrink-0 p-4 border-t border-[#F2F4F7] flex items-center justify-between">
-        <span className="text-[.8125rem] text-[#667085]">
+      <div className="shrink-0 p-3 sm:p-4 border-t border-[#F2F4F7] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 sm:gap-3">
+        <span className="text-[.75rem] sm:text-[.8125rem] text-[#667085]">
           Need to add or manage your bank accounts?
         </span>
         <Link
           href={settingsPath}
           onClick={onClose}
-          className="text-[.8125rem] font-[600] text-[#007FFF] hover:underline flex items-center gap-1"
+          className="text-[.75rem] sm:text-[.8125rem] font-[600] text-[#007FFF] hover:underline flex items-center gap-1 shrink-0"
         >
           Payout accounts
-          <Icon icon="hugeicons:arrow-right-02" className="w-4 h-4" />
+          <Icon icon="hugeicons:arrow-right-02" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </Link>
       </div>
     </Modal>

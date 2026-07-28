@@ -92,8 +92,7 @@ export function CompleteProfileModal({ isOpen }: { isOpen: boolean }) {
       if (dashboardData) {
         setDashboardData({
           ...dashboardData,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          selectedSubjects: result.selectedSubjects as any,
+            selectedSubjects: result.selectedSubjects as any,
           currentExamType: {
             ...dashboardData.currentExamType,
             hasSelectedSubjects: true,

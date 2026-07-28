@@ -68,64 +68,89 @@ function durationLabel(days: number) {
 function SubscriptionsSkeleton() {
   return (
     <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
-      <div className="mb-8">
-        <div className="h-7 w-48 bg-gray-200 rounded-lg animate-pulse" />
-        <div className="h-4 w-96 max-w-full bg-gray-100 rounded-md animate-pulse mt-2" />
+      <div className="mb-6 sm:mb-8">
+        {/* h1: text-[1.125rem] sm:text-xl md:text-2xl → h-6/h-7 */}
+        <div className="h-6 sm:h-7 w-36 sm:w-48 bg-gray-200 rounded-lg animate-pulse" />
+        {/* subtitle: text-[.8125rem] sm:text-sm → h-4/h-5 */}
+        <div className="h-4 sm:h-5 w-56 sm:w-80 max-w-full bg-gray-100 rounded-md animate-pulse mt-1.5" />
       </div>
 
-      {/* Current Subscription skeleton */}
+      {/* Current Subscription card */}
       <div
         style={{
           boxShadow:
             "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
         }}
-        className="rounded-[1rem] mb-13 overflow-hidden animate-pulse"
+        className="rounded-[1rem] mb-8 sm:mb-13 overflow-hidden animate-pulse"
       >
-        <div className="p-[2rem_1.5rem_1rem_1.5rem] bg-gray-200 h-14" />
-        <div className="bg-white p-6 flex flex-col gap-4">
-          <div className="flex gap-4 items-center">
-            <div className="w-13 h-13 bg-gray-200 rounded-full shrink-0" />
-            <div className="flex-1">
-              <div className="h-6 w-40 bg-gray-200 rounded mb-2" />
-              <div className="h-4 w-72 max-w-full bg-gray-100 rounded" />
+        {/* Header strip: p-[1rem_1rem_.75rem_1rem] sm:p-[1.5rem_1.25rem...] → h-10 sm:h-13 */}
+        <div className="h-10 sm:h-[3.25rem] md:h-14 bg-gray-200" />
+        <div className="bg-white p-4 sm:p-6 flex flex-col gap-3 sm:gap-4">
+          <div className="flex gap-3 sm:gap-4 items-start sm:items-center">
+            {/* Icon circle: p-2.5 sm:p-3.5 = 10/14px + icon 20/24px = 40/52px */}
+            <div className="w-10 h-10 sm:w-[3.25rem] sm:h-[3.25rem] bg-gray-200 rounded-full shrink-0" />
+            <div className="flex-1 min-w-0">
+              {/* Plan name: text-[1.125rem] sm:text-[1.5rem] leading-7/8 → h-6/h-8 */}
+              <div className="h-6 sm:h-8 w-32 sm:w-40 bg-gray-200 rounded mb-1.5" />
+              {/* Subtitle: text-[.8125rem] sm:text-[1rem] → h-4/h-5 */}
+              <div className="h-4 sm:h-5 w-48 sm:w-64 max-w-full bg-gray-100 rounded" />
             </div>
           </div>
           <div className="h-[1px] bg-[#EDEDED] w-full" />
-          <div className="flex items-center justify-between">
-            <div className="h-5 w-52 bg-gray-200 rounded" />
-            <div className="h-7 w-28 bg-gray-200 rounded" />
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            {/* "Renews on:" text-[.9375rem] sm:text-[1.125rem] → h-5/h-6 */}
+            <div className="h-5 sm:h-6 w-40 sm:w-52 bg-gray-200 rounded" />
+            {/* Price: text-[1.375rem] sm:text-[1.75rem] → h-7/h-9 */}
+            <div className="h-7 sm:h-8 w-20 sm:w-28 bg-gray-200 rounded" />
+          </div>
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            {/* Status: same h-5/h-6 */}
+            <div className="h-5 sm:h-6 w-24 sm:w-32 bg-gray-200 rounded" />
+            <div className="h-5 w-24 sm:w-32 bg-gray-100 rounded" />
           </div>
         </div>
       </div>
 
-      <div className="h-7 w-56 bg-gray-200 rounded-lg animate-pulse mb-7" />
+      {/* "Available Subscriptions" heading: text-[1.125rem] sm:text-xl → h-6/h-7 */}
+      <div className="h-6 sm:h-7 w-40 sm:w-56 bg-gray-200 rounded-lg animate-pulse mb-4 sm:mb-5" />
 
-      {/* Plan cards skeleton */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Plan cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            style={{
-              boxShadow:
-                "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
-            }}
-            className="p-[1rem_.75rem_1.25rem_.75rem] rounded-[1.5rem] bg-white animate-pulse"
-          >
-            <div className="p-[1.5rem_1.25rem] mb-6 rounded-[1.25rem] bg-gray-100">
-              <div className="h-5 w-24 bg-gray-200 rounded-full mb-3.5" />
-              <div className="w-13 h-13 bg-gray-200 rounded-full mb-3.5" />
-              <div className="h-5 w-32 bg-gray-200 rounded mb-2" />
-              <div className="h-9 w-24 bg-gray-200 rounded" />
+          <div key={i} className={cn(i === 2 && "sm:col-span-2 lg:col-span-1")}>
+            <div
+              style={{
+                boxShadow:
+                  "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
+              }}
+              className={cn(
+                "p-[.625rem_.5rem_.875rem_.5rem] sm:p-[1rem_.75rem_1.25rem_.75rem] rounded-[1.5rem] bg-white animate-pulse",
+                i === 2 && "sm:w-[calc(50%-.75rem)] sm:mx-auto lg:w-auto lg:mx-0"
+              )}
+            >
+              {/* Inner header */}
+              <div className="p-[1rem_.875rem] sm:p-[1.5rem_1.25rem] mb-4 sm:mb-6 rounded-[1.25rem] bg-gray-100">
+                {/* Badge: h-5 */}
+                <div className="h-5 w-20 sm:w-24 bg-gray-200 rounded-full mb-3" />
+                {/* Icon circle: p-2.5/3.5 + icon 20/24 = ~40/52px */}
+                <div className="w-10 h-10 sm:w-[3.25rem] sm:h-[3.25rem] bg-gray-200 rounded-full mb-3" />
+                {/* Plan name: text-[.9375rem] sm:text-[1.125rem] → h-5/h-6 */}
+                <div className="h-5 sm:h-6 w-24 sm:w-32 bg-gray-200 rounded mb-1.5" />
+                {/* Price: text-[1.625rem] sm:text-[2rem] leading-9/10 → h-8/h-9 */}
+                <div className="h-8 sm:h-9 w-20 sm:w-24 bg-gray-200 rounded" />
+              </div>
+              {/* Features: mb-16 sm:mb-24 */}
+              <div className="flex flex-col gap-2 sm:gap-3 mb-14 sm:mb-24">
+                {[0, 1, 2, 3].map((j) => (
+                  <div key={j} className="flex items-center gap-2">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gray-200 rounded-full shrink-0" />
+                    <div className="h-4 flex-1 max-w-[12rem] bg-gray-100 rounded" />
+                  </div>
+                ))}
+              </div>
+              {/* Button: h-10 */}
+              <div className="h-9 sm:h-10 w-full bg-gray-200 rounded-lg" />
             </div>
-            <div className="flex flex-col gap-3 mb-24">
-              {[0, 1, 2, 3].map((j) => (
-                <div key={j} className="flex items-center gap-2">
-                  <div className="w-5 h-5 bg-gray-200 rounded-full shrink-0" />
-                  <div className="h-4 w-48 bg-gray-100 rounded" />
-                </div>
-              ))}
-            </div>
-            <div className="h-10 w-full bg-gray-200 rounded-lg" />
           </div>
         ))}
       </div>
@@ -227,9 +252,9 @@ const Subscriptions = () => {
 
   return (
     <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
-      <div className="mb-8">
-        <h1 className="text-2xl font-[600] text-[#171717]">Subscriptions</h1>
-        <p className="text-gray-500 text-sm mt-1">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-[1.125rem] sm:text-xl md:text-2xl font-[600] text-[#171717]">Subscriptions</h1>
+        <p className="text-gray-500 text-[.8125rem] sm:text-sm mt-1">
           Keep track of your subscription details, update your billing
           information, and control your accounts payments
         </p>
@@ -237,16 +262,16 @@ const Subscriptions = () => {
 
       {/* Sponsored badge */}
       {isSponsored && (
-        <div className="mb-6 flex items-center gap-3 p-4 bg-[#E5E8F8] border border-[#007FFF] rounded-[.75rem]">
+        <div className="mb-6 flex items-start gap-3 p-3 sm:p-4 bg-[#E5E8F8] border border-[#007FFF] rounded-[.75rem]">
           <Icon
             icon="hugeicons:healtcare"
-            className="w-5 h-5 text-[#007FFF] shrink-0"
+            className="w-4 h-4 sm:w-5 sm:h-5 text-[#007FFF] shrink-0 mt-0.5"
           />
           <div>
-            <p className="text-[.875rem] font-[600] text-[#2B2B2B]">
+            <p className="text-[.8125rem] sm:text-[.875rem] font-[600] text-[#2B2B2B]">
               Sponsored Account
             </p>
-            <p className="text-[.8125rem] text-[#575757]">
+            <p className="text-[.75rem] sm:text-[.8125rem] text-[#575757]">
               Your subscription is managed by your sponsor. You cannot
               self-subscribe.
             </p>
@@ -259,16 +284,16 @@ const Subscriptions = () => {
         <>
           {/* SUSPENDED warning */}
           {activeSubscription.status === "suspended" && (
-            <div className="mb-4 flex items-start gap-3 p-4 bg-[#FFF3CD] border border-[#F3A218] rounded-[.75rem]">
+            <div className="mb-4 flex items-start gap-3 p-3 sm:p-4 bg-[#FFF3CD] border border-[#F3A218] rounded-[.75rem]">
               <Icon
                 icon="hugeicons:alert-02"
-                className="w-5 h-5 text-[#F3A218] shrink-0 mt-0.5"
+                className="w-4 h-4 sm:w-5 sm:h-5 text-[#F3A218] shrink-0 mt-0.5"
               />
               <div>
-                <p className="text-[.875rem] font-[600] text-[#2B2B2B]">
+                <p className="text-[.8125rem] sm:text-[.875rem] font-[600] text-[#2B2B2B]">
                   Subscription Suspended
                 </p>
-                <p className="text-[.8125rem] text-[#575757]">
+                <p className="text-[.75rem] sm:text-[.8125rem] text-[#575757]">
                   Your last payment failed. Please update your payment method to
                   restore access.
                 </p>
@@ -285,7 +310,7 @@ const Subscriptions = () => {
           >
             <div
               className={cn(
-                "p-[2rem_1.5rem_1rem_1.5rem] text-white font-[500] leading-7 text-[1.125rem]",
+                "p-[1rem_1rem_.75rem_1rem] sm:p-[1.5rem_1.25rem_.875rem_1.25rem] md:p-[2rem_1.5rem_1rem_1.5rem] text-white font-[500] leading-6 sm:leading-7 text-[.9375rem] sm:text-[1.125rem]",
                 activeSubscription.status === "cancelled"
                   ? "bg-[#F59E0B]"
                   : activeSubscription.status === "suspended"
@@ -299,16 +324,16 @@ const Subscriptions = () => {
                   ? "Subscription Suspended"
                   : "Current Subscription"}
             </div>
-            <div className="bg-white p-6 flex flex-col gap-4">
-              <div className="flex gap-4 items-center">
-                <div className="gradients-subtle-hue-2 p-3.5 rounded-full">
-                  <Icon icon="hugeicons:star" className="w-6 h-6 text-white" />
+            <div className="bg-white p-4 sm:p-6 flex flex-col gap-3 sm:gap-4">
+              <div className="flex gap-3 sm:gap-4 items-start sm:items-center">
+                <div className="gradients-subtle-hue-2 p-2.5 sm:p-3.5 rounded-full flex-shrink-0">
+                  <Icon icon="hugeicons:star" className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <div>
-                  <h5 className="text-[#212636] text-[1.5rem] font-[600] leading-8 tracking-[-.48px]">
+                <div className="min-w-0">
+                  <h5 className="text-[#212636] text-[1.125rem] sm:text-[1.5rem] font-[600] leading-7 sm:leading-8 tracking-[-.48px]">
                     {activeSubscription.plan?.name ?? "Sponsored Access"}
                   </h5>
-                  <p className="text-[#757575] text-[1.125rem] font-[400] leading-7">
+                  <p className="text-[#757575] text-[.8125rem] sm:text-[1rem] md:text-[1.125rem] font-[400] leading-5 sm:leading-7 mt-0.5">
                     {activeSubscription.status === "cancelled"
                       ? `Your subscription was cancelled. Access expires on ${formatDate(
                           activeSubscription.endDate,
@@ -329,7 +354,7 @@ const Subscriptions = () => {
                   </p>
                   {activeSubscription.status === "cancelled" &&
                     activeSubscription.upcomingSubscription?.plan && (
-                      <p className="text-[#007FFF] text-[.875rem] font-[500] leading-5 mt-1 flex items-center gap-1.5">
+                      <p className="text-[#007FFF] text-[.8125rem] sm:text-[.875rem] font-[500] leading-5 mt-1 flex items-center gap-1.5">
                         <Icon
                           icon="hugeicons:arrow-right-02"
                           className="w-4 h-4"
@@ -342,8 +367,8 @@ const Subscriptions = () => {
                 </div>
               </div>
               <div className="h-[1px] bg-[#EDEDED] w-full" />
-              <div className="flex items-center justify-between">
-                <p className="tracking-[-.4px] text-[#2B2B2B] font-[500] leading-7 text-[1.25rem]">
+              <div className="flex items-start sm:items-center justify-between gap-2 flex-wrap">
+                <p className="tracking-[-.4px] text-[#2B2B2B] font-[500] leading-6 sm:leading-7 text-[.9375rem] sm:text-[1.125rem] md:text-[1.25rem]">
                   {activeSubscription.status === "cancelled" ||
                   !activeSubscription.autoRenew
                     ? `Expires on: ${formatDate(
@@ -363,20 +388,20 @@ const Subscriptions = () => {
                           "en-US",
                         )}`}
                 </p>
-                <div className="flex items-center">
-                  <span className="text-[#2B2B2B] leading-9 text-[1.75rem] font-[500] tracking-[-.65px]">
+                <div className="flex items-baseline">
+                  <span className="text-[#2B2B2B] leading-8 sm:leading-9 text-[1.375rem] sm:text-[1.75rem] font-[500] tracking-[-.65px]">
                     {currencySymbol}
                     {(activeSubscription.amountPaid ?? 0).toLocaleString()}
                   </span>
-                  <span className="text-[#757575] leading-6 font-[400] text-[1rem]">
+                  <span className="text-[#757575] leading-6 font-[400] text-[.8125rem] sm:text-[1rem]">
                     {activeSubscription.plan?.durationDays
                       ? `/${durationLabel(activeSubscription.plan.durationDays)}`
                       : ""}
                   </span>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
-                <p className="tracking-[-.4px] text-[#2B2B2B] font-[500] leading-7 text-[1.25rem]">
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <p className="tracking-[-.4px] text-[#2B2B2B] font-[500] leading-6 sm:leading-7 text-[.9375rem] sm:text-[1.125rem] md:text-[1.25rem]">
                   Status:{" "}
                   {activeSubscription.status === "cancelled"
                     ? "Cancelled"
@@ -393,7 +418,7 @@ const Subscriptions = () => {
                         reactivateSubscription(lastExamTypeId);
                       }}
                       disabled={isReactivating}
-                      className="text-[#007FFF] text-[1rem] font-[600] leading-6 disabled:opacity-50 flex items-center gap-2"
+                      className="text-[#007FFF] text-[.875rem] sm:text-[1rem] font-[600] leading-6 disabled:opacity-50 flex items-center gap-2"
                     >
                       {isReactivating && (
                         <Icon
@@ -407,7 +432,7 @@ const Subscriptions = () => {
                 ) : activeSubscription.status === "active" ? (
                   <button
                     onClick={() => setShowCancelModal(true)}
-                    className="text-[#D42620] text-[1rem] font-[600] leading-6 flex items-center gap-2"
+                    className="text-[#D42620] text-[.875rem] sm:text-[1rem] font-[600] leading-6 flex items-center gap-2"
                   >
                     Cancel Subscription
                   </button>
@@ -424,21 +449,21 @@ const Subscriptions = () => {
           }}
           className="rounded-[1rem] mb-13 overflow-hidden"
         >
-          <div className="p-[2rem_1.5rem_1rem_1.5rem] text-white font-[500] leading-7 text-[1.125rem] bg-[#007FFF]">
+          <div className="p-[1rem_1rem_.75rem_1rem] sm:p-[1.5rem_1.25rem_.875rem_1.25rem] md:p-[2rem_1.5rem_1rem_1.5rem] text-white font-[500] leading-6 sm:leading-7 text-[.9375rem] sm:text-[1.125rem] bg-[#007FFF]">
             Current Plan
           </div>
-          <div className="bg-white p-6 flex gap-4 items-center">
-            <div className="bg-gray-100 p-3.5 rounded-full">
+          <div className="bg-white p-4 sm:p-6 flex gap-3 sm:gap-4 items-start sm:items-center">
+            <div className="bg-gray-100 p-2.5 sm:p-3.5 rounded-full flex-shrink-0">
               <Icon
                 icon="hugeicons:shield-user"
-                className="w-6 h-6 text-gray-500"
+                className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500"
               />
             </div>
             <div>
-              <h5 className="text-[#212636] text-[1.5rem] font-[600] leading-8 tracking-[-.48px]">
+              <h5 className="text-[#212636] text-[1.125rem] sm:text-[1.5rem] font-[600] leading-7 sm:leading-8 tracking-[-.48px]">
                 Free Plan
               </h5>
-              <p className="text-[#757575] text-[1.125rem] font-[400] leading-7">
+              <p className="text-[#757575] text-[.8125rem] sm:text-[1rem] md:text-[1.125rem] font-[400] leading-5 sm:leading-7 mt-0.5">
                 You&apos;re on the free plan. Upgrade to unlock full access to
                 all subjects and features.
               </p>
@@ -447,18 +472,20 @@ const Subscriptions = () => {
         </div>
       )}
 
-      <h2 className="text-2xl mb-7 font-[600] text-[#171717]">
+      <h2 className="text-[1.125rem] sm:text-xl md:text-2xl mb-5 sm:mb-7 font-[600] text-[#171717]">
         Available Subscriptions
       </h2>
 
       {checkoutInfo && checkoutInfo.plans.length > 0 ? (
         <div
           className={cn(
-            "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+            "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
             isSponsored && "opacity-50 pointer-events-none select-none",
           )}
         >
           {checkoutInfo.plans.map((plan, index) => {
+            const totalPlans = checkoutInfo.plans.length;
+            const isLastAndOdd = index === totalPlans - 1 && totalPlans % 2 !== 0;
             const style = planStyles[index] || planStyles[0];
             const isCurrentPlan = activeSubscription?.planId === plan.id;
             const isUpcomingPlan =
@@ -466,24 +493,27 @@ const Subscriptions = () => {
             const formattedPrice = `${currencySymbol}${plan.price.toLocaleString()}`;
 
             return (
-              <div key={plan.id}>
+              <div key={plan.id} className={cn(isLastAndOdd && "sm:col-span-2 lg:col-span-1")}>
                 <div
                   style={{
                     boxShadow:
                       "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
                   }}
-                  className="p-[1rem_.75rem_1.25rem_.75rem] rounded-[1.5rem] bg-white"
+                  className={cn(
+                    "p-[.625rem_.5rem_.875rem_.5rem] sm:p-[1rem_.75rem_1.25rem_.75rem] rounded-[1.5rem] bg-white",
+                    isLastAndOdd && "sm:w-[calc(50%-.75rem)] sm:mx-auto lg:w-auto lg:mx-0"
+                  )}
                 >
                   <div
                     style={{
                       boxShadow:
                         "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
                     }}
-                    className="p-[1.5rem_1.25rem] mb-6 rounded-[1.25rem] gradients-linear-grey"
+                    className="p-[1rem_.875rem] sm:p-[1.5rem_1.25rem] mb-4 sm:mb-6 rounded-[1.25rem] gradients-linear-grey"
                   >
                     <span
                       className={cn(
-                        "block mb-3.5 font-[500] text-[.875rem] leading-5 p-[.125rem_.625rem] border w-fit mix-blend-multiply rounded-[1rem] bg-[#EFF8FF]",
+                        "block mb-3 sm:mb-3.5 font-[500] text-[.8125rem] sm:text-[.875rem] leading-5 p-[.125rem_.625rem] border w-fit mix-blend-multiply rounded-[1rem] bg-[#EFF8FF]",
                         isUpcomingPlan
                           ? "text-[#007FFF] bg-[#EFF8FF] border-[#B2DDFF]"
                           : style.badge.color,
@@ -506,22 +536,22 @@ const Subscriptions = () => {
                         className="w-6 h-6 text-white"
                       />
                     </div>
-                    <p className="text-[1.125rem] mt-3.5 mb-2 font-[500] leading-7 text-[#2B2B2B]">
+                    <p className="text-[.9375rem] sm:text-[1.125rem] mt-3 sm:mt-3.5 mb-1 sm:mb-2 font-[500] leading-6 sm:leading-7 text-[#2B2B2B]">
                       {plan.name}
                     </p>
-                    <h6 className="tracking-[-.64px] text-[2rem] leading-10 font-[500]">
+                    <h6 className="tracking-[-.64px] text-[1.625rem] sm:text-[2rem] leading-9 sm:leading-10 font-[500]">
                       {formattedPrice}
                     </h6>
                   </div>
 
-                  <ul className="flex mb-24 flex-col gap-3">
+                  <ul className="flex mb-16 sm:mb-24 flex-col gap-2 sm:gap-3">
                     {defaultFeatures.map((feature, idx) => (
                       <li key={idx} className="flex items-center gap-2">
                         <Icon
                           icon="hugeicons:checkmark-circle-01"
-                          className="w-5 h-5 text-[#2B2B2B]"
+                          className="w-4 h-4 sm:w-5 sm:h-5 text-[#2B2B2B] flex-shrink-0"
                         />
-                        <p className="text-[#2B2B2B] text-[.875rem] font-[400] leading-5">
+                        <p className="text-[#2B2B2B] text-[.8125rem] sm:text-[.875rem] font-[400] leading-5">
                           {feature}
                         </p>
                       </li>
@@ -564,53 +594,43 @@ const Subscriptions = () => {
       {/* Cancel Confirmation Modal */}
       {showCancelModal && activeSubscription && (
         <Modal isOpen onClose={() => setShowCancelModal(false)} className="rounded-2xl w-full max-w-md overflow-hidden">
-            <div className="p-6 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-50 flex items-center justify-center">
-                <Icon
-                  icon="line-md:alert-loop"
-                  className="w-8 h-8 text-[#D42620]"
-                />
-              </div>
-              <h3 className="text-[1.25rem] font-[600] text-[#171717] mb-2">
-                Cancel Subscription?
-              </h3>
-              <p className="text-[#757575] text-[.9375rem] leading-6 mb-1">
-                Your{" "}
-                <span className="font-[600] text-[#2B2B2B]">
-                  {activeSubscription.plan?.name ?? "subscription"}
-                </span>{" "}
-                will be cancelled immediately. Access to paid features will be
-                revoked right away.
-              </p>
-              <p className="text-[#757575] text-[.875rem] leading-5">
-                You can resubscribe at any time to regain access.
-              </p>
+          <div className="p-4 sm:p-6 text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full bg-red-50 flex items-center justify-center">
+              <Icon icon="line-md:alert-loop" className="w-6 h-6 sm:w-8 sm:h-8 text-[#D42620]" />
             </div>
-            <div className="p-4 border-t border-gray-100 flex gap-3">
-              <button
-                onClick={() => setShowCancelModal(false)}
-                disabled={isCancelling}
-                className="flex-1 py-2.5 px-4 rounded-lg border border-gray-200 text-[#2B2B2B] font-[500] text-[.9375rem] hover:bg-gray-50 transition-colors"
-              >
-                Keep Subscription
-              </button>
-              <button
-                onClick={handleCancelSubscription}
-                disabled={isCancelling}
-                className="flex-1 py-2.5 px-4 rounded-lg bg-[#D42620] text-white font-[500] text-[.9375rem] hover:bg-[#B91C17] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {isCancelling ? (
-                  <>
-                    <Icon icon="svg-spinners:ring-resize" className="w-4 h-4" />
-                    Cancelling...
-                  </>
-                ) : (
-                  "Yes, Cancel"
-                )}
-              </button>
-            </div>
-          </Modal>
-        )}
+            <h3 className="text-[1.0625rem] sm:text-[1.25rem] font-[600] text-[#171717] mb-2">
+              Cancel Subscription?
+            </h3>
+            <p className="text-[#757575] text-[.8125rem] sm:text-[.9375rem] leading-5 sm:leading-6 mb-1">
+              Your{" "}
+              <span className="font-[600] text-[#2B2B2B]">
+                {activeSubscription.plan?.name ?? "subscription"}
+              </span>{" "}
+              will be cancelled immediately. Access to paid features will be revoked right away.
+            </p>
+            <p className="text-[#757575] text-[.75rem] sm:text-[.875rem] leading-5">
+              You can resubscribe at any time to regain access.
+            </p>
+          </div>
+          <div className="p-3 sm:p-4 border-t border-gray-100 flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <Button
+              variant="outlined"
+              onClick={() => setShowCancelModal(false)}
+              disabled={isCancelling}
+              className="flex-1"
+            >
+              Keep Subscription
+            </Button>
+            <Button
+              onClick={handleCancelSubscription}
+              loading={isCancelling}
+              className="flex-1 !bg-[#D42620] !border-[#FBCFCE] hover:!bg-[#B91C17] focus-within:!bg-[#991B13] focus:!bg-[#991B13] focus-visible:!bg-[#991B13] !shadow-[0_0_0_1px_#B91C17] disabled:!bg-[#E86960] disabled:!border-[#EDEDED]"
+            >
+              Yes, Cancel
+            </Button>
+          </div>
+        </Modal>
+      )}
 
       {/* Payment Modal */}
       {showPayment && selectedPlan && (

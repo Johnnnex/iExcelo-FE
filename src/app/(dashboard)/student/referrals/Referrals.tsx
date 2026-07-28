@@ -214,19 +214,19 @@ const Referrals = () => {
   return (
     <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
       {/* Header */}
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+      <div className="mb-6 flex flex-row items-start justify-between gap-3">
         <div>
-          <h1 className="text-xl md:text-2xl font-[600] text-[#171717]">
+          <h1 className="text-[1.125rem] sm:text-xl md:text-2xl font-[600] text-[#171717]">
             Referrals & Invites
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-gray-500 text-[.8125rem] sm:text-sm mt-1">
             Start building your learning circle, send invites and earn
             commissions.
           </p>
         </div>
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
           {earningsByCurrency.length > 1 && (
-            <div className="flex items-center gap-1.5 flex-wrap">
+            <div className="hidden sm:flex items-center gap-1.5 flex-wrap">
               {earningsByCurrency.map((e) => (
                 <button
                   key={e.currency}
@@ -242,21 +242,32 @@ const Referrals = () => {
               ))}
             </div>
           )}
-          <Button onClick={() => setShowShareModal(true)}>
-            <Icon icon="hugeicons:gift" className="w-4 h-4 md:w-5 md:h-5" />
-            Invite
-          </Button>
+          {/* Mobile: icon-only round button */}
+          <button
+            onClick={() => setShowShareModal(true)}
+            className="sm:hidden w-9 h-9 rounded-full bg-[#007FFF] text-white flex items-center justify-center flex-shrink-0"
+            aria-label="Invite"
+          >
+            <Icon icon="hugeicons:gift" className="w-4 h-4" />
+          </button>
+          {/* sm+: full labelled button */}
+          <div className="hidden sm:flex">
+            <Button onClick={() => setShowShareModal(true)}>
+              <Icon icon="hugeicons:gift" className="w-4 h-4 md:w-5 md:h-5" />
+              Invite
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Soft nudge — only shown when student hasn't subscribed yet */}
       {!hasEverSubscribed && (
-        <div className="mb-6 flex items-center gap-3 p-3 md:p-4 bg-[#FFF9ED] border border-[#F3A218] rounded-[.75rem]">
+        <div className="mb-6 flex items-start gap-3 p-3 sm:p-4 bg-[#FFF9ED] border border-[#F3A218] rounded-[.75rem]">
           <Icon
             icon="hugeicons:star-01"
-            className="w-5 h-5 text-[#F3A218] shrink-0"
+            className="w-4 h-4 sm:w-5 sm:h-5 text-[#F3A218] shrink-0 mt-0.5"
           />
-          <p className="text-[.875rem] text-[#2B2B2B]">
+          <p className="text-[.8125rem] sm:text-[.875rem] text-[#2B2B2B]">
             You can invite friends now! Once you{" "}
             <strong>subscribe to any plan</strong>, every successful referral
             starts earning you a 15% commission.
@@ -271,16 +282,16 @@ const Referrals = () => {
             background:
               "radial-gradient(71.77% 100% at 50.18% 0%, #5A2958 13.03%, #371D52 41.67%, #061023 87.06%)",
           }}
-          className="p-[.9375rem_1.25rem] flex items-center justify-between h-auto lg:h-42.5 w-full lg:w-[70%] rounded-[.5rem]"
+          className="p-[.75rem_1rem] sm:p-[.9375rem_1.25rem] flex items-center justify-between h-auto lg:h-42.5 w-full lg:w-[70%] rounded-[.5rem]"
         >
-          <div className="flex h-full justify-between flex-col">
+          <div className="flex h-full justify-between flex-col gap-3 sm:gap-4">
             <div>
-              <h2 className="text-[1.125rem] md:text-[1.25rem] mb-1 font-[600] leading-7 tracking-[-.4px] text-white">
+              <h2 className="text-[.9375rem] sm:text-[1.125rem] md:text-[1.25rem] mb-1 font-[600] leading-snug sm:leading-7 tracking-[-.4px] text-white">
                 {hasEverSubscribed
                   ? "Refer and earn 15% commission"
                   : "Share your referral link"}
               </h2>
-              <p className="leading-6 font-[400] text-[.875rem] md:text-[1rem] text-[#D0D5DD]">
+              <p className="leading-5 sm:leading-6 font-[400] text-[.8125rem] sm:text-[.875rem] md:text-[1rem] text-[#D0D5DD]">
                 {hasEverSubscribed
                   ? "Earn 15% commission every time someone you refer subscribes to any plan"
                   : "Invite friends to iExcelo — subscribe to any plan to start earning commissions on their payments"}
@@ -288,7 +299,7 @@ const Referrals = () => {
             </div>
             <button
               onClick={handleCopy}
-              className="p-2 w-fit border-[#E5E8F8] border-[1.5px] rounded-[.5rem] text-[#E5E8F8] flex items-center gap-[.25rem] leading-5 text-[.875rem] font-[600]"
+              className="p-1.5 sm:p-2 w-fit border-[#E5E8F8] border-[1.5px] rounded-[.5rem] text-[#E5E8F8] flex items-center gap-[.25rem] leading-5 text-[.75rem] sm:text-[.875rem] font-[600]"
             >
               {affiliateLink.length > 32
                 ? affiliateLink.slice(0, 32) + "..."
@@ -310,20 +321,20 @@ const Referrals = () => {
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="h-auto lg:h-42.5 w-full lg:w-[30%] flex flex-col justify-between p-5 rounded-[.5rem]"
+          className="h-auto lg:h-42.5 w-full lg:w-[30%] flex flex-col justify-between p-4 sm:p-5 rounded-[.5rem]"
         >
-          <span className="leading-7 font-[400] text-[1rem] md:text-[1.125rem] text-[#757575]">
+          <span className="leading-6 sm:leading-7 font-[400] text-[.875rem] sm:text-[1rem] md:text-[1.125rem] text-[#757575]">
             Available Balance
           </span>
-          <span className="text-xl md:text-[1.75rem] tracking-[-.56px] leading-9 font-[600] text-[#2B2B2B]">
+          <span className="text-[1.5rem] sm:text-xl md:text-[1.75rem] tracking-[-.56px] leading-8 sm:leading-9 font-[600] text-[#2B2B2B]">
             {currencySymbol}
             {(dashboard?.pendingBalance ?? 0).toLocaleString()}
           </span>
-          <div className="flex gap-[.625rem] items-center">
-            <span className="text-[#2B2B2B] font-[400] leading-7 text-[1rem] md:text-[1.125rem]">
+          <div className="flex gap-[.375rem] sm:gap-[.625rem] items-center flex-wrap">
+            <span className="text-[#2B2B2B] font-[400] leading-6 sm:leading-7 text-[.875rem] sm:text-[1rem] md:text-[1.125rem]">
               Total rewards:
             </span>
-            <span className="leading-7 text-[#757575] text-[1.125rem] md:text-[1.25rem] font-[500]">
+            <span className="leading-7 text-[#757575] text-[1rem] sm:text-[1.125rem] md:text-[1.25rem] font-[500]">
               {currencySymbol}
               {(dashboard?.totalEarnings ?? 0).toLocaleString()}
             </span>
@@ -333,33 +344,20 @@ const Referrals = () => {
 
       {/* Metric cards */}
       <div className="grid mb-6 grid-cols-1 sm:grid-cols-3 gap-[1rem]">
-        <div className="border rounded-[.75rem] p-[1rem_.75rem] md:p-[1.25rem_1rem] border-[#D6D6D6] flex flex-col gap-1">
-          <span className="text-[#575757] font-[400] leading-5 text-[.875rem]">
-            Pending Users
-          </span>
-          <span className="tracking-[-.56px] leading-9 text-[#2B2B2B] text-xl md:text-[1.75rem] font-[500]">
-            {dashboard?.referredNotSubscribed ?? 0}
-          </span>
-        </div>
-
-        <div className="border rounded-[.75rem] p-[1rem_.75rem] md:p-[1.25rem_1rem] border-[#D6D6D6] flex flex-col gap-1">
-          <span className="text-[#575757] font-[400] leading-5 text-[.875rem]">
-            Active Users
-          </span>
-          <span className="tracking-[-.56px] leading-9 text-[#2B2B2B] text-xl md:text-[1.75rem] font-[500]">
-            {dashboard?.totalConversions ?? 0}
-          </span>
-        </div>
-
-        <div className="border rounded-[.75rem] p-[1rem_.75rem] md:p-[1.25rem_1rem] border-[#D6D6D6] flex flex-col gap-1">
-          <span className="text-[#575757] font-[400] leading-5 text-[.875rem]">
-            Total Earnings
-          </span>
-          <span className="tracking-[-.56px] leading-9 text-[#2B2B2B] text-xl md:text-[1.75rem] font-[500]">
-            {currencySymbol}
-            {(dashboard?.totalEarnings ?? 0).toLocaleString()}
-          </span>
-        </div>
+        {[
+          { label: "Pending Users", value: String(dashboard?.referredNotSubscribed ?? 0) },
+          { label: "Active Users", value: String(dashboard?.totalConversions ?? 0) },
+          { label: "Total Earnings", value: `${currencySymbol}${(dashboard?.totalEarnings ?? 0).toLocaleString()}` },
+        ].map(({ label, value }) => (
+          <div key={label} className="border rounded-[.75rem] py-5 sm:py-6 md:py-8 px-3 sm:px-4 border-[#D6D6D6] flex flex-col gap-2 justify-between">
+            <span className="text-[#575757] font-[400] leading-5 text-[.8125rem] sm:text-[.875rem]">
+              {label}
+            </span>
+            <span className="tracking-[-.56px] leading-8 sm:leading-9 text-[#2B2B2B] text-[1.375rem] sm:text-xl md:text-[1.75rem] font-[500]">
+              {value}
+            </span>
+          </div>
+        ))}
       </div>
 
       {/* Referrals table */}
@@ -370,8 +368,8 @@ const Referrals = () => {
         }}
         className="max-h-[500px] rounded-[.625rem] overflow-hidden pt-4 mb-6"
       >
-        <div className="p-[.5rem_1rem_.375rem_1rem] border-b-[1.5px] border-[#007FFF] flex gap-2 items-center w-fit">
-          <span className="text-[1rem] font-[500] text-[#171717] leading-6">
+        <div className="p-[.375rem_.75rem_.25rem_.75rem] sm:p-[.5rem_1rem_.375rem_1rem] border-b-[1.5px] border-[#007FFF] flex gap-2 items-center w-fit">
+          <span className="text-[.875rem] sm:text-[1rem] font-[500] text-[#171717] leading-6">
             Invites
           </span>
           <span className="p-[.125rem_.375rem] rounded-[999999px] text-[.875rem] font-[500] leading-5 bg-[#E5E8F8]">
@@ -427,12 +425,12 @@ const Referrals = () => {
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="xl:w-[50%] w-full bg-white rounded-[.75rem] p-[1.25rem_1rem] md:p-[2rem_1.5rem] flex flex-col items-center"
+          className="xl:w-[50%] w-full bg-white rounded-[.75rem] p-[1rem_.875rem] sm:p-[1.25rem_1rem] md:p-[2rem_1.5rem] flex flex-col items-center"
         >
-          <h3 className="text-[1rem] md:text-[1.125rem] font-[500] leading-7 mb-2 self-start">
+          <h3 className="text-[.9375rem] sm:text-[1rem] md:text-[1.125rem] font-[500] leading-7 mb-1 sm:mb-2 self-start">
             QR Code
           </h3>
-          <p className="text-[.875rem] text-[#757575] mb-6 self-start">
+          <p className="text-[.8125rem] sm:text-[.875rem] text-[#757575] mb-4 sm:mb-6 self-start">
             Scan to open your referral link
           </p>
           {affiliateCode ? (
@@ -460,18 +458,18 @@ const Referrals = () => {
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="xl:w-[50%] w-full bg-white rounded-[.75rem] p-[1.25rem_1rem] md:p-[2rem_1.5rem]"
+          className="xl:w-[50%] w-full bg-white rounded-[.75rem] p-[1rem_.875rem] sm:p-[1.25rem_1rem] md:p-[2rem_1.5rem]"
         >
-          <h3 className="text-[1rem] md:text-[1.125rem] font-[500] leading-7 mb-2">
+          <h3 className="text-[.9375rem] sm:text-[1rem] md:text-[1.125rem] font-[500] leading-7 mb-1 sm:mb-2">
             Custom Referral Code
           </h3>
-          <p className="text-[.875rem] text-[#757575] mb-6">
+          <p className="text-[.8125rem] sm:text-[.875rem] text-[#757575] mb-4 sm:mb-6">
             Set a memorable code for your referral link
           </p>
 
           <div className="mb-4">
-            <p className="text-sm text-[#575757] mb-1">Current code</p>
-            <p className="text-[.875rem] md:text-[1rem] font-[500] text-[#2B2B2B] bg-[#F3F3F3] rounded-lg p-2 md:p-3">
+            <p className="text-[.8125rem] sm:text-sm text-[#575757] mb-1">Current code</p>
+            <p className="text-[.875rem] md:text-[1rem] font-[500] text-[#2B2B2B] bg-[#F3F3F3] rounded-lg p-2 sm:p-3">
               {affiliateCode || "—"}
             </p>
           </div>

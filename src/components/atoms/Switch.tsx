@@ -63,10 +63,10 @@ const Switch: React.FC<SwitchProps> = ({
               {label}
             </label>
           )}
-      <div className="h-fit w-fit cursor-pointer">
+      <div className="relative h-fit w-fit cursor-pointer">
         <input
           type="checkbox"
-          className="sr-only"
+          className="absolute opacity-0 w-0 h-0 overflow-hidden pointer-events-none"
           checked={isChecked}
           onChange={handleToggle}
         />

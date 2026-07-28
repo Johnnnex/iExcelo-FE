@@ -31,7 +31,7 @@ export function RichText({
     <div
       className={cn(
         // Base prose-like styles without depending on @tailwindcss/typography
-        "text-inherit leading-relaxed",
+        "text-inherit leading-relaxed max-w-full",
         variant === "block" && [
           "[&_p]:mb-3 [&_p:last-child]:mb-0",
           "[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-3",
@@ -54,6 +54,11 @@ export function RichText({
           "[&_p]:inline [&_p]:m-0",
           "[&_.katex-display]:my-1 [&_.katex-display]:overflow-x-auto",
           "[&_img]:max-w-full [&_img]:max-h-40 [&_img]:object-contain [&_img]:rounded [&_img]:block",
+          // Prevent tables from blowing past container width
+          "[&_table]:w-full [&_table]:max-w-full [&_table]:table-fixed",
+          // Prevent code blocks from causing horizontal overflow
+          "[&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:whitespace-pre-wrap",
+          "[&_code]:break-all",
         ],
         className,
       )}

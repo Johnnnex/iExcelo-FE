@@ -53,17 +53,23 @@ export default function ActivateAccount() {
   if (!token) {
     return (
       <div className="w-full max-w-[28rem] text-center">
-        <div className="rounded-[1rem] bg-white p-[2.5rem_2rem]">
-          <h2 className="mb-[1rem] text-[1.5rem] font-[600] text-[#D42620]">
+        <div
+          style={{
+            boxShadow:
+              "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
+          }}
+          className="rounded-[1rem] bg-white p-[1.25rem_1rem] sm:p-[2.5rem_2rem]"
+        >
+          <h2 className="mb-[.5rem] sm:mb-[1rem] text-[1.25rem] sm:text-[1.5rem] font-[600] text-[#D42620]">
             Invalid Link
           </h2>
-          <p className="text-[#667185] mb-[1.5rem]">
+          <p className="text-[.8125rem] sm:text-[.875rem] leading-[1.5rem] text-[#667085] mb-[1.25rem] sm:mb-[1.5rem]">
             This activation link is invalid or missing a token. Please use the
             link from your invitation email.
           </p>
           <Link
             href="/login"
-            className="text-[#007FFF] font-[600] hover:underline"
+            className="text-[.875rem] text-[#007FFF] font-[600] hover:underline"
           >
             Go to Login
           </Link>
@@ -75,11 +81,17 @@ export default function ActivateAccount() {
   if (done) {
     return (
       <div className="w-full max-w-[28rem] text-center">
-        <div className="rounded-[1rem] bg-white p-[2.5rem_2rem]">
-          <div className="w-16 h-16 rounded-full bg-[#E7F7ED] flex items-center justify-center mx-auto mb-4">
+        <div
+          style={{
+            boxShadow:
+              "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
+          }}
+          className="rounded-[1rem] bg-white p-[1.25rem_1rem] sm:p-[2.5rem_2rem]"
+        >
+          <div className="w-[3.5rem] h-[3.5rem] sm:w-16 sm:h-16 rounded-full bg-[#E7F7ED] flex items-center justify-center mx-auto mb-[1rem] sm:mb-[1.25rem]">
             <svg
-              width="32"
-              height="32"
+              width="28"
+              height="28"
               viewBox="0 0 24 24"
               fill="none"
               stroke="#099137"
@@ -90,10 +102,10 @@ export default function ActivateAccount() {
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <h2 className="mb-[.5rem] text-[1.5rem] font-[600] text-[#2B2B2B]">
+          <h2 className="mb-[.5rem] text-[1.25rem] sm:text-[1.5rem] font-[600] text-[#2B2B2B]">
             Account Activated!
           </h2>
-          <p className="text-[#667185] mb-[2rem]">
+          <p className="text-[.8125rem] sm:text-[.875rem] leading-[1.5rem] text-[#667085] mb-[1.5rem] sm:mb-[2rem]">
             Your account is ready. Log in to start your exam preparation
             journey.
           </p>
@@ -115,14 +127,14 @@ export default function ActivateAccount() {
           boxShadow:
             "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
         }}
-        className="rounded-[1rem] bg-white p-[2.5rem_2rem]"
+        className="rounded-[1rem] bg-white p-[1.25rem_1rem] sm:p-[2.5rem_2rem]"
       >
         <div className="mb-[2rem] text-center">
           <SVGClient src="/svg/logo.svg" className="mx-auto mb-4" />
-          <h2 className="text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
+          <h2 className="text-[1.25rem] sm:text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
             Set Your Password
           </h2>
-          <p className="mt-[.5rem] text-[.875rem] text-[#667185]">
+          <p className="mt-[.5rem] text-[.8125rem] sm:text-[.875rem] text-[#667185]">
             Welcome to iExcelo! Your sponsor has created an account for you. Set
             a password to activate it.
           </p>

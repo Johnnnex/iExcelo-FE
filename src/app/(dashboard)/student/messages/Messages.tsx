@@ -122,7 +122,7 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
   return (
     <Modal isOpen onClose={onClose} className="rounded-[.875rem] w-full max-w-[34rem]" overflowY="hidden">
       {/* ── Header ──────────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#F0F0F0] sticky top-0 bg-white z-10">
+      <div className="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-4 border-b border-[#F0F0F0] sticky top-0 bg-white z-10">
           <div className="flex items-center gap-3">
             {step === 2 && (
               <button
@@ -133,10 +133,10 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
               </button>
             )}
             <div>
-              <h3 className="font-[600] text-[1rem] text-[#171717]">
+              <h3 className="font-[600] text-[.9375rem] sm:text-[1rem] text-[#171717]">
                 Start a Conversation
               </h3>
-              <p className="text-[.75rem] text-[#A3A3A3] mt-0.5">
+              <p className="text-[.6875rem] sm:text-[.75rem] text-[#A3A3A3] mt-0.5">
                 {step === 1
                   ? "Step 1 of 2 — Find a user by email"
                   : "Step 2 of 2 — Write your message"}
@@ -153,7 +153,7 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
 
         {/* ── Step 1: Search by email ──────────────────────────────────────── */}
         {step === 1 && (
-          <div className="flex flex-col gap-4 px-6 py-5">
+          <div className="flex flex-col gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-5">
             {/* Search */}
             <div className="relative">
               <Icon
@@ -162,7 +162,7 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
               />
               <input
                 autoFocus
-                className="w-full pl-9 pr-4 py-[.625rem] border-[1.5px] border-[#D6D6D6] rounded-[9999px] text-[.875rem] text-[#2B2B2B] focus:outline-none focus:border-[#007FFF] transition-colors"
+                className="w-full pl-9 pr-4 py-[.625rem] border-[1.5px] border-[#D6D6D6] rounded-[9999px] text-[.8125rem] sm:text-[.875rem] text-[#2B2B2B] focus:outline-none focus:border-[#007FFF] transition-colors"
                 placeholder="Enter exact email address..."
                 value={query}
                 onChange={(e) => handleQueryChange(e.target.value)}
@@ -191,10 +191,10 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
                         />
                         <Initials name={name} size="sm" />
                         <div className="flex-1 min-w-0">
-                          <p className="text-[.875rem] font-[500] text-[#171717] truncate">
+                          <p className="text-[.8125rem] sm:text-[.875rem] font-[500] text-[#171717] truncate">
                             {name}
                           </p>
-                          <p className="text-[.75rem] text-[#757575] truncate">
+                          <p className="text-[.6875rem] sm:text-[.75rem] text-[#757575] truncate">
                             {student.email}
                           </p>
                         </div>
@@ -254,14 +254,14 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-end gap-3 pt-2 border-t border-[#F0F0F0]">
-              <Button variant="outlined" onClick={onClose} className="w-28">
+            <div className="flex flex-col sm:flex-row sm:justify-end gap-2 sm:gap-3 pt-2 border-t border-[#F0F0F0]">
+              <Button variant="outlined" onClick={onClose} className="w-full sm:w-auto justify-center">
                 Cancel
               </Button>
               <Button
                 onClick={() => setStep(2)}
                 disabled={!selected.length}
-                className="w-36"
+                className="w-full sm:w-auto justify-center"
               >
                 Continue
                 <Icon icon="hugeicons:arrow-right-01" className="w-4 h-4" />
@@ -272,7 +272,7 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
 
         {/* ── Step 2: Write message ────────────────────────────────────────── */}
         {step === 2 && (
-          <div className="flex flex-col flex-1 min-h-0 gap-4 px-6 py-5">
+          <div className="flex flex-col flex-1 min-h-0 gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-5">
             {/* Recipients */}
             <div className="flex flex-wrap gap-1.5">
               {selected.map((s) => (
@@ -321,18 +321,18 @@ function ComposeModal({ onClose }: { onClose: () => void }) {
             </p>
 
             {/* Footer */}
-            <div className="flex items-center justify-end gap-3 pt-2 border-t border-[#F0F0F0]">
+            <div className="flex flex-col sm:flex-row sm:justify-end gap-2 sm:gap-3 pt-2 border-t border-[#F0F0F0]">
               <Button
                 variant="outlined"
                 onClick={() => setStep(1)}
-                className="w-28"
+                className="w-full sm:w-auto justify-center"
               >
                 Back
               </Button>
               <Button
                 onClick={handleSend}
                 loading={isCreatingChatroom}
-                className="w-36"
+                className="w-full sm:w-auto justify-center"
               >
                 <Icon icon="hugeicons:sent" className="w-4 h-4" />
                 Send
@@ -368,12 +368,12 @@ function ChatroomRow({
     <Link
       href={`/student/messages/${room.id}`}
       style={{ boxShadow: CARD_SHADOW }}
-      className="p-5 rounded-[.5rem] flex items-center gap-4 hover:bg-[#FAFAFA] transition-colors"
+      className="p-2.5 sm:p-3 md:p-5 rounded-[.5rem] flex items-center gap-2.5 sm:gap-3 md:gap-4 hover:bg-[#FAFAFA] transition-colors"
     >
       <Initials name={name} />
 
       <div className="flex-1 min-w-0">
-        <span className="font-[500] text-[1rem] leading-6 block">{name}</span>
+        <span className="font-[500] text-[.9375rem] sm:text-[1rem] leading-6 block">{name}</span>
         {isTyping ? (
           <span className="flex items-center gap-1.5 h-5">
             <span className="flex items-center gap-[3px]">
@@ -385,12 +385,12 @@ function ChatroomRow({
                 />
               ))}
             </span>
-            <span className="text-[.8125rem] text-[#007FFF] font-[400]">
+            <span className="text-[.75rem] sm:text-[.8125rem] text-[#007FFF] font-[400]">
               Typing...
             </span>
           </span>
         ) : (
-          <span className="text-[#757575] font-[400] leading-5 text-[.875rem] truncate block">
+          <span className="text-[#757575] font-[400] leading-5 text-[.8125rem] sm:text-[.875rem] truncate block">
             {isMine ? <span className="text-[#A3A3A3]">You: </span> : null}
             {preview || (
               <span className="italic text-[#A3A3A3]">No messages yet</span>
@@ -399,8 +399,8 @@ function ChatroomRow({
         )}
       </div>
 
-      <div className="flex gap-2 flex-col items-end flex-shrink-0">
-        <span className="text-[#757575] font-[400] text-[.75rem] leading-5">
+      <div className="flex gap-1 sm:gap-2 flex-col items-end flex-shrink-0">
+        <span className="text-[#757575] font-[400] text-[.6875rem] sm:text-[.75rem] leading-5">
           {relativeTime(ts)}
         </span>
         {room.unreadCount > 0 && (
@@ -410,6 +410,34 @@ function ChatroomRow({
         )}
       </div>
     </Link>
+  );
+}
+
+// ─── Skeleton ─────────────────────────────────────────────────────────────────
+
+function ChatroomSkeleton() {
+  const previewWidths = ["60%", "75%", "50%", "70%", "55%"];
+  const nameWidths = ["8rem", "10rem", "7rem", "9rem", "11rem"];
+  return (
+    <div className="flex flex-col gap-3 animate-pulse">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          key={i}
+          style={{ boxShadow: CARD_SHADOW }}
+          className="p-2.5 sm:p-3 md:p-5 rounded-[.5rem] flex items-center gap-2.5 sm:gap-3 md:gap-4"
+        >
+          <div className="w-11 h-11 rounded-full bg-gray-200 flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            {/* name: text-[1rem] leading-6 = 24px */}
+            <div className="h-6 bg-gray-200 rounded" style={{ width: nameWidths[i] }} />
+            {/* preview: text-[.875rem] leading-5 = 20px, mt-0 (natural block stacking) */}
+            <div className="h-5 bg-gray-100 rounded mt-0.5" style={{ width: previewWidths[i] }} />
+          </div>
+          {/* timestamp: text-[.75rem] leading-5 = 20px */}
+          <div className="h-5 bg-gray-100 rounded w-8 flex-shrink-0" />
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -458,16 +486,27 @@ export default function Messages() {
   const lastRoom = chatrooms[chatrooms.length - 1];
 
   return (
-    <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
+    <section className="px-[.875rem] sm:px-[1.25rem] xl:px-[2rem] py-[1.25rem] mx-auto">
       {/* Page header */}
-      <div className="flex mb-8 flex-col xl:flex-row xl:items-center justify-between">
+      <div className="flex mb-6 sm:mb-8 items-start sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Messages</h1>
-          <p className="text-gray-500 text-sm mt-1">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">My Messages</h1>
+          <p className="text-gray-500 text-[.8125rem] sm:text-sm mt-1">
             Communicate with other users on iExcelo
           </p>
         </div>
-        <div className="flex items-center gap-3">
+
+        {/* Mobile: compact round icon button */}
+        <button
+          onClick={() => setShowCompose(true)}
+          aria-label="Compose message"
+          className="sm:hidden shrink-0 w-9 h-9 rounded-full bg-[#007FFF] flex items-center justify-center text-white hover:bg-[#0070e0] transition-colors mt-0.5"
+        >
+          <Icon icon="hugeicons:edit-02" className="w-4 h-4" />
+        </button>
+
+        {/* sm+: full labelled button */}
+        <div className="hidden sm:flex shrink-0">
           <Button onClick={() => setShowCompose(true)}>
             <Icon className="text-white w-4.5 h-4.5" icon="hugeicons:edit-02" />
             Compose Message
@@ -476,12 +515,12 @@ export default function Messages() {
       </div>
 
       {/* Info banner */}
-      <div className="flex mb-8 p-[.8125rem_1.5rem] rounded-[.625rem] border border-[#C2F1FF] bg-[#F1FCFF] gap-4 items-center text-[#41BCE2]">
+      <div className="flex mb-6 sm:mb-8 p-3 sm:p-[.8125rem_1.5rem] rounded-[.625rem] border border-[#C2F1FF] bg-[#F1FCFF] gap-2.5 sm:gap-4 items-start text-[#41BCE2]">
         <Icon
-          className="w-5 h-5 text-inherit"
+          className="w-4 h-4 sm:w-5 sm:h-5 text-inherit flex-shrink-0 mt-0.5"
           icon="hugeicons:information-circle"
         />
-        <span className="font-[400] text-[.875rem] leading-5">
+        <span className="font-[400] text-[.8125rem] sm:text-[.875rem] leading-5">
           You can flag any inappropriate message — our admin team will review it
           and take action where necessary.
         </span>
@@ -489,26 +528,26 @@ export default function Messages() {
 
       {/* Conversations card */}
       <section
-        className="p-6 rounded-[.75rem]"
+        className="p-3 sm:p-4 md:p-6 rounded-[.75rem]"
         style={{
           boxShadow: `0px 5px 22px 0px rgba(0,0,0,0.04), 0px 0px 0px 1px rgba(0,0,0,0.06)`,
         }}
       >
-        <div className="flex mb-6 items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <span className="font-[500] text-[#171717] text-[1.125rem] leading-7">
+        <div className="flex mb-4 sm:mb-6 items-center justify-between">
+          <div className="flex flex-col gap-0.5 sm:gap-1">
+            <span className="font-[500] text-[#171717] text-[1rem] sm:text-[1.125rem] leading-7">
               Messages{totalUnread > 0 ? ` (${totalUnread})` : ""}
             </span>
-            <span className="font-[400] text-[#757575] text-[.875rem] leading-5">
+            <span className="font-[400] text-[#757575] text-[.8125rem] sm:text-[.875rem] leading-5">
               Your conversation history
             </span>
           </div>
         </div>
 
         {/* Search */}
-        <div className="flex mb-6 items-stretch gap-4">
+        <div className="flex mb-4 sm:mb-6 items-stretch gap-4">
           <input
-            className="border-[1.5px] text-[.875rem] text-[#757575] font-[400] leading-5 p-[.625rem_.875rem] flex-1 border-[#D6D6D6] rounded-[9999px] focus:outline-none focus:border-[#007FFF] transition-colors"
+            className="border-[1.5px] text-[.8125rem] sm:text-[.875rem] text-[#757575] font-[400] leading-5 p-[.5rem_.75rem] sm:p-[.625rem_.875rem] flex-1 border-[#D6D6D6] rounded-[9999px] focus:outline-none focus:border-[#007FFF] transition-colors"
             placeholder="Search conversations..."
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
@@ -516,21 +555,16 @@ export default function Messages() {
         </div>
 
         {/* List */}
-        <div className="p-6 -m-6 max-h-150 overflow-y-auto flex flex-col gap-3">
+        <div className="p-3 sm:p-4 md:p-6 -m-3 sm:-m-4 md:-m-6 max-h-150 overflow-y-auto flex flex-col gap-3">
           {isLoadingChatrooms && chatrooms.length === 0 ? (
-            <div className="flex justify-center py-12">
-              <Icon
-                icon="svg-spinners:ring-resize"
-                className="w-8 h-8 text-[#007FFF]"
-              />
-            </div>
+            <ChatroomSkeleton />
           ) : chatrooms.length === 0 ? (
             <div className="flex flex-col items-center py-12 gap-3 text-[#A3A3A3]">
               <Icon
                 icon="hugeicons:bubble-chat-notification"
                 className="w-10 h-10"
               />
-              <p className="text-[.9375rem]">
+              <p className="text-[.875rem] sm:text-[.9375rem]">
                 {search
                   ? "No conversations match your search."
                   : "No conversations yet. Start one!"}
@@ -558,7 +592,7 @@ export default function Messages() {
                     )
                   }
                   disabled={isLoadingChatrooms}
-                  className="text-[.875rem] text-[#007FFF] font-[500] py-2 hover:underline disabled:opacity-50"
+                  className="text-[.8125rem] sm:text-[.875rem] text-[#007FFF] font-[500] py-2 hover:underline disabled:opacity-50"
                 >
                   {isLoadingChatrooms ? "Loading..." : "Load more"}
                 </button>

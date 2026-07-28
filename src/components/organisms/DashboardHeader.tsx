@@ -196,9 +196,9 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
   return (
     <>
-      <header className="h-16 border-b border-gray-100 bg-white flex items-center justify-between px-4 md:px-6">
+      <header className="h-16 border-b border-gray-100 bg-white flex items-center justify-between px-4 lg:px-6">
         <div className="flex items-center gap-4">
-          <button onClick={onMenuClick} className="md:hidden text-gray-600">
+          <button onClick={onMenuClick} className="lg:hidden text-gray-600">
             <Icon icon="hugeicons:menu-02" className="w-6 h-6" />
           </button>
           <button className="text-gray-500 hover:text-gray-700">

@@ -48,24 +48,39 @@ function notifIcon(type: INotification["type"]): string {
   }
 }
 
+function notifIconColor(type: INotification["type"]): string {
+  switch (type) {
+    case "new_message":
+    case "new_chatroom":
+      return "bg-[#DBEDFF] text-[#007FFF]";
+    case "giveback_activated":
+      return "bg-[#DCFCE7] text-[#099137]";
+    case "subscription_expiring":
+    case "subscription_expired":
+      return "bg-[#FEF3F2] text-[#D42620]";
+    case "exam_result":
+      return "bg-[#FFF5FA] text-[#A12161]";
+    default:
+      return "bg-[#F0F0F0] text-[#757575]";
+  }
+}
+
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 
 function NotificationSkeleton() {
   return (
-    <div
-      className="flex items-start gap-4 p-5 rounded-[.5rem] animate-pulse"
-      style={{
-        boxShadow: "0 0 0 1px rgba(0,0,0,0.06), 0 2px 8px 0 rgba(0,0,0,0.04)",
-      }}
-    >
-      <div className="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0" />
-      <div className="flex-1 min-w-0 flex flex-col gap-2">
-        <div className="flex items-center justify-between gap-2">
-          <div className="h-4 w-48 bg-gray-200 rounded-md" />
-          <div className="h-3 w-14 bg-gray-100 rounded-md flex-shrink-0" />
+    <div className="flex items-start gap-3 sm:gap-4 animate-pulse">
+      {/* matches w-9 h-9 sm:w-10 sm:h-10 + mt-0.5 on real icon */}
+      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-200 flex-shrink-0 mt-0.5" />
+      <div className="flex-1 min-w-0">
+        {/* title row: text-[.875rem] leading-snug ≈ 19px → h-5; timestamp text-[.6875rem] → h-3 */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="h-5 w-40 sm:w-48 bg-gray-200 rounded" />
+          <div className="h-3 w-10 sm:w-14 bg-gray-100 rounded flex-shrink-0 mt-1" />
         </div>
-        <div className="h-3 w-full bg-gray-100 rounded-md" />
-        <div className="h-3 w-3/5 bg-gray-100 rounded-md" />
+        {/* body: leading-5 (20px) per line, mt-0.5 from real <p> */}
+        <div className="h-5 w-full bg-gray-100 rounded mt-0.5" />
+        <div className="h-5 w-3/5 bg-gray-100 rounded" />
       </div>
     </div>
   );
@@ -91,25 +106,22 @@ function NotificationRow({
     <button
       onClick={handleClick}
       className={cn(
-        "w-full text-left flex items-start gap-4 p-5 rounded-[.5rem] transition-colors",
+        "w-full text-left flex items-start gap-3 sm:gap-4 px-4 sm:px-6 py-3 sm:py-4 transition-colors",
         !notification.isRead
-          ? "bg-[#F0F8FF] hover:bg-[#E8F4FF]"
+          ? "bg-[#F5F9FF] hover:bg-[#EBF4FF]"
           : "bg-white hover:bg-[#FAFAFA]",
       )}
-      style={{
-        boxShadow: "0 0 0 1px rgba(0,0,0,0.06), 0 2px 8px 0 rgba(0,0,0,0.04)",
-      }}
     >
       {/* Icon */}
       <div
         className={cn(
-          "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5",
+          "w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5",
           !notification.isRead
-            ? "bg-[#DBEDFF] text-[#007FFF]"
-            : "bg-[#F5F5F5] text-[#A3A3A3]",
+            ? notifIconColor(notification.type)
+            : "bg-[#F0F0F0] text-[#A3A3A3]",
         )}
       >
-        <Icon icon={notifIcon(notification.type)} className="w-5 h-5" />
+        <Icon icon={notifIcon(notification.type)} className="w-4 h-4 sm:w-5 sm:h-5" />
       </div>
 
       {/* Content */}
@@ -117,7 +129,7 @@ function NotificationRow({
         <div className="flex items-start justify-between gap-2">
           <p
             className={cn(
-              "text-[.9375rem] leading-5",
+              "text-[.875rem] sm:text-[.9375rem] leading-snug",
               !notification.isRead
                 ? "font-[600] text-[#171717]"
                 : "font-[400] text-[#2B2B2B]",
@@ -125,16 +137,16 @@ function NotificationRow({
           >
             {notification.title}
           </p>
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <span className="text-[.75rem] text-[#A3A3A3] whitespace-nowrap">
+          <div className="flex items-center gap-1.5 flex-shrink-0 mt-0.5">
+            <span className="text-[.6875rem] sm:text-[.75rem] text-[#A3A3A3] whitespace-nowrap">
               {relativeTime(notification.createdAt)}
             </span>
             {!notification.isRead && (
-              <span className="w-2 h-2 rounded-full bg-[#007FFF] flex-shrink-0 mt-1" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#007FFF] flex-shrink-0" />
             )}
           </div>
         </div>
-        <p className="text-[.875rem] text-[#757575] leading-5 mt-0.5">
+        <p className="text-[.8125rem] sm:text-[.875rem] text-[#757575] leading-5 mt-0.5 text-left">
           {notification.body}
         </p>
       </div>
@@ -169,76 +181,116 @@ export function NotificationsPage() {
   };
 
   return (
-    <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
+    <section className="px-[.875rem] sm:px-[1.25rem] xl:px-[2rem] py-[1.25rem] mx-auto">
       {/* Page header */}
-      <div className="flex mb-8 flex-col xl:flex-row xl:items-center justify-between gap-4">
+      <div className="flex mb-6 sm:mb-8 items-start sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl flex items-center font-bold gap-3 text-gray-900">
-            Notifications
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Notifications</h1>
             {unreadCount > 0 && (
-              <span className="flex items-center justify-center bg-[#E32E89] text-white text-[.75rem] font-[600] rounded-full w-6 h-6">
+              <span className="flex items-center justify-center bg-[#E32E89] text-white text-[.6875rem] font-[600] rounded-full min-w-[1.375rem] h-[1.375rem] px-1">
                 {unreadCount > 99 ? "99+" : unreadCount}
               </span>
             )}
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">
+          </div>
+          <p className="text-gray-500 text-[.8125rem] sm:text-sm mt-1">
             Your activity feed from iExcelo
           </p>
         </div>
+
         {unreadCount > 0 && (
-          <Button
-            variant="outlined"
-            onClick={markAllRead}
-            loading={isMarkingRead}
-          >
-            <Icon icon="hugeicons:tick-double-02" className="w-4 h-4" />
-            Mark all as read
-          </Button>
+          <>
+            {/* Mobile: compact icon button */}
+            <button
+              onClick={markAllRead}
+              disabled={isMarkingRead}
+              aria-label="Mark all as read"
+              className="sm:hidden shrink-0 w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-[#007FFF] hover:bg-gray-50 transition-colors mt-0.5 disabled:opacity-50"
+            >
+              {isMarkingRead ? (
+                <Icon icon="svg-spinners:ring-resize" className="w-4 h-4" />
+              ) : (
+                <Icon icon="hugeicons:tick-double-02" className="w-4 h-4" />
+              )}
+            </button>
+            {/* sm+: full labelled button */}
+            <div className="hidden sm:flex shrink-0">
+              <Button variant="outlined" onClick={markAllRead} loading={isMarkingRead}>
+                <Icon icon="hugeicons:tick-double-02" className="w-4 h-4" />
+                Mark all as read
+              </Button>
+            </div>
+          </>
         )}
       </div>
 
-      {/* List */}
-      <div className="flex flex-col gap-3">
-        {isLoadingNotifications && notifications.length === 0 ? (
-          <>
-            {Array.from({ length: 6 }).map((_, i) => (
-              <NotificationSkeleton key={i} />
-            ))}
-          </>
-        ) : notifications.length === 0 ? (
-          <div className="flex flex-col items-center py-16 gap-3 text-[#A3A3A3]">
-            <Icon icon="hugeicons:notification-01" className="w-10 h-10" />
-            <p className="text-[.9375rem]">No notifications yet</p>
+      {/* Content card */}
+      <div
+        className="bg-white rounded-[.75rem] overflow-hidden"
+        style={{
+          boxShadow:
+            "0px 5px 22px 0px rgba(0,0,0,0.04), 0px 0px 0px 1px rgba(0,0,0,0.06)",
+        }}
+      >
+        {/* Unread strip — only shown when there are unread items */}
+        {unreadCount > 0 && (
+          <div className="px-4 sm:px-6 py-2 sm:py-2.5 bg-[#F0F7FF] border-b border-[#DBEDFF] flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#007FFF] flex-shrink-0" />
+            <span className="text-[.75rem] sm:text-[.8125rem] text-[#007FFF] font-[500]">
+              {unreadCount} unread notification{unreadCount !== 1 ? "s" : ""}
+            </span>
           </div>
-        ) : (
-          <>
-            {notifications.map((n) => (
-              <NotificationRow key={n.id} notification={n} onMark={markRead} />
-            ))}
-
-            {hasMore && (
-              <div className="flex justify-center pt-2">
-                <button
-                  onClick={handleLoadMore}
-                  disabled={isLoadingNotifications}
-                  className="text-[.875rem] text-[#007FFF] font-[500] hover:underline disabled:opacity-50 py-2"
-                >
-                  {isLoadingNotifications ? (
-                    <span className="flex items-center gap-2">
-                      <Icon
-                        icon="svg-spinners:ring-resize"
-                        className="w-4 h-4"
-                      />
-                      Loading...
-                    </span>
-                  ) : (
-                    `Load more (${notificationsTotal - notifications.length} remaining)`
-                  )}
-                </button>
-              </div>
-            )}
-          </>
         )}
+
+        {/* List */}
+        <div className="flex flex-col divide-y divide-[#F5F5F5]">
+          {isLoadingNotifications && notifications.length === 0 ? (
+            <>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="px-4 sm:px-6 py-3 sm:py-4">
+                  <NotificationSkeleton />
+                </div>
+              ))}
+            </>
+          ) : notifications.length === 0 ? (
+            <div className="flex flex-col items-center py-14 sm:py-16 gap-3 text-[#A3A3A3]">
+              <div className="w-14 h-14 rounded-full bg-[#F5F5F5] flex items-center justify-center">
+                <Icon icon="hugeicons:notification-01" className="w-7 h-7" />
+              </div>
+              <div className="text-center">
+                <p className="text-[.9375rem] font-[500] text-[#757575]">All caught up!</p>
+                <p className="text-[.8125rem] sm:text-[.875rem] text-[#A3A3A3] mt-1">
+                  You have no notifications right now.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {notifications.map((n) => (
+                <NotificationRow key={n.id} notification={n} onMark={markRead} />
+              ))}
+
+              {hasMore && (
+                <div className="flex justify-center px-4 sm:px-6 py-4">
+                  <button
+                    onClick={handleLoadMore}
+                    disabled={isLoadingNotifications}
+                    className="text-[.8125rem] sm:text-[.875rem] text-[#007FFF] font-[500] hover:underline disabled:opacity-50 flex items-center gap-2"
+                  >
+                    {isLoadingNotifications ? (
+                      <>
+                        <Icon icon="svg-spinners:ring-resize" className="w-4 h-4" />
+                        Loading...
+                      </>
+                    ) : (
+                      `Load more (${notificationsTotal - notifications.length} remaining)`
+                    )}
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </section>
   );

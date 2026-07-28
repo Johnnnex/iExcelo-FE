@@ -388,15 +388,12 @@ export const useStudentStore = create<IStudentStore>()(
           const responseData = (res as any).data as {
             success: boolean;
             data?: {
-              url?: string;
               authorizationUrl?: string;
             };
           };
 
-          if (responseData?.success && responseData.data) {
-            const url =
-              responseData.data.url || responseData.data.authorizationUrl;
-            if (url) callback?.(url);
+          if (responseData?.success && responseData.data?.authorizationUrl) {
+            callback?.(responseData.data.authorizationUrl);
           }
 
           set({ isCheckingOut: false });

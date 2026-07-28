@@ -27,7 +27,7 @@ function formatDate(iso: string): string {
 
 function TopicDetailSkeleton() {
   return (
-    <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto max-w-3xl animate-pulse">
+    <section className="px-[.875rem] sm:px-[1.25rem] xl:px-[2rem] py-[1.25rem] mx-auto max-w-3xl animate-pulse">
       <div className="h-4 bg-gray-200 rounded w-28 mb-6" />
       <div className="rounded-2xl overflow-hidden mb-6" style={{ boxShadow: SHADOW }}>
         <div className="bg-gray-200 h-44 w-full" />
@@ -53,7 +53,7 @@ function TopicDetailSkeleton() {
 export default function TopicDetail() {
   const { topicId } = useParams<{ topicId: string }>();
   const { topicDetail, isLoadingTopicDetail, fetchTopicDetail } = useExamStore();
-  useExamProtection();
+  useExamProtection(true, false);
 
   useEffect(() => {
     if (topicId) fetchTopicDetail(topicId);
@@ -64,7 +64,7 @@ export default function TopicDetail() {
 
   if (!topicDetail) {
     return (
-      <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto max-w-3xl">
+      <section className="px-[.875rem] sm:px-[1.25rem] xl:px-[2rem] py-[1.25rem] mx-auto max-w-3xl">
         <p className="text-gray-400 text-center py-16">Topic not found.</p>
       </section>
     );
@@ -73,7 +73,7 @@ export default function TopicDetail() {
   const readingTime = estimateReadingTime(topicDetail.content);
 
   return (
-    <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto max-w-3xl">
+    <section className="px-[.875rem] sm:px-[1.25rem] xl:px-[2rem] py-[1.25rem] mx-auto max-w-3xl">
       {/* Back link */}
       <Link
         href="/student/topics"
@@ -113,14 +113,7 @@ export default function TopicDetail() {
 
         {/* Meta strip */}
         <div className="bg-white px-6 py-3.5 md:px-10 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-gray-100">
-          {topicDetail.subjectName && (
-            <span className="flex items-center gap-1.5 text-xs font-semibold text-[#007FFF]">
-              <Icon icon="hugeicons:book-open-01" className="w-3.5 h-3.5" />
-              {topicDetail.subjectName}
-            </span>
-          )}
-          <span className="text-gray-200 text-xs select-none">|</span>
-          {topicDetail.createdAt && (
+              {topicDetail.createdAt && (
             <span className="flex items-center gap-1.5 text-xs text-gray-500">
               <Icon icon="hugeicons:calendar-add-01" className="w-3.5 h-3.5 text-gray-400" />
               Created {formatDate(topicDetail.createdAt)}

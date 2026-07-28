@@ -99,12 +99,12 @@ const Earnings = () => {
 
   return (
     <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
-      <section className="mb-8 flex items-start justify-between gap-4 flex-wrap">
+      <section className="mb-6 sm:mb-8 flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="text-2xl font-[600] text-[#171717]">
+          <h1 className="text-[1.125rem] sm:text-xl md:text-2xl font-[600] text-[#171717]">
             Earnings Tracking
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-gray-500 text-[.8125rem] sm:text-sm mt-1">
             Monitor your referral commission and financial performance
           </p>
         </div>
@@ -129,12 +129,12 @@ const Earnings = () => {
 
       {/* Nudge — only shown when student hasn't subscribed yet */}
       {!hasEverSubscribed && (
-        <div className="mb-6 flex items-center gap-3 p-4 bg-[#FFF9ED] border border-[#F3A218] rounded-[.75rem]">
+        <div className="mb-6 flex items-start gap-3 p-3 sm:p-4 bg-[#FFF9ED] border border-[#F3A218] rounded-[.75rem]">
           <Icon
             icon="hugeicons:star-01"
-            className="w-5 h-5 text-[#F3A218] shrink-0"
+            className="w-4 h-4 sm:w-5 sm:h-5 text-[#F3A218] shrink-0 mt-0.5"
           />
-          <p className="text-[.875rem] text-[#2B2B2B]">
+          <p className="text-[.8125rem] sm:text-[.875rem] text-[#2B2B2B]">
             You can already invite friends! Once you{" "}
             <strong>subscribe to any plan</strong>, every successful referral
             starts earning you a 15% commission.
@@ -150,31 +150,31 @@ const Earnings = () => {
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="p-6 min-h-65 flex justify-between flex-col rounded-[.75rem]"
+          className="p-4 sm:p-6 min-h-[unset] sm:min-h-65 flex justify-between flex-col rounded-[.75rem] gap-6 sm:gap-0"
         >
           <div>
-            <span className="text-[#D6D6D6] leading-7 font-[500] text-[1.125rem]">
+            <span className="text-[#D6D6D6] leading-6 sm:leading-7 font-[500] text-[.9375rem] sm:text-[1.125rem]">
               Wallet Balance
             </span>
-            <h3 className="tracking-[-.8px] mt-1 leading-12 font-[600] text-[2.5rem] text-white">
+            <h3 className="tracking-[-.8px] mt-1 leading-10 sm:leading-12 font-[600] text-[2rem] sm:text-[2.5rem] text-white">
               {isLoadingDashboard
                 ? "..."
                 : `${currencySymbol}${(dashboard?.pendingBalance ?? 0).toLocaleString()}`}
             </h3>
           </div>
-          <div className="flex flex-col gap-[1rem]">
+          <div className="flex flex-col gap-[.75rem] sm:gap-[1rem]">
             <button
               onClick={() => setShowWithdrawModal(true)}
-              className="w-full text-[1rem] font-[600] leading-6 text-black flex justify-center items-center gap-[.5rem] p-3 rounded-[.5rem] bg-white hover:bg-[#F2F4F7] transition-colors"
+              className="w-full text-[.875rem] sm:text-[1rem] font-[600] leading-6 text-black flex justify-center items-center gap-[.5rem] p-2.5 sm:p-3 rounded-[.5rem] bg-white hover:bg-[#F2F4F7] transition-colors"
             >
-              <Icon className="text-inherit w-6 h-6" icon="hugeicons:money-04" />
+              <Icon className="text-inherit w-5 h-5 sm:w-6 sm:h-6" icon="hugeicons:money-04" />
               Withdraw
             </button>
             <Link
               href="/student/settings/payouts"
-              className="flex text-white text-[1rem] font-[600] leading-6 gap-[.5rem] items-center w-fit mx-auto hover:underline"
+              className="flex text-white text-[.875rem] sm:text-[1rem] font-[600] leading-6 gap-[.5rem] items-center w-fit mx-auto hover:underline"
             >
-              <Icon className="h-6 w-6" icon="hugeicons:plus-sign-circle" />
+              <Icon className="h-5 w-5 sm:h-6 sm:w-6" icon="hugeicons:plus-sign-circle" />
               Add payout account
             </Link>
           </div>
@@ -199,10 +199,10 @@ const Earnings = () => {
                 className={"text-[#099137]"}
               />
             </div>
-            <p className="text-[#575757] text-sm mb-1">
+            <p className="text-[#575757] text-[.8125rem] sm:text-sm mb-1">
               Lifetime Commission Earned
             </p>
-            <p className="text-[1.75rem] mb-4 leading-[2.25rem] font-[500] text-[#2B2B2B]">
+            <p className="text-[1.375rem] sm:text-[1.75rem] mb-3 sm:mb-4 leading-8 sm:leading-[2.25rem] font-[500] text-[#2B2B2B]">
               {isLoadingDashboard
                 ? "..."
                 : `${currencySymbol}${(dashboard?.totalEarnings ?? 0).toLocaleString()}`}
@@ -273,12 +273,12 @@ const Earnings = () => {
         }}
         className="bg-white rounded-xl p-4 border border-[#D6D6D6]"
       >
-        <div className="flex items-center px-[.5rem] justify-between mb-6">
+        <div className="flex items-center px-[.5rem] justify-between mb-4 sm:mb-6">
           <div>
-            <h3 className="font-[500] leading-7 text-[1.125rem] text-gray-900">
+            <h3 className="font-[500] leading-6 sm:leading-7 text-[1rem] sm:text-[1.125rem] text-gray-900">
               Earnings Performance
             </h3>
-            <p className="text-[#757575] text-[.875rem] font-[400] leading-5">
+            <p className="text-[#757575] text-[.8125rem] sm:text-[.875rem] font-[400] leading-5">
               {activeOption.hint} — {currencySymbol} earnings
             </p>
           </div>
@@ -315,7 +315,7 @@ const Earnings = () => {
             )}
           </div>
         </div>
-        <div className="h-[400px] relative">
+        <div className="h-[260px] sm:h-[340px] md:h-[400px] relative">
           {isChartLoading ? (
             <div className="flex items-center justify-center h-full">
               <Icon
@@ -363,10 +363,10 @@ const Earnings = () => {
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="xl:w-[59%] w-full flex flex-col max-h-129.5 bg-white rounded-[.75rem] p-[2rem_1.5rem]"
+          className="xl:w-[59%] w-full flex flex-col max-h-129.5 bg-white rounded-[.75rem] p-[1rem_1rem] sm:p-[1.5rem_1.25rem] md:p-[2rem_1.5rem]"
         >
-          <div className="flex justify-between items-center mb-8.5">
-            <h4 className="text-[1.125rem] font-[500] leading-7">
+          <div className="flex justify-between items-center mb-5 sm:mb-8.5">
+            <h4 className="text-[1rem] sm:text-[1.125rem] font-[500] leading-7">
               Withdrawal History
             </h4>
           </div>
@@ -390,18 +390,18 @@ const Earnings = () => {
               payouts.map((payout) => (
                 <div
                   key={payout.id}
-                  className="p-4 bg-white border h-fit w-full border-[#DCDFE4] rounded-[.625rem] flex justify-between"
+                  className="p-3 sm:p-4 bg-white border h-fit w-full border-[#DCDFE4] rounded-[.625rem] flex justify-between gap-2"
                 >
                   <div className="flex flex-col justify-between gap-[.25rem]">
-                    <span className="font-[600] text-[1rem] leading-6">
+                    <span className="font-[600] text-[.875rem] sm:text-[1rem] leading-5 sm:leading-6">
                       {payout.id.slice(0, 14).toUpperCase()}
                     </span>
-                    <span className="text-[.875rem] font-[400] leading-5">
+                    <span className="text-[.8125rem] sm:text-[.875rem] font-[400] leading-5">
                       {new Date(payout.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                   <div className="flex flex-col justify-between items-end gap-[.25rem]">
-                    <span className="leading-7 text-[1.125rem] font-[600] text-[#2B2B2B]">
+                    <span className="leading-6 sm:leading-7 text-[1rem] sm:text-[1.125rem] font-[600] text-[#2B2B2B]">
                       {currencySymbol}
                       {payout.amount.toLocaleString()}
                     </span>
@@ -445,13 +445,13 @@ const Earnings = () => {
             boxShadow:
               "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
           }}
-          className="xl:w-[39%] w-full border border-[#D6D6D6] flex flex-col bg-white rounded-[.75rem] p-[2rem_1.5rem]"
+          className="xl:w-[39%] w-full border border-[#D6D6D6] flex flex-col bg-white rounded-[.75rem] p-[1rem_1rem] sm:p-[1.5rem_1.25rem] md:p-[2rem_1.5rem]"
         >
-          <div className="flex flex-col">
-            <span className="text-[1.125rem] font-[500] leading-7">
+          <div className="flex flex-col mb-1">
+            <span className="text-[1rem] sm:text-[1.125rem] font-[500] leading-7">
               Earnings by Package
             </span>
-            <span className="leading-5 text-[.875rem] text-[#757575] font-[400]">
+            <span className="leading-5 text-[.8125rem] sm:text-[.875rem] text-[#757575] font-[400]">
               Commission breakdown by student package type
             </span>
           </div>

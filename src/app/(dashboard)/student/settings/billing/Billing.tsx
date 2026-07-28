@@ -156,8 +156,14 @@ function SubscriptionRow({
 }) {
   const status =
     SUB_STATUS[(sub.status ?? "").toLowerCase()] ?? SUB_STATUS.cancelled;
+  // Stripe subs: Customer Portal shows/manages card — no need for stored cardLast4.
+  // Paystack subs: button only if we have cardLast4 (Paystack has no web portal).
+  const isStripe = sub.paymentProvider === "stripe";
   const showManageCard =
-    sub.status === "active" && sub.autoRenew && !sub.isSponsored && !!sub.cardLast4;
+    sub.status === "active" &&
+    sub.autoRenew &&
+    !sub.isSponsored &&
+    (isStripe || !!sub.cardLast4);
 
   return (
     <div className="flex flex-col gap-4">
@@ -243,6 +249,21 @@ function SubscriptionRow({
                 Manage Card
               </Button>
             )}
+          </div>
+        </>
+      ) : showManageCard ? (
+        /* Stripe sub: no card info stored locally, but Customer Portal manages it */
+        <>
+          <div className="border-t border-[#F2F4F7]" />
+          <div className="flex justify-end">
+            <Button
+              onClick={() => onManageCard(sub.examTypeId)}
+              loading={managing === sub.examTypeId}
+              disabled={!!managing}
+              className="bg-white! text-[#344054]! border border-[#D0D5DD] hover:bg-[#F9FAFB]! text-[.8125rem]"
+            >
+              Manage Card
+            </Button>
           </div>
         </>
       ) : null}

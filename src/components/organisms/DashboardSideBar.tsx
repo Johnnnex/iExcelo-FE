@@ -150,7 +150,7 @@ export function DashboardSideBar({
     <>
       <div
         className={cn(
-          "fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity",
+          "fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity",
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={onClose}
@@ -159,7 +159,7 @@ export function DashboardSideBar({
       <aside
         className={cn(
           "flex flex-col w-[272px] bg-[#00356B] text-white z-50 transition-transform duration-300",
-          "md:relative md:translate-x-0 md:min-h-screen",
+          "lg:relative lg:translate-x-0 lg:min-h-screen",
           "fixed left-0 top-0 bottom-0",
           isOpen ? "translate-x-0" : "-translate-x-full",
         )}
@@ -172,7 +172,7 @@ export function DashboardSideBar({
             </div>
             <button
               onClick={onClose}
-              className="text-white/80 hover:text-white md:hidden"
+              className="text-white/80 hover:text-white lg:hidden"
             >
               <Icon icon="hugeicons:cancel-01" className="w-6 h-6" />
             </button>

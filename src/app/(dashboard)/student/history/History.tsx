@@ -42,9 +42,9 @@ const History = () => {
 
   return (
     <section className="xl:px-[2rem] px-[.875rem] py-[1.25rem] mx-auto">
-      <div className="mb-8">
-        <h1 className="text-2xl font-[600] text-[#171717]">Exam History</h1>
-        <p className="text-gray-500 text-sm mt-1">
+      <div className="mb-5 sm:mb-8">
+        <h1 className="text-xl sm:text-2xl font-[600] text-[#171717]">Exam History</h1>
+        <p className="text-gray-500 text-xs sm:text-sm mt-1">
           Review your past exam attempts and track your progress over time
         </p>
       </div>
@@ -77,6 +77,7 @@ const History = () => {
           "Time Used",
           {
             title: "Action",
+            isHead: true,
             customTableBody: (id: string) => (
               <Link
                 href={`/student/history/${id}`}

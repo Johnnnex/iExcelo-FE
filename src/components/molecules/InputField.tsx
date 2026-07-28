@@ -15,6 +15,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 import { defaultCountries, parseCountry } from "react-international-phone";
 import Select, {
   ClearIndicatorProps,
@@ -35,21 +36,35 @@ import { useUtilsStore } from "@/store";
 // ── Tel: country data ─────────────────────────────────────────────────────────
 
 function telFlagEmoji(iso2: string): string {
-  return iso2.toUpperCase().replace(/./g, (ch) => String.fromCodePoint(ch.charCodeAt(0) + 127397));
+  return iso2
+    .toUpperCase()
+    .replace(/./g, (ch) => String.fromCodePoint(ch.charCodeAt(0) + 127397));
 }
 
-type CountryTelOption = { value: string; dialCode: string; name: string; flag: string };
+type CountryTelOption = {
+  value: string;
+  dialCode: string;
+  name: string;
+  flag: string;
+};
 
 const COUNTRY_TEL_OPTIONS: CountryTelOption[] = defaultCountries.map((raw) => {
   const { iso2, dialCode, name } = parseCountry(raw);
   return { value: iso2, dialCode, name, flag: telFlagEmoji(iso2) };
 });
 
-const DEFAULT_TEL_COUNTRY = COUNTRY_TEL_OPTIONS.find((c) => c.value === "ng") ?? COUNTRY_TEL_OPTIONS[0];
+const DEFAULT_TEL_COUNTRY =
+  COUNTRY_TEL_OPTIONS.find((c) => c.value === "ng") ?? COUNTRY_TEL_OPTIONS[0];
 
-function parseInitialTel(value: string | undefined, defaultIso2: string): { iso2: string; number: string } {
-  if (!value || !value.startsWith("+")) return { iso2: defaultIso2, number: value ?? "" };
-  const match = COUNTRY_TEL_OPTIONS.find((c) => value.startsWith(`+${c.dialCode}`));
+function parseInitialTel(
+  value: string | undefined,
+  defaultIso2: string,
+): { iso2: string; number: string } {
+  if (!value || !value.startsWith("+"))
+    return { iso2: defaultIso2, number: value ?? "" };
+  const match = COUNTRY_TEL_OPTIONS.find((c) =>
+    value.startsWith(`+${c.dialCode}`),
+  );
   if (!match) return { iso2: defaultIso2, number: value };
   return { iso2: match.value, number: value.slice(match.dialCode.length + 1) };
 }
@@ -62,7 +77,11 @@ type TelCountrySelectProps = {
   disabled?: boolean;
 };
 
-const TelCountrySelect: FC<TelCountrySelectProps> = ({ selected, onChange, disabled }) => {
+const TelCountrySelect: FC<TelCountrySelectProps> = ({
+  selected,
+  onChange,
+  disabled,
+}) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [dropStyle, setDropStyle] = useState<React.CSSProperties>({});
@@ -74,24 +93,42 @@ const TelCountrySelect: FC<TelCountrySelectProps> = ({ selected, onChange, disab
     const q = search.toLowerCase().trim();
     if (!q) return COUNTRY_TEL_OPTIONS;
     return COUNTRY_TEL_OPTIONS.filter(
-      (c) => c.name.toLowerCase().includes(q) || c.dialCode.includes(q) || c.value.includes(q),
+      (c) =>
+        c.name.toLowerCase().includes(q) ||
+        c.dialCode.includes(q) ||
+        c.value.includes(q),
     );
   }, [search]);
 
   const openDropdown = () => {
     if (disabled || !btnRef.current) return;
     const rect = btnRef.current.getBoundingClientRect();
-    setDropStyle({ position: "fixed", top: rect.bottom + 4, left: rect.left, width: 268, zIndex: 9999 });
+    const dropWidth = Math.min(268, window.innerWidth - 16);
+    const left = Math.min(rect.left, window.innerWidth - dropWidth - 8);
+    setDropStyle({
+      position: "fixed",
+      top: rect.bottom + 4,
+      left,
+      width: dropWidth,
+      zIndex: 9999,
+    });
     setOpen(true);
     setTimeout(() => searchRef.current?.focus(), 40);
   };
 
-  const closeDropdown = () => { setOpen(false); setSearch(""); };
+  const closeDropdown = () => {
+    setOpen(false);
+    setSearch("");
+  };
 
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
-      if (btnRef.current?.contains(e.target as Node) || dropRef.current?.contains(e.target as Node)) return;
+      if (
+        btnRef.current?.contains(e.target as Node) ||
+        dropRef.current?.contains(e.target as Node)
+      )
+        return;
       closeDropdown();
     };
     document.addEventListener("mousedown", handler);
@@ -100,77 +137,113 @@ const TelCountrySelect: FC<TelCountrySelectProps> = ({ selected, onChange, disab
 
   useEffect(() => {
     if (!open) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") closeDropdown(); };
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeDropdown();
+    };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, [open]);
 
+  const dropdown = open ? (
+    <div
+      ref={dropRef}
+      style={dropStyle}
+      className="bg-white rounded-[.5rem] border border-[#EAECF0] shadow-[0px_12px_16px_-4px_rgba(16,24,40,0.08),0px_4px_6px_-2px_rgba(16,24,40,0.03)] overflow-hidden"
+    >
+      <div className="px-2.5 pt-2.5 pb-2">
+        <div className="flex items-center gap-2 border border-[#E5E7EB] rounded-[.5rem] px-2.5 py-1.5 bg-white focus-within:border-[#007FFF] transition-colors">
+          <Icon
+            icon="mynaui:search"
+            className="w-3.5 h-3.5 text-[#9CA3AF] shrink-0"
+          />
+          <input
+            ref={searchRef}
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search country…"
+            className="flex-1 min-w-0 border-none! bg-transparent outline-none text-[.8125rem] text-black placeholder:text-[#9CA3AF]"
+          />
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch("")}
+              className="text-[#9CA3AF] hover:text-black transition-colors"
+            >
+              <Icon icon="mdi:close" className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+      </div>
+      <ul className="overflow-y-auto max-h-52 px-1.5 pb-1.5">
+        {filtered.length === 0 && (
+          <li className="text-[.8125rem] text-[#9CA3AF] px-2 py-3 text-center">
+            No countries found
+          </li>
+        )}
+        {filtered.map((c) => {
+          const isSelected = selected.value === c.value;
+          return (
+            <li key={c.value} className="mb-0.5">
+              <button
+                type="button"
+                onClick={() => {
+                  onChange(c);
+                  closeDropdown();
+                }}
+                className={`w-full flex items-center gap-2.5 rounded-md px-2 py-[0.4375rem] text-[.875rem] font-normal text-left cursor-pointer transition-colors hover:bg-[#F9FAFB] ${isSelected ? "bg-[#F0F7FF]" : ""}`}
+              >
+                <span className="text-[1.125rem] leading-none shrink-0">
+                  {c.flag}
+                </span>
+                <span className="flex-1 text-[#101828] truncate">
+                  {c.name}
+                </span>
+                <span className="text-[#9CA3AF] text-[.8125rem] tabular-nums shrink-0">
+                  +{c.dialCode}
+                </span>
+                {isSelected && (
+                  <Icon
+                    icon="lucide:check"
+                    color="#007FFF"
+                    width=".875rem"
+                    height=".875rem"
+                    className="shrink-0"
+                  />
+                )}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ) : null;
+
   return (
-    <div className="relative h-full shrink-0">
+    <div className="relative h-full w-[33%] max-w-[8rem] shrink-0 min-w-0 overflow-hidden">
       <button
         ref={btnRef}
         type="button"
         disabled={disabled}
         onClick={open ? closeDropdown : openDropdown}
-        className={`flex items-center gap-1.5 h-full pl-3 pr-2 w-[7.5rem] border-r border-[#D0D5DD] bg-transparent text-[.875rem] text-[#667085] cursor-pointer hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors focus:outline-none ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+        className={`flex items-center gap-1.5 h-full w-full pl-3 pr-2 border-r border-[#D0D5DD] bg-transparent text-[.875rem] text-[#667085] cursor-pointer hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors focus:outline-none ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
       >
-        <span className="text-[1rem] leading-none shrink-0">{selected.flag}</span>
-        <span className="tabular-nums flex-1 text-left text-[.8125rem]">+{selected.dialCode}</span>
+        <span className="text-[1rem] leading-none shrink-0">
+          {selected.flag}
+        </span>
+        <span className="tabular-nums flex-1 text-left text-[.8125rem] truncate">
+          +{selected.dialCode}
+        </span>
         <Icon
           icon="hugeicons:arrow-up-01"
           className="w-[1rem] h-[1rem] text-[#D0D5DD] shrink-0"
-          style={{ transition: "transform .3s", transform: open ? "rotate(0deg)" : "rotate(180deg)" }}
+          style={{
+            transition: "transform .3s",
+            transform: open ? "rotate(0deg)" : "rotate(180deg)",
+          }}
         />
       </button>
-
-      {open && (
-        <div
-          ref={dropRef}
-          style={dropStyle}
-          className="bg-white rounded-[.5rem] border border-[#EAECF0] shadow-[0px_12px_16px_-4px_rgba(16,24,40,0.08),0px_4px_6px_-2px_rgba(16,24,40,0.03)] overflow-hidden"
-        >
-          <div className="px-2.5 pt-2.5 pb-2">
-            <div className="flex items-center gap-2 border border-[#E5E7EB] rounded-[.5rem] px-2.5 py-1.5 bg-white focus-within:border-[#007FFF] transition-colors">
-              <Icon icon="mynaui:search" className="w-3.5 h-3.5 text-[#9CA3AF] shrink-0" />
-              <input
-                ref={searchRef}
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search country…"
-                className="flex-1 min-w-0 border-none! bg-transparent outline-none text-[.8125rem] text-black placeholder:text-[#9CA3AF]"
-              />
-              {search && (
-                <button type="button" onClick={() => setSearch("")} className="text-[#9CA3AF] hover:text-black transition-colors">
-                  <Icon icon="mdi:close" className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-          </div>
-          <ul className="overflow-y-auto max-h-52 px-1.5 pb-1.5">
-            {filtered.length === 0 && (
-              <li className="text-[.8125rem] text-[#9CA3AF] px-2 py-3 text-center">No countries found</li>
-            )}
-            {filtered.map((c) => {
-              const isSelected = selected.value === c.value;
-              return (
-                <li key={c.value} className="mb-0.5">
-                  <button
-                    type="button"
-                    onClick={() => { onChange(c); closeDropdown(); }}
-                    className={`w-full flex items-center gap-2.5 rounded-md px-2 py-[0.4375rem] text-[.875rem] font-normal text-left cursor-pointer transition-colors hover:bg-[#F9FAFB] ${isSelected ? "bg-[#F0F7FF]" : ""}`}
-                  >
-                    <span className="text-[1.125rem] leading-none shrink-0">{c.flag}</span>
-                    <span className="flex-1 text-[#101828] truncate">{c.name}</span>
-                    <span className="text-[#9CA3AF] text-[.8125rem] tabular-nums shrink-0">+{c.dialCode}</span>
-                    {isSelected && <Icon icon="lucide:check" color="#007FFF" width=".875rem" height=".875rem" className="shrink-0" />}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
+      {typeof window !== "undefined" && createPortal(dropdown, document.body)}
     </div>
   );
 };
@@ -186,10 +259,18 @@ type TelInputRenderProps = {
   error?: string;
 };
 
-const TelInputRender: FC<TelInputRenderProps> = ({ name, value, onChange, placeholder, disabled, error }) => {
+const TelInputRender: FC<TelInputRenderProps> = ({
+  name,
+  value,
+  onChange,
+  placeholder,
+  disabled,
+  error,
+}) => {
   const parsed = parseInitialTel(value, DEFAULT_TEL_COUNTRY.value);
   const [country, setCountry] = useState<CountryTelOption>(
-    COUNTRY_TEL_OPTIONS.find((c) => c.value === parsed.iso2) ?? DEFAULT_TEL_COUNTRY,
+    COUNTRY_TEL_OPTIONS.find((c) => c.value === parsed.iso2) ??
+      DEFAULT_TEL_COUNTRY,
   );
   const [rawNumber, setRawNumber] = useState(parsed.number);
 
@@ -197,7 +278,10 @@ const TelInputRender: FC<TelInputRenderProps> = ({ name, value, onChange, placeh
     onChange?.({ target: { name, value: num ? `+${c.dialCode}${num}` : "" } });
   };
 
-  const handleCountryChange = (c: CountryTelOption) => { setCountry(c); emit(c, rawNumber); };
+  const handleCountryChange = (c: CountryTelOption) => {
+    setCountry(c);
+    emit(c, rawNumber);
+  };
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRawNumber(e.target.value);
     emit(country, e.target.value);
@@ -206,10 +290,16 @@ const TelInputRender: FC<TelInputRenderProps> = ({ name, value, onChange, placeh
   return (
     <div
       className={`border outline-none transition-all duration-[.4s] ${
-        error ? "border-[#FDA29B]" : "border-[#D0D5DD] focus-within:border-[#007FFF]"
+        error
+          ? "border-[#FDA29B]"
+          : "border-[#D0D5DD] focus-within:border-[#007FFF]"
       } flex h-[2.75rem] w-full overflow-hidden rounded-[.5rem] bg-white`}
     >
-      <TelCountrySelect selected={country} onChange={handleCountryChange} disabled={disabled} />
+      <TelCountrySelect
+        selected={country}
+        onChange={handleCountryChange}
+        disabled={disabled}
+      />
       <input
         type="tel"
         name={name}
@@ -396,12 +486,13 @@ const CustomValueContainer: FC<
       setShowEllipsis(overflowing);
       el.scrollLeft = el.scrollWidth - el.clientWidth;
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count, props.isMulti]);
 
   if (!props.isMulti)
     return (
-      <components.ValueContainer {...props}>{children}</components.ValueContainer>
+      <components.ValueContainer {...props}>
+        {children}
+      </components.ValueContainer>
     );
 
   return (
@@ -452,7 +543,8 @@ const InputField = memo(
         onChange,
         selectOptions,
         disabled,
-        telProps,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        telProps: _telProps,
         richTextProps,
         onBlur,
         ...rest
@@ -724,7 +816,11 @@ const InputField = memo(
                 <TelInputRender
                   name={name}
                   value={value as string}
-                  onChange={onChange as (e: { target: { name?: string; value: string } }) => void}
+                  onChange={
+                    onChange as (e: {
+                      target: { name?: string; value: string };
+                    }) => void
+                  }
                   placeholder={placeholder}
                   disabled={!!disabled}
                   error={error}

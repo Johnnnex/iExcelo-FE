@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   Calculator,
@@ -43,13 +43,30 @@ function MockSkeleton() {
     <section className="bg-white p-4 md:p-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-pulse">
-          <div className="lg:col-span-2 space-y-6 pb-8">
-            <div className="rounded-[1.5rem] bg-gray-100 h-24" />
-            <div className="rounded-[1rem] bg-gray-100 h-96" />
+          <div className="lg:col-span-2 pb-8">
+            <div
+              style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.06), 0 5px 22px 0 rgba(0,0,0,0.04)" }}
+              className="bg-white rounded-[1.5rem] p-3 sm:p-4 md:p-6 space-y-6"
+            >
+              <div className="rounded-[1rem] bg-[#007FFF]/10 h-[6rem]" />
+              <div className="rounded-[1rem] bg-gray-100 h-72 sm:h-96" />
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                <div className="flex gap-2">
+                  <div className="h-10 flex-1 sm:flex-none sm:w-24 bg-gray-100 rounded-lg" />
+                </div>
+                <div className="flex">
+                  <div className="h-10 flex-1 sm:flex-none sm:w-32 bg-gray-200 rounded-lg" />
+                </div>
+              </div>
+              <div className="flex gap-2 lg:hidden">
+                <div className="flex-1 h-10 bg-gray-100 rounded-xl" />
+                <div className="flex-1 h-10 bg-gray-100 rounded-xl" />
+              </div>
+            </div>
           </div>
           <div className="hidden lg:flex flex-col gap-4">
-            <div className="rounded-[1.5rem] bg-gray-100 h-80" />
-            <div className="rounded-[2rem] bg-gray-100 h-96" />
+            <div className="rounded-[1.5rem] bg-gray-100 h-64" />
+            <div className="rounded-[2rem] bg-gray-100 h-[26rem]" />
           </div>
         </div>
       </div>
@@ -84,14 +101,18 @@ export default function Mock() {
     new Set(),
   );
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
-  const [showNavigation, setShowNavigation] = useState(true);
+  const [showNavigation, setShowNavigation] = useState(false);
+  const [showCalculatorModal, setShowCalculatorModal] = useState(false);
+  const navDragStartY = useRef(0);
+  const [navDragY, setNavDragY] = useState(0);
+  const isNavigatingAway = useRef(false);
   const [isNavigationMinimized, setIsNavigationMinimized] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [showInstructions, setShowInstructions] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  useExamProtection(!showResults);
-  const { showLeaveModal, dismissLeaveModal } = useExamLeaveGuard(!showResults);
+  useExamProtection(!showResults && !showInstructions);
+  const { showLeaveModal, dismissLeaveModal } = useExamLeaveGuard(!showResults && !showInstructions);
 
   // Seed flaggedQuestions from previously flagged IDs when session loads
   useEffect(() => {
@@ -164,7 +185,7 @@ export default function Mock() {
   }, [!!pendingConfig, !!examSession]);
 
   // Session guard — must come AFTER all hooks
-  if (!pendingConfig && !examSession) {
+  if (!isNavigatingAway.current && !pendingConfig && !examSession) {
     return <MockSkeleton />;
   }
 
@@ -243,8 +264,9 @@ export default function Mock() {
   const handleReturnToAttempt = () => setShowReview(false);
 
   const handleReturnToMain = () => {
-    router.push("/student/exams");
+    isNavigatingAway.current = true;
     clearSession();
+    router.push("/student/exams");
   };
 
   const formatTime = (seconds: number) => {
@@ -334,7 +356,7 @@ export default function Mock() {
               </div>
             </div>
 
-            <div className="grid grid-cols-8 gap-2 mb-6">
+            <div className="flex flex-wrap gap-2 mb-6">
               {Array.from({ length: totalQuestions }, (_, i) => i + 1).map(
                 (num) => (
                   <div key={num} className="relative">
@@ -400,39 +422,59 @@ export default function Mock() {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left — summary area */}
-              <div className="lg:col-span-2 space-y-12 pb-8">
+              <div className="lg:col-span-2 pb-8">
                 <div
                   style={{
                     boxShadow:
                       "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
                   }}
-                  className="bg-white rounded-[1.5rem]"
+                  className="bg-white rounded-[1.5rem] overflow-hidden"
                 >
                   {/* Header */}
-                  <div className="p-6 flex flex-col gap-2 text-[#2B2B2B] border-b border-[#EDEDED]">
-                    <span className="tracking-[-.4px] leading-7 font-[600] text-[1.25rem]">
-                      Exam Type: {examTypeName}
-                    </span>
-                    <span className="tracking-[-.4px] leading-7 font-[500] text-[1.125rem]">
-                      Subjects: {subjectNames.join(", ")}
-                    </span>
-                    <span className="tracking-[-.4px] leading-7 text-[#E32E89] font-[500] text-[1.125rem]">
+                  <div className="p-4 sm:p-6 border-b border-[#EDEDED]">
+                    <h2 className="font-[600] text-[.9375rem] sm:text-[1.125rem] text-[#2B2B2B] mb-0.5">
+                      {examTypeName}
+                    </h2>
+                    <p className="text-[.8125rem] sm:text-[.9375rem] text-[#757575]">
+                      {subjectNames.join(", ")}
+                    </p>
+                  </div>
+
+                  {/* Stats bar */}
+                  <div className="grid grid-cols-3 divide-x divide-[#EDEDED] border-b border-[#EDEDED] bg-[#FAFAFA]">
+                    <div className="p-3 sm:p-4 text-center">
+                      <p className="text-[1.125rem] sm:text-[1.375rem] font-[700] text-[#2B2B2B]">{totalQuestions}</p>
+                      <p className="text-[.6875rem] sm:text-[.75rem] text-[#757575] mt-0.5">Total</p>
+                    </div>
+                    <div className="p-3 sm:p-4 text-center">
+                      <p className="text-[1.125rem] sm:text-[1.375rem] font-[700] text-[#0F973D]">{answeredCount}</p>
+                      <p className="text-[.6875rem] sm:text-[.75rem] text-[#757575] mt-0.5">Answered</p>
+                    </div>
+                    <div className="p-3 sm:p-4 text-center">
+                      <p className="text-[1.125rem] sm:text-[1.375rem] font-[700] text-[#D42620]">{totalQuestions - answeredCount}</p>
+                      <p className="text-[.6875rem] sm:text-[.75rem] text-[#757575] mt-0.5">Unanswered</p>
+                    </div>
+                  </div>
+
+                  {/* Section label */}
+                  <div className="px-4 sm:px-6 py-2.5 bg-[#FFF5FA] border-b border-[#EDEDED]">
+                    <span className="text-[.8125rem] sm:text-[.875rem] font-[600] text-[#E32E89]">
                       Summary of Attempts
                     </span>
                   </div>
 
-                  {/* Question status table */}
-                  <div className="max-h-130 overflow-y-auto">
+                  {/* Question list */}
+                  <div className="max-h-[26rem] overflow-y-auto">
                     <table className="w-full">
-                      <thead className="sticky top-0 bg-white">
-                        <tr className="border-b border-[#EDEDED]">
-                          <th className="text-left w-22 p-[1rem_1.5rem] text-[#2B2B2B] text-[.875rem] leading-5 font-[500]">
+                      <thead className="sticky top-0 bg-white border-b border-[#EDEDED]">
+                        <tr>
+                          <th className="text-left w-14 sm:w-16 p-[.75rem_.875rem] sm:p-[.875rem_1.25rem] text-[.8125rem] sm:text-[.875rem] font-[600] text-[#2B2B2B]">
                             No.
                           </th>
-                          <th className="text-left p-[1rem_1.5rem] text-[#2B2B2B] text-[.875rem] leading-5 font-[500]">
+                          <th className="text-left p-[.75rem_.875rem] sm:p-[.875rem_1.25rem] text-[.8125rem] sm:text-[.875rem] font-[600] text-[#2B2B2B]">
                             Question
                           </th>
-                          <th className="text-left p-[1rem_1.5rem] text-[#2B2B2B] text-[.875rem] leading-5 font-[500]">
+                          <th className="text-left p-[.75rem_.875rem] sm:p-[.875rem_1.25rem] text-[.8125rem] sm:text-[.875rem] font-[600] text-[#2B2B2B]">
                             Status
                           </th>
                         </tr>
@@ -449,35 +491,32 @@ export default function Mock() {
                             <tr
                               key={num}
                               className={cn(
-                                "border-b border-[#EDEDED] border-0",
+                                "border-b border-[#EDEDED] last:border-0",
                                 num % 2 === 0 ? "bg-[#FAFAFA]" : "bg-white",
                               )}
                             >
-                              <td className="py-3 text-[.875rem] leading-5 font-[600] text-[#007FFF] h-20 w-22 p-[1.75rem_1.5rem]">
+                              <td className="p-[.75rem_.875rem] sm:p-[.875rem_1.25rem] text-[.875rem] font-[600] text-[#007FFF]">
                                 {num}
                               </td>
-                              <td className="text-[.875rem] leading-4 p-[1.75rem_1.5rem] font-[400] text-[#2B2B2B]">
-                                Question {num}
+                              <td className="p-[.75rem_.875rem] sm:p-[.875rem_1.25rem]">
+                                <span className="text-[.875rem] text-[#2B2B2B]">Question {num}</span>
                                 {isFlagged && (
-                                  <span className="ml-2 inline-flex items-center gap-1 text-xs text-pink-500">
-                                    <Icon
-                                      icon="hugeicons:flag-02"
-                                      className="w-3 h-3"
-                                    />
+                                  <span className="ml-2 inline-flex items-center gap-1 text-[.6875rem] text-pink-500 bg-pink-50 border border-pink-100 px-1.5 py-0.5 rounded-full">
+                                    <Icon icon="hugeicons:flag-02" className="w-3 h-3" />
                                     Flagged
                                   </span>
                                 )}
                               </td>
-                              <td className="p-[1.75rem_1.5rem] text-[.875rem] font-[400]">
+                              <td className="p-[.75rem_.875rem] sm:p-[.875rem_1.25rem]">
                                 {isAnswered ? (
-                                  <span className="inline-flex items-center gap-1.5 text-[#0F973D] leading-4">
-                                    <span className="w-2 h-2 rounded-full bg-[#0F973D]" />
-                                    Answer Saved
+                                  <span className="inline-flex items-center gap-1.5 text-[.75rem] sm:text-[.8125rem] text-[#0F973D] bg-[#F0FAF4] border border-[#D3F0DC] px-2 py-0.5 sm:py-1 rounded-full whitespace-nowrap">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#0F973D] shrink-0" />
+                                    Answered
                                   </span>
                                 ) : (
-                                  <span className="inline-flex items-center gap-1.5 text-[#D42620] leading-4">
-                                    <span className="w-2 h-2 rounded-full bg-[#D42620]" />
-                                    Not Answered
+                                  <span className="inline-flex items-center gap-1.5 text-[.75rem] sm:text-[.8125rem] text-[#D42620] bg-[#FEF3F2] border border-[#FECDCA] px-2 py-0.5 sm:py-1 rounded-full whitespace-nowrap">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#D42620] shrink-0" />
+                                    Skipped
                                   </span>
                                 )}
                               </td>
@@ -489,13 +528,14 @@ export default function Mock() {
                   </div>
 
                   {/* Action buttons */}
-                  <div className="p-6 flex gap-4 border-t border-[#EDEDED]">
-                    <Button variant="outlined" onClick={handleReturnToAttempt}>
+                  <div className="p-4 sm:p-6 flex flex-col sm:flex-row gap-3 sm:gap-4 border-t border-[#EDEDED]">
+                    <Button variant="outlined" onClick={handleReturnToAttempt} className="w-full sm:w-auto justify-center">
                       Return to Attempt
                     </Button>
                     <Button
                       onClick={handleFinalSubmit}
                       loading={isSubmittingExam}
+                      className="w-full sm:w-auto justify-center"
                     >
                       Submit all and finish
                     </Button>
@@ -512,13 +552,16 @@ export default function Mock() {
               })}
             </div>
 
-            {/* Mobile nav toggle */}
-            <button
-              onClick={() => setShowNavigation(!showNavigation)}
-              className="fixed bottom-6 right-6 lg:hidden w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg flex items-center justify-center"
-            >
-              <Icon icon="hugeicons:menu-02" className="w-6 h-6" />
-            </button>
+            {/* Mobile nav trigger for review screen */}
+            <div className="lg:hidden mt-4 flex justify-center">
+              <button
+                onClick={() => setShowNavigation(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F2F4F7] text-[#344054] text-sm font-medium"
+              >
+                <Icon icon="hugeicons:menu-02" className="w-4 h-4" />
+                Test Navigation
+              </button>
+            </div>
           </div>
         </section>
       ) : (
@@ -533,7 +576,7 @@ export default function Mock() {
                     boxShadow:
                       "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
                   }}
-                  className="p-6 bg-white rounded-[1.5rem] space-y-6"
+                  className="p-3 sm:p-4 md:p-6 bg-white rounded-[1.5rem] space-y-6"
                 >
                   <ExamHeader examType={examTypeName} subjects={subjectNames} />
 
@@ -543,7 +586,7 @@ export default function Mock() {
                         boxShadow:
                           "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
                       }}
-                      className="bg-white rounded-[1rem] p-[1.25rem_1.375rem_2rem_1.375rem]"
+                      className="bg-white rounded-[1rem] p-[1rem_1rem_1.5rem_1rem] sm:p-[1.25rem_1.375rem_2rem_1.375rem]"
                     >
                       <div className="flex items-center justify-between pb-5 border-b border-[#EDEDED]">
                         <h3 className="font-semibold text-gray-900">
@@ -691,19 +734,36 @@ export default function Mock() {
                           </div>
                         )}
 
-                        <div className="flex justify-between mt-6">
+                        <div className="flex gap-2 mt-6">
                           <Button
                             variant="outlined"
                             onClick={handlePrevious}
                             disabled={currentQuestion === 1}
+                            className="flex-1 sm:flex-none justify-center bg-white! border-[#D0D5DD]! text-[#344054]! hover:bg-[#F9FAFB]!"
                           >
                             Previous
                           </Button>
-                          <Button onClick={handleNext}>
-                            {currentQuestion === totalQuestions
-                              ? "Finish"
-                              : "Next"}
+                          <Button onClick={handleNext} className="flex-1 sm:flex-none justify-center">
+                            {currentQuestion === totalQuestions ? "Finish" : "Next"}
                           </Button>
+                        </div>
+
+                        {/* Mobile nav + calculator triggers */}
+                        <div className="lg:hidden mt-3 flex gap-2">
+                          <button
+                            onClick={() => setShowNavigation(true)}
+                            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#F2F4F7] text-[#344054] text-sm font-medium"
+                          >
+                            <Icon icon="hugeicons:menu-02" className="w-4 h-4 shrink-0" />
+                            <span className="whitespace-nowrap">Test Navigation</span>
+                          </button>
+                          <button
+                            onClick={() => setShowCalculatorModal(true)}
+                            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#F2F4F7] text-[#344054] text-sm font-medium"
+                          >
+                            <Icon icon="hugeicons:calculator" className="w-4 h-4 shrink-0" />
+                            Calculator
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -720,111 +780,99 @@ export default function Mock() {
               })}
             </div>
 
-            {/* Mobile nav toggle */}
-            <button
-              onClick={() => setShowNavigation(!showNavigation)}
-              className="fixed bottom-6 right-6 lg:hidden w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg flex items-center justify-center"
-            >
-              <Icon icon="hugeicons:menu-02" className="w-6 h-6" />
-            </button>
-
-            <Modal
-              isOpen={showNavigation}
-              onClose={() => setShowNavigation(false)}
-              position="bottom"
-              overlayClassName="lg:hidden"
-              className="rounded-t-2xl w-full max-w-md p-4 pb-8"
-              overflowY="hidden"
-            >
-                  <div className="bg-white rounded-xl border border-gray-100 p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold text-gray-900">
-                        Test Navigation
-                      </h3>
-                      <button
-                        onClick={() =>
-                          setIsNavigationMinimized((prev) => !prev)
-                        }
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        <Icon
-                          icon="hugeicons:arrow-down-01"
-                          className={cn(
-                            "w-5 h-5 transition-transform",
-                            isNavigationMinimized && "rotate-180",
-                          )}
-                        />
-                      </button>
-                    </div>
-                    {!isNavigationMinimized && (
-                      <>
-                        <hr className="mb-4" />
-                        <div className="mb-4">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm text-gray-600">
-                              Time Left
-                            </span>
-                            <span className="text-lg font-bold text-[#E32E89]">
-                              {timeLeft !== null
-                                ? formatTime(timeLeft)
-                                : "--:--:--"}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-8 gap-2 mb-6">
-                          {Array.from(
-                            { length: totalQuestions },
-                            (_, i) => i + 1,
-                          ).map((num) => (
-                            <div key={num} className="relative">
-                              <button
-                                onClick={() => {
-                                  setCurrentQuestion(num);
-                                  prefetchAround(num - 1);
-                                  setShowNavigation(false);
-                                }}
-                                className={cn(
-                                  "w-8 h-8 rounded-lg text-sm font-medium transition-colors border",
-                                  getButtonStyle(num),
-                                  flaggedQuestions.has(
-                                    getQuestion(num - 1)?.id ?? "",
-                                  ) && "border-b-4 border-red-500",
-                                )}
-                              >
-                                {num}
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                        <button
-                          onClick={handleFinish}
-                          className="text-blue-500 text-sm font-medium hover:underline"
-                        >
-                          Finish attempt and Review...
-                        </button>
-                      </>
-                    )}
+            {showNavigation && (
+              <div
+                className="fixed inset-0 bg-black/50 z-50 lg:hidden flex items-end"
+                onClick={() => { setNavDragY(0); setShowNavigation(false); }}
+              >
+                <div
+                  className="bg-white rounded-t-2xl w-full p-4 pb-8 max-h-[75vh] overflow-y-auto"
+                  style={{ transform: `translateY(${navDragY}px)`, transition: navDragY > 0 ? "none" : "transform 0.3s ease" }}
+                  onTouchStart={(e) => { navDragStartY.current = e.touches[0].clientY; }}
+                  onTouchMove={(e) => { const d = e.touches[0].clientY - navDragStartY.current; if (d > 0) setNavDragY(d); }}
+                  onTouchEnd={() => { if (navDragY > 80) setShowNavigation(false); setNavDragY(0); }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-semibold text-gray-900">Test Navigation</h3>
+                    <button onClick={() => setShowNavigation(false)} className="text-gray-400 hover:text-gray-600">
+                      <Icon icon="hugeicons:cancel-01" className="w-5 h-5" />
+                    </button>
                   </div>
-            </Modal>
+                  <hr className="mb-4 text-[#DCDFE4]" />
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-sm text-gray-600">Time Left</span>
+                    <span className="text-lg font-bold text-[#E32E89]">
+                      {timeLeft !== null ? formatTime(timeLeft) : "--:--:--"}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {Array.from({ length: totalQuestions }, (_, i) => i + 1).map((num) => (
+                      <div key={num} className="relative">
+                        <button
+                          onClick={() => { setCurrentQuestion(num); prefetchAround(num - 1); setShowNavigation(false); }}
+                          className={cn(
+                            "w-8 h-8 rounded-lg text-sm font-medium transition-colors border",
+                            getButtonStyle(num),
+                            flaggedQuestions.has(getQuestion(num - 1)?.id ?? "") && "border-b-4 border-red-500",
+                          )}
+                        >
+                          {num}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => { setShowNavigation(false); handleFinish(); }}
+                    className="text-[#007FFF] text-sm font-medium hover:underline"
+                  >
+                    Finish attempt and Review...
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {showCalculatorModal && (
+              <div
+                className="fixed inset-0 bg-black/50 z-50 lg:hidden flex items-end"
+                onClick={() => setShowCalculatorModal(false)}
+              >
+                <div
+                  className="bg-white rounded-t-2xl w-full p-4 pb-8 max-h-[85vh] overflow-y-auto"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold text-gray-900">Calculator</h3>
+                    <button onClick={() => setShowCalculatorModal(false)} className="text-gray-400 hover:text-gray-600">
+                      <Icon icon="hugeicons:cancel-01" className="w-5 h-5" />
+                    </button>
+                  </div>
+                  <Calculator />
+                </div>
+              </div>
+            )}
           </div>
         </section>
       )}
 
       {/* ── Leave Exam Modal ── */}
       {showLeaveModal && (
-        <Modal isOpen className="rounded-2xl w-full max-w-md p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">
+        <Modal isOpen className="rounded-2xl w-full max-w-md p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
               Leave Exam?
             </h2>
-            <p className="text-sm text-gray-500 mb-6">
+            <p className="text-sm text-gray-500 mb-4 sm:mb-6">
               Your progress will be lost if you leave now. Submit first to save
               your results.
             </p>
-            <div className="flex gap-3 justify-end">
-              <Button variant="outlined" onClick={dismissLeaveModal}>
+            <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
+              <Button variant="outlined" onClick={dismissLeaveModal} className="w-full sm:w-auto justify-center">
                 Stay in Exam
               </Button>
               <Button
+                className="w-full sm:w-auto justify-center"
                 onClick={() => {
                   dismissLeaveModal();
                   handleReturnToMain();

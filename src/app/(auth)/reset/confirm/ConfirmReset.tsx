@@ -57,12 +57,12 @@ export default function ConfirmReset() {
           boxShadow:
             "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
         }}
-        className="rounded-[1rem] max-w-[34rem] w-[95%] mx-auto bg-white p-[2.5rem_2rem]"
+        className="rounded-[1rem] max-w-[34rem] w-[95%] mx-auto bg-white p-[1.25rem_1rem] sm:p-[2.5rem_2rem]"
       >
-        <h2 className="mb-[1rem] leading-[2rem] text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
+        <h2 className="mb-[.75rem] sm:mb-[1rem] leading-[1.75rem] sm:leading-[2rem] text-[1.25rem] sm:text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
           Password Reset Successful
         </h2>
-        <p className="text-[.875rem] leading-[1.5rem] text-[#667085] mb-[1.5rem]">
+        <p className="text-[.8125rem] sm:text-[.875rem] leading-[1.5rem] text-[#667085] mb-[1.5rem]">
           Your password has been successfully reset. You can now log in with
           your new password.
         </p>
@@ -82,12 +82,12 @@ export default function ConfirmReset() {
         boxShadow:
           "0 3px 2px -2px rgba(235, 80, 23, 0.06), 0 5px 3px -2px rgba(235, 80, 23, 0.02)",
       }}
-      className="rounded-[1rem] max-w-[34rem] w-[95%] mx-auto bg-white p-[2.5rem_2rem]"
+      className="rounded-[1rem] max-w-[34rem] w-[95%] mx-auto bg-white p-[1.25rem_1rem] sm:p-[2.5rem_2rem]"
     >
-      <h2 className="mb-[.5rem] leading-[2rem] text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
+      <h2 className="mb-[.5rem] leading-[1.75rem] sm:leading-[2rem] text-[1.25rem] sm:text-[1.5rem] font-[600] tracking-[-.48px] text-[#2B2B2B]">
         Set New Password
       </h2>
-      <p className="text-[.875rem] leading-[1.5rem] text-[#667085] mb-[2rem]">
+      <p className="text-[.8125rem] sm:text-[.875rem] leading-[1.5rem] text-[#667085] mb-[1.5rem] sm:mb-[2rem]">
         Your new password must be different to previously used passwords.
       </p>
 

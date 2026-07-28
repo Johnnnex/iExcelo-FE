@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -81,7 +82,6 @@ export default function Account() {
     setValue,
     formState: { errors, isDirty },
   } = useForm<AccountFormData>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: yupResolver(accountSchema) as any,
     mode: "onChange",
   });
@@ -93,8 +93,6 @@ export default function Account() {
       lastName: user.lastName ?? "",
       phone: buildInitialPhone(user.countryCode, user.phoneNumber),
     });
-  // Only reset when name/phone fields change, not on picture updates
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.firstName, user?.lastName, user?.phoneNumber, user?.countryCode]);
 
   const handleAvatarClick = () => fileInputRef.current?.click();
