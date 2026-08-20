@@ -21,7 +21,7 @@ const PAGE_LIMIT = 20;
 
 // ─── Renew Giveback Modal ─────────────────────────────────────────────────────
 
-type RenewStep = "students" | "exam" | "plan" | "confirm";
+type RenewStep = "students" | "exam" | "plan" | "provider" | "confirm";
 
 function RenewGivebackModal({
   giveback,
@@ -51,6 +51,9 @@ function RenewGivebackModal({
   const [checkoutInfo, setCheckoutInfo] = useState<ICheckoutInfo | null>(null);
   const [isLoadingPlans, setIsLoadingPlans] = useState(false);
   const [selectedPlanIdx, setSelectedPlanIdx] = useState<number | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<
+    "stripe" | "paystack" | null
+  >(null);
 
   const loadPlans = async (examTypeId: string) => {
     setIsLoadingPlans(true);
@@ -88,6 +91,15 @@ function RenewGivebackModal({
 
   const handlePlanNext = () => {
     if (selectedPlanIdx === null) return;
+    const plan =
+      selectedPlanIdx !== null ? checkoutInfo?.plans[selectedPlanIdx] : null;
+    const firstProvider = plan?.providers[0]?.provider ?? null;
+    setSelectedProvider(firstProvider);
+    setStep("provider");
+  };
+
+  const handleProviderNext = () => {
+    if (!selectedProvider) return;
     setStep("confirm");
   };
 
@@ -111,7 +123,12 @@ function RenewGivebackModal({
     "₦";
 
   const handleConfirm = () => {
-    if (!selectedPlan || !selectedExamTypeId || !selectedPlan.planPriceId)
+    if (
+      !selectedPlan ||
+      !selectedExamTypeId ||
+      !selectedPlan.planPriceId ||
+      !selectedProvider
+    )
       return;
 
     const callbackUrl =
@@ -128,6 +145,7 @@ function RenewGivebackModal({
         examTypeId: selectedExamTypeId,
         planId: selectedPlan.id,
         planPriceId: selectedPlan.planPriceId,
+        provider: selectedProvider,
         customerEmail: sponsorEmail,
         callbackUrl,
       },
@@ -141,9 +159,10 @@ function RenewGivebackModal({
     students: "Students",
     exam: "Exam Type",
     plan: "Plan",
-    confirm: "Confirm & Pay",
+    provider: "Payment",
+    confirm: "Confirm",
   };
-  const steps: RenewStep[] = ["students", "exam", "plan", "confirm"];
+  const steps: RenewStep[] = ["students", "exam", "plan", "provider", "confirm"];
   const currentStepIdx = steps.indexOf(step);
 
   // Format student name helper
@@ -400,7 +419,64 @@ function RenewGivebackModal({
             </div>
           )}
 
-          {/* Step 4: Confirm */}
+          {/* Step 4: Select Provider */}
+          {step === "provider" && (
+            <div className="flex flex-col gap-4">
+              <p className="text-sm text-[#575757]">
+                Choose how you want to pay for this renewal.
+              </p>
+              <div className="flex flex-col gap-3">
+                {(selectedPlan?.providers ?? []).map(({ provider: p }) => (
+                  <div
+                    key={p}
+                    onClick={() => setSelectedProvider(p)}
+                    className={cn(
+                      "flex items-center justify-between p-4 rounded-[.75rem] border transition-colors cursor-pointer",
+                      selectedProvider === p
+                        ? "border-[#007FFF] bg-[#E5F0FF]"
+                        : "border-[#D6D6D6] hover:border-[#007FFF]/40",
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Radio
+                        name="provider"
+                        value={selectedProvider === p}
+                        onChange={() => setSelectedProvider(p)}
+                      />
+                      {p === "paystack" ? (
+                        <span className="text-cyan-600 font-bold">
+                          ≡ Paystack
+                        </span>
+                      ) : (
+                        <span className="text-purple-700 font-bold">
+                          stripe
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {(selectedPlan?.providers ?? []).length === 0 && (
+                  <p className="text-sm text-[#757575]">
+                    No payment methods configured for this plan.
+                  </p>
+                )}
+              </div>
+              <div className="flex gap-3">
+                <Button variant="outlined" onClick={() => setStep("plan")}>
+                  Back
+                </Button>
+                <Button
+                  onClick={handleProviderNext}
+                  disabled={!selectedProvider}
+                >
+                  Continue
+                  <Icon icon="hugeicons:arrow-right-01" className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Step 5: Confirm */}
           {step === "confirm" && (
             <div className="flex flex-col gap-4">
               {/* Timing notice */}
@@ -493,16 +569,16 @@ function RenewGivebackModal({
 
               <p className="text-xs text-[#757575]">
                 You will be redirected to{" "}
-                {checkoutInfo?.provider
-                  ? checkoutInfo.provider.charAt(0).toUpperCase() +
-                    checkoutInfo.provider.slice(1)
+                {selectedProvider
+                  ? selectedProvider.charAt(0).toUpperCase() +
+                    selectedProvider.slice(1)
                   : "the payment provider"}{" "}
                 to complete payment. The new subscriptions are queued and
                 activate automatically when the current ones expire.
               </p>
 
               <div className="flex gap-3">
-                <Button variant="outlined" onClick={() => setStep("plan")}>
+                <Button variant="outlined" onClick={() => setStep("provider")}>
                   Back
                 </Button>
                 <Button

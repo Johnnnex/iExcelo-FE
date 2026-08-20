@@ -627,13 +627,14 @@ export interface IExamAttempt {
 export interface IDetailedResult {
   questionId: string;
   questionText: string;
+  contentFormat?: 'markdown' | 'plate';
   questionType: string;
   topicId: string | null;
   topicName: string | null;
   explanation: string | null;
   marks: number;
   passageId: string | null;
-  passage: { id: string; title: string; content: string } | null;
+  passage: { id: string; title: string; content: string; contentFormat?: 'markdown' | 'plate' } | null;
   options: { id: string; text: string }[];
   matchingPrompts?: string[];
   matchingOptions?: string[];
@@ -685,6 +686,7 @@ export interface IExamOption {
 export interface IExamQuestion {
   id: string;
   questionText: string;
+  contentFormat?: 'markdown' | 'plate';
   type: string; // QuestionType enum value
   marks: number;
   difficulty: string;
@@ -704,6 +706,7 @@ export interface IExamPassage {
   id: string;
   title: string;
   content: string;
+  contentFormat?: 'markdown' | 'plate';
 }
 
 export interface IPendingExamConfig {
@@ -818,7 +821,7 @@ export interface IExamStore {
     subjectIds?: string[],
     limit?: number,
   ) => Promise<void>;
-  fetchTopicsForSubject: (subjectId: string, page?: number, limit?: number) => Promise<ITopic[]>;
+  fetchTopicsForSubject: (subjectId: string, page?: number, limit?: number, examTypeId?: string) => Promise<ITopic[]>;
   searchTopics: (
     examTypeId: string,
     q: string,
@@ -923,7 +926,12 @@ export interface IStudentStore {
   ) => Promise<void>;
   // Initiate checkout (redirect to payment provider)
   initiateCheckout: (
-    data: { planId: string; examTypeId: string; region: string },
+    data: {
+      planId: string;
+      examTypeId: string;
+      region: string;
+      provider: "stripe" | "paystack";
+    },
     callback?: (url: string) => void,
   ) => Promise<void>;
   isCheckingOut: boolean;
@@ -1073,6 +1081,7 @@ export interface ISponsorStore {
       examTypeId: string;
       planId: string;
       planPriceId: string;
+      provider: "stripe" | "paystack";
       customerEmail: string;
       callbackUrl: string;
     },
@@ -1085,6 +1094,7 @@ export interface ISponsorStore {
       examTypeId: string;
       planId: string;
       planPriceId: string;
+      provider: "stripe" | "paystack";
       customerEmail: string;
       callbackUrl: string;
     },
@@ -1197,6 +1207,22 @@ export interface IAffiliateStore {
 }
 
 // Checkout info types (from backend)
+export type SupportedCurrency =
+  | "NGN"
+  | "USD"
+  | "GBP"
+  | "EUR"
+  | "CAD"
+  | "AUD"
+  | "GHS"
+  | "ZAR"
+  | "KES"
+  | "UGX"
+  | "TZS"
+  | "XOF"
+  | "XAF"
+  | "GMD";
+
 export interface ICheckoutPlan {
   id: string;
   name: string;
@@ -1204,14 +1230,12 @@ export interface ICheckoutPlan {
   durationDays: number;
   price: number;
   planPriceId?: string;
-  stripePriceId?: string;
-  paystackPlanCode?: string;
+  providers: Array<{ provider: "stripe" | "paystack" }>;
 }
 
 export interface ICheckoutInfo {
   region: string;
-  currency: "NGN" | "USD" | "GBP" | "EUR" | "CAD" | "AUD";
-  provider: "stripe" | "paystack";
+  currency: SupportedCurrency;
   plans: ICheckoutPlan[];
 }
 

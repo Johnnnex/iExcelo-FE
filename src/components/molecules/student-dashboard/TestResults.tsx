@@ -79,8 +79,7 @@ export function TestResults({
               </p>
               {timeUsed && (
                 <p className="tracking-[-.4px] leading-5 text-[1rem] sm:text-[1.25rem] font-[600] text-[#2B2B2B]">
-                  Time Used:{" "}
-                  <span className="text-[#757575]">{timeUsed}</span>
+                  Time Used: <span className="text-[#757575]">{timeUsed}</span>
                 </p>
               )}
             </div>
@@ -99,13 +98,20 @@ export function TestResults({
 
         <hr className="my-6 sm:my-8 text-[#EDEDED]" />
 
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <div className="flex flex-col justify-center sm:flex-row gap-3 sm:gap-4">
           {onReviewTest && (
-            <Button variant="outlined" onClick={onReviewTest} className="w-full sm:w-auto justify-center">
+            <Button
+              variant="outlined"
+              onClick={onReviewTest}
+              className="w-full sm:w-auto justify-center"
+            >
               Review Test
             </Button>
           )}
-          <Button onClick={onReturnToMain} className="w-full sm:w-auto justify-center">
+          <Button
+            onClick={onReturnToMain}
+            className="w-full sm:w-auto justify-center"
+          >
             Return to Main Window
           </Button>
         </div>

@@ -15,7 +15,7 @@ import { Modal } from "@/components/molecules";
 import { Icon } from "@iconify/react";
 import { useExamProtection, useExamLeaveGuard } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { Button, CheckBox, Radio, RichText } from "@/components/atoms";
+import { Button, CheckBox, Radio, ContentRenderer } from "@/components/atoms";
 import { InputField } from "@/components/molecules";
 import { useExamStore, useAuthStore, useStudentStore } from "@/store";
 import type { IQuestionResponse, IFlagUpdate } from "@/types";
@@ -214,6 +214,10 @@ export default function Timed() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [!!pendingConfig, !!examSession]);
 
+  const shouldClearRef = useRef(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => () => { if (shouldClearRef.current) clearSession(); }, []);
+
   // Session guard — after all hooks
   if (!isNavigatingAway.current && !pendingConfig && !examSession) {
     return <TimedSkeleton />;
@@ -283,11 +287,14 @@ export default function Timed() {
     } else if (isTextInput) {
       const studentAnswer =
         typeof answer === "string" ? answer.trim().toLowerCase() : "";
-      const accepted = String(correctAnswer ?? "")
-        .split(/[,/]/)
-        .map((a) => a.trim().toLowerCase())
+      const keywords = (
+        Array.isArray(correctAnswer)
+          ? (correctAnswer as string[])
+          : String(correctAnswer ?? "").split(/[\n,/]/)
+      )
+        .map((k) => k.trim().toLowerCase())
         .filter(Boolean);
-      isCorrect = accepted.length > 0 && accepted.includes(studentAnswer);
+      isCorrect = keywords.length > 0 && keywords.some((kw) => studentAnswer.includes(kw));
     } else if (isMultipleResponse) {
       const selected = Array.isArray(answer) ? [...answer].sort() : [];
       const correct = Array.isArray(correctAnswer)
@@ -341,9 +348,9 @@ export default function Timed() {
 
   const handleReturnToMain = () => {
     isNavigatingAway.current = true;
-    clearSession();
-    fetchDashboard(granularity);
+    shouldClearRef.current = true;
     router.push("/student/exams");
+    fetchDashboard(granularity);
   };
 
   const formatTime = (seconds: number) => {
@@ -546,12 +553,12 @@ export default function Timed() {
                               </h4>
                             )}
                             <div className="text-sm text-gray-700 leading-relaxed max-h-56 overflow-y-auto pr-1">
-                              <RichText content={passage.content} />
+                              <ContentRenderer content={passage.content} contentFormat={passage.contentFormat} />
                             </div>
                           </div>
                         )}
                         <div className="text-gray-700 mb-6 text-[.9375rem] leading-relaxed">
-                          <RichText content={question.questionText} />
+                          <ContentRenderer content={question.questionText} contentFormat={question.contentFormat} />
                         </div>
 
                         {/* ── Essay ── */}
@@ -681,7 +688,7 @@ export default function Timed() {
                                                 : "text-gray-600",
                                           )}
                                         >
-                                          <RichText
+                                          <ContentRenderer
                                             content={option.text}
                                             variant="inline"
                                           />
@@ -790,7 +797,7 @@ export default function Timed() {
                                       state === "default" && "text-gray-600",
                                     )}
                                   >
-                                    <RichText
+                                    <ContentRenderer
                                       content={option.text}
                                       variant="inline"
                                     />
@@ -910,9 +917,7 @@ export default function Timed() {
 
                   {isExamSubmitted &&
                     question &&
-                    (question.correctAnswer ||
-                      question.topicName ||
-                      question.explanation) && (
+                    (question.topicName || question.explanation) && (
                       <div
                         style={{
                           boxShadow:
@@ -953,7 +958,7 @@ export default function Timed() {
                                   Right Answer
                                 </h4>
                                 <p className="text-lg font-bold text-blue-600">
-                                  <RichText
+                                  <ContentRenderer
                                     content={getCorrectAnswerDisplay(question)}
                                     variant="inline"
                                   />
@@ -967,7 +972,7 @@ export default function Timed() {
                           <>
                             <div className="h-[1px] w-full bg-[#EDEDED] my-4" />
                             <div className="text-gray-600 text-sm leading-relaxed">
-                              <RichText content={question.explanation} />
+                              <ContentRenderer content={question.explanation!} contentFormat={question.contentFormat} />
                             </div>
                           </>
                         )}
@@ -1274,7 +1279,7 @@ export default function Timed() {
                 </div>
               )}
               <div className="text-gray-700 leading-relaxed">
-                <RichText content={fullDetailsContent} />
+                <ContentRenderer content={fullDetailsContent} />
               </div>
               <div className="flex justify-end mt-4 sm:mt-6">
                 <button

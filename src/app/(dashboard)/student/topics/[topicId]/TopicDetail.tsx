@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Icon } from "@iconify/react";
-import { RichText } from "@/components/atoms";
+import { ContentRenderer } from "@/components/atoms";
 import { useExamStore } from "@/store";
 import { useExamProtection } from "@/hooks";
 import Link from "next/link";
@@ -138,7 +138,7 @@ export default function TopicDetail() {
           className="bg-white rounded-2xl px-6 py-8 md:px-10 md:py-10"
           style={{ boxShadow: SHADOW }}
         >
-          <RichText content={topicDetail.content} variant="block" />
+          <ContentRenderer content={topicDetail.content} contentFormat={topicDetail.contentFormat} variant="block" />
         </div>
       ) : (
         <div

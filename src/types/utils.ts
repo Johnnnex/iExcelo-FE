@@ -43,6 +43,7 @@ export interface ITopic {
   subjectName: string;
   name: string;
   content: string | null;
+  contentFormat?: 'markdown' | 'plate';
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

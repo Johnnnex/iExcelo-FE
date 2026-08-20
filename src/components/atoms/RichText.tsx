@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
@@ -15,6 +18,44 @@ interface RichTextProps {
   className?: string;
   /** Use 'inline' for option text — suppresses block-level margins */
   variant?: "block" | "inline";
+}
+
+function RichTextImage({ src, alt }: { src: string; alt: string }) {
+  const [open, setOpen] = useState(false);
+  const handleKey = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen(true); }
+  }, []);
+  return (
+    <>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        className="max-w-full max-h-72 object-contain rounded-xl my-3 block cursor-zoom-in border border-[#E4E7EC] shadow-sm"
+        tabIndex={0}
+        role="button"
+        aria-label="View full size"
+        onClick={() => setOpen(true)}
+        onKeyDown={handleKey}
+      />
+      {open && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          onClick={() => setOpen(false)}
+          role="dialog"
+          aria-modal="true"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt={alt}
+            className="max-w-full max-h-full object-contain rounded-xl cursor-zoom-out shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+    </>
+  );
 }
 
 /**
@@ -71,10 +112,7 @@ export function RichText({
         rehypePlugins={[rehypeRaw, [rehypeKatex, { strict: false }]]}
         components={{
           img: ({ src, alt }) =>
-            src ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={src} alt={alt ?? ""} />
-            ) : null,
+            typeof src === "string" && src ? <RichTextImage src={src} alt={alt ?? ""} /> : null,
         }}
       >
         {content}

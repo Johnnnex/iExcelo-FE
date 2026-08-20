@@ -381,6 +381,7 @@ export const useStudentStore = create<IStudentStore>()(
               planId: data.planId,
               examTypeId: data.examTypeId,
               region: data.region,
+              provider: data.provider,
               redirectUrl: window.location.origin,
             },
           });

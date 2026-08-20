@@ -7,4 +7,6 @@ export * from "./Switch";
 export * from "./StatusChip";
 export * from "./ProgressBar";
 export * from "./RichText";
+export * from "./RichTextV2";
+export * from "./ContentRenderer";
 export * from "./Tab";

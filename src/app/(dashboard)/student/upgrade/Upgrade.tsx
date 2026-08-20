@@ -17,6 +17,14 @@ const currencySymbols: Record<string, string> = {
   EUR: "€",
   CAD: "C$",
   AUD: "A$",
+  GHS: "GH₵",
+  ZAR: "R",
+  KES: "KSh",
+  UGX: "USh",
+  TZS: "TSh",
+  XOF: "CFA",
+  XAF: "CFA",
+  GMD: "D",
 };
 
 // Plan styling configurations (matching Subscriptions.tsx design)
@@ -51,24 +59,6 @@ const defaultFeatures = [
   "Detailed answer explanations",
 ];
 
-// Payment methods based on provider
-const getPaymentMethods = (provider: string) => {
-  const methods = [];
-
-  if (provider === "paystack") {
-    methods.push({
-      id: "paystack",
-      label: "Paystack",
-      icon: null,
-      isPaystack: true,
-    });
-  } else if (provider === "stripe") {
-    methods.push({ id: "stripe", label: "stripe", icon: null, isStripe: true });
-  }
-
-  return methods;
-};
-
 interface UpgradeProps {
   examTypeId: string;
   checkoutInfo: ICheckoutInfo | null;
@@ -78,7 +68,9 @@ export default function Upgrade({ examTypeId, checkoutInfo }: UpgradeProps) {
   const router = useRouter();
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const [showPayment, setShowPayment] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<
+    "stripe" | "paystack" | null
+  >(null);
 
   // Transform checkout info into display format
   const plans = useMemo(() => {
@@ -90,42 +82,36 @@ export default function Upgrade({ examTypeId, checkoutInfo }: UpgradeProps) {
     }));
   }, [checkoutInfo]);
 
-  // Set default selected plan and payment method on initial load
+  // Set default selected plan on initial load
   useEffect(() => {
     if (plans.length > 0 && !selectedPlanId) {
       setSelectedPlanId(plans[0].id);
     }
   }, [plans, selectedPlanId]);
 
-  useEffect(() => {
-    if (checkoutInfo?.provider && !selectedMethod) {
-      setSelectedMethod(checkoutInfo.provider);
-    }
-  }, [checkoutInfo, selectedMethod]);
-
   const currentPlan = plans.find((p) => p.id === selectedPlanId);
   const currency = checkoutInfo?.currency || "NGN";
   const currencySymbol = currencySymbols[currency] || "₦";
-  const provider = checkoutInfo?.provider || "paystack";
+
+  const availableProviders = currentPlan?.providers ?? [];
 
   const { initiateCheckout, isCheckingOut } = useStudentStore();
 
   const handleSubscribe = () => {
-    if (!currentPlan || !checkoutInfo) return;
+    if (!currentPlan || !checkoutInfo || !selectedProvider) return;
 
     initiateCheckout(
       {
         planId: currentPlan.id,
         examTypeId,
         region: checkoutInfo.region,
+        provider: selectedProvider,
       },
       (url) => {
         window.location.href = url;
       },
     );
   };
-
-  const paymentMethods = getPaymentMethods(provider);
 
   // Show error state if checkout info failed to load
   if (!checkoutInfo || plans.length === 0) {
@@ -181,6 +167,8 @@ export default function Upgrade({ examTypeId, checkoutInfo }: UpgradeProps) {
                   key={plan.id}
                   onClick={() => {
                     setSelectedPlanId(plan.id);
+                    const firstProv = plan.providers[0]?.provider ?? null;
+                    setSelectedProvider(firstProv);
                     setShowPayment(true);
                   }}
                   className="cursor-pointer"
@@ -270,36 +258,42 @@ export default function Upgrade({ examTypeId, checkoutInfo }: UpgradeProps) {
                   Payment Method
                 </h3>
                 <div className="space-y-3">
-                  {paymentMethods.map((method) => (
-                    <div
-                      key={method.id}
-                      onClick={() => setSelectedMethod(method.id)}
-                      className={`flex items-center justify-between p-3 md:p-4 rounded-xl border cursor-pointer transition-colors ${
-                        selectedMethod === method.id
+                  {availableProviders.map(({ provider: p }) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setSelectedProvider(p)}
+                      className={cn(
+                        "w-full flex items-center justify-between p-3 md:p-4 rounded-xl border cursor-pointer transition-colors",
+                        selectedProvider === p
                           ? "border-blue-500 bg-blue-50"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
+                          : "border-gray-200 hover:border-gray-300",
+                      )}
                     >
                       <div className="flex items-center gap-3">
-                        {method.icon && (
-                          <Icon
-                            icon={method.icon}
-                            className="w-5 h-5 text-gray-600"
-                          />
-                        )}
-                        {method.isPaystack && (
+                        {p === "paystack" ? (
                           <span className="text-cyan-500 font-bold">
                             ≡ paystack
                           </span>
-                        )}
-                        {method.isStripe && (
+                        ) : (
                           <span className="text-purple-600 font-bold text-lg">
                             stripe
                           </span>
                         )}
                       </div>
-                    </div>
+                      {selectedProvider === p && (
+                        <Icon
+                          icon="hugeicons:checkmark-circle-02"
+                          className="w-5 h-5 text-blue-500"
+                        />
+                      )}
+                    </button>
                   ))}
+                  {availableProviders.length === 0 && (
+                    <p className="text-sm text-gray-400">
+                      No payment methods available for this plan.
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -343,7 +337,7 @@ export default function Upgrade({ examTypeId, checkoutInfo }: UpgradeProps) {
                 className="w-full justify-center"
                 onClick={handleSubscribe}
                 loading={isCheckingOut}
-                disabled={!currentPlan}
+                disabled={!currentPlan || !selectedProvider}
               >
                 Subscribe
               </Button>
@@ -354,7 +348,7 @@ export default function Upgrade({ examTypeId, checkoutInfo }: UpgradeProps) {
               <div className="flex items-center justify-center gap-2 md:gap-4 mt-4 text-xs text-gray-400">
                 <span>
                   Powered by{" "}
-                  {provider === "stripe" ? (
+                  {selectedProvider === "stripe" ? (
                     <span className="text-purple-600 font-bold">stripe</span>
                   ) : (
                     <span className="text-cyan-500 font-bold">paystack</span>

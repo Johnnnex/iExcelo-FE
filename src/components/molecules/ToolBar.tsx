@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { Editor } from "@tiptap/react";
 import { Icon } from "@iconify/react";
+import { MathPicker } from "./MathPicker";
 
 const ALLOWED_TYPES = [
   "image/jpeg",
@@ -197,6 +198,23 @@ const ToolBar = ({ editor, onImageUpload, variant = "full" }: ToolBarProps) => {
             onChange={handleFileChange}
           />
         </>
+      )}
+
+      {variant !== "chat" && (
+        <MathPicker
+          onInsertInline={(latex) =>
+            editor.chain().focus().insertContent({ type: "text", text: `$${latex}$` }).run()
+          }
+          onInsertBlock={(latex) =>
+            editor
+              .chain()
+              .focus()
+              .insertContent([
+                { type: "paragraph", content: [{ type: "text", text: `$$${latex}$$` }] },
+              ])
+              .run()
+          }
+        />
       )}
     </div>
   );

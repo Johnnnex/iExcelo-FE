@@ -303,11 +303,12 @@ export const useExamStore = create<IExamStore>()((set, get) => ({
     }
   },
 
-  fetchTopicsForSubject: async (subjectId, page?, limit?) => {
+  fetchTopicsForSubject: async (subjectId, page?, limit?, examTypeId?) => {
     const isPaged = page !== undefined && limit !== undefined;
     try {
-      const params: Record<string, number> = {};
+      const params: Record<string, string | number> = {};
       if (isPaged) { params.page = page!; params.limit = limit!; }
+      if (examTypeId) params.examTypeId = examTypeId;
       const res: any = await authRequest({
         method: "GET",
         url: `/exams/subjects/${subjectId}/topics`,

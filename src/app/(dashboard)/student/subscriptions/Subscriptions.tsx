@@ -17,6 +17,14 @@ const currencySymbols: Record<string, string> = {
   EUR: "\u20AC",
   CAD: "C$",
   AUD: "A$",
+  GHS: "GH\u20B5",
+  ZAR: "R",
+  KES: "KSh",
+  UGX: "USh",
+  TZS: "TSh",
+  XOF: "CFA",
+  XAF: "CFA",
+  GMD: "D",
 };
 
 // Map currency to a default region for checkout-info override
@@ -27,6 +35,14 @@ const currencyToRegion: Record<string, string> = {
   EUR: "DE",
   CAD: "CA",
   AUD: "AU",
+  GHS: "GH",
+  ZAR: "ZA",
+  KES: "KE",
+  UGX: "UG",
+  TZS: "TZ",
+  XOF: "SN",
+  XAF: "CM",
+  GMD: "GM",
 };
 
 const planStyles = [
@@ -182,6 +198,9 @@ const Subscriptions = () => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<
+    "stripe" | "paystack" | null
+  >(null);
 
   useEffect(() => {
     if (!lastExamTypeId) return;
@@ -220,7 +239,11 @@ const Subscriptions = () => {
       router.push(`/student/subscriptions/update/${planId}`);
     } else {
       // No sub, cancelled, or suspended → new subscription flow
+      const plan = checkoutInfo.plans.find((p) => p.id === planId);
+      // Auto-select the first available provider for this plan
+      const firstProvider = plan?.providers[0]?.provider ?? null;
       setSelectedPlanId(planId);
+      setSelectedProvider(firstProvider);
       setShowPayment(true);
     }
   };
@@ -229,16 +252,18 @@ const Subscriptions = () => {
   const selectedPlanPrice = selectedPlan
     ? `${currencySymbol}${selectedPlan.price.toLocaleString()}`
     : `${currencySymbol}0`;
-  const provider = checkoutInfo?.provider || "paystack";
+  const availableProviders = selectedPlan?.providers ?? [];
 
   const handleSubscribe = () => {
-    if (!selectedPlanId || !lastExamTypeId || !checkoutInfo) return;
+    if (!selectedPlanId || !lastExamTypeId || !checkoutInfo || !selectedProvider)
+      return;
 
     initiateCheckout(
       {
         planId: selectedPlanId,
         examTypeId: lastExamTypeId,
         region: checkoutInfo.region,
+        provider: selectedProvider,
       },
       (url) => {
         window.location.href = url;
@@ -650,19 +675,42 @@ const Subscriptions = () => {
                   Payment Method
                 </h3>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 md:p-4 rounded-xl border cursor-pointer border-blue-500 bg-blue-50">
-                    <div className="flex items-center gap-3">
-                      {provider === "paystack" ? (
-                        <span className="text-cyan-500 font-bold">
-                          ≡ paystack
-                        </span>
-                      ) : (
-                        <span className="text-purple-600 font-bold text-lg">
-                          stripe
-                        </span>
+                  {availableProviders.map(({ provider: p }) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setSelectedProvider(p)}
+                      className={cn(
+                        "w-full flex items-center justify-between p-3 md:p-4 rounded-xl border cursor-pointer transition-colors",
+                        selectedProvider === p
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-200 hover:border-gray-300",
                       )}
-                    </div>
-                  </div>
+                    >
+                      <div className="flex items-center gap-3">
+                        {p === "paystack" ? (
+                          <span className="text-cyan-500 font-bold">
+                            ≡ paystack
+                          </span>
+                        ) : (
+                          <span className="text-purple-600 font-bold text-lg">
+                            stripe
+                          </span>
+                        )}
+                      </div>
+                      {selectedProvider === p && (
+                        <Icon
+                          icon="hugeicons:checkmark-circle-02"
+                          className="w-5 h-5 text-blue-500"
+                        />
+                      )}
+                    </button>
+                  ))}
+                  {availableProviders.length === 0 && (
+                    <p className="text-sm text-gray-400">
+                      No payment methods available for this plan.
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -702,6 +750,7 @@ const Subscriptions = () => {
                 className="w-full justify-center"
                 onClick={handleSubscribe}
                 loading={isCheckingOut}
+                disabled={!selectedProvider || availableProviders.length === 0}
               >
                 Subscribe
               </Button>
@@ -712,7 +761,7 @@ const Subscriptions = () => {
               <div className="flex items-center justify-center gap-2 md:gap-4 mt-4 text-xs text-gray-400">
                 <span>
                   Powered by{" "}
-                  {provider === "stripe" ? (
+                  {selectedProvider === "stripe" ? (
                     <span className="text-purple-600 font-bold">stripe</span>
                   ) : (
                     <span className="text-cyan-500 font-bold">paystack</span>

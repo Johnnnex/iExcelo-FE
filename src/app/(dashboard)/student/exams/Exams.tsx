@@ -73,6 +73,8 @@ export default function Exams() {
     setPendingConfig,
     fetchTopicsForSubject,
     topicsGrouped,
+    topicsHasMore,
+    topicsPage,
   } = useExamStore();
 
   const examTypeId = dashboardData?.currentExamType?.id ?? "";
@@ -106,6 +108,8 @@ export default function Exams() {
   const [loadingTopicsForSubject, setLoadingTopicsForSubject] = useState<
     string | null
   >(null);
+  const [loadingMoreTopics, setLoadingMoreTopics] = useState<string | null>(null);
+  const TOPICS_LIMIT = 20;
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Subjects visible under the current category filter
@@ -203,9 +207,16 @@ export default function Exams() {
     setExpandedSubjectTopics(subjectId);
     if (!topicsGrouped[subjectId]) {
       setLoadingTopicsForSubject(subjectId);
-      await fetchTopicsForSubject(subjectId);
+      await fetchTopicsForSubject(subjectId, 1, TOPICS_LIMIT, examTypeId);
       setLoadingTopicsForSubject(null);
     }
+  };
+
+  const handleLoadMoreTopics = async (subjectId: string) => {
+    const nextPage = (topicsPage[subjectId] ?? 1) + 1;
+    setLoadingMoreTopics(subjectId);
+    await fetchTopicsForSubject(subjectId, nextPage, TOPICS_LIMIT, examTypeId);
+    setLoadingMoreTopics(null);
   };
 
   const handleTopicToggle = (topicId: string) => {
@@ -630,29 +641,40 @@ export default function Exams() {
                                 No topics available for this subject.
                               </p>
                             ) : (
-                              subjectTopics.map((topic) => {
-                                const topicChecked = selectedTopicIds.includes(
-                                  topic.id,
-                                );
-                                return (
-                                  <div
-                                    key={topic.id}
-                                    className="flex items-center justify-between"
+                              <>
+                                {subjectTopics.map((topic) => {
+                                  const topicChecked = selectedTopicIds.includes(topic.id);
+                                  return (
+                                    <div key={topic.id} className="flex items-center justify-between">
+                                      <CheckBox
+                                        onChange={() => handleTopicToggle(topic.id)}
+                                        value={topicChecked}
+                                        customLabel={
+                                          <span className="text-sm text-[#2B2B2B] ml-2">
+                                            {topic.name}
+                                          </span>
+                                        }
+                                      />
+                                    </div>
+                                  );
+                                })}
+                                {topicsHasMore[subject.id] && (
+                                  <button
+                                    onClick={() => handleLoadMoreTopics(subject.id)}
+                                    disabled={loadingMoreTopics === subject.id}
+                                    className="mt-1 text-xs text-pink-500 font-[600] hover:underline disabled:opacity-50 flex items-center gap-1"
                                   >
-                                    <CheckBox
-                                      onChange={() =>
-                                        handleTopicToggle(topic.id)
-                                      }
-                                      value={topicChecked}
-                                      customLabel={
-                                        <span className="text-sm text-[#2B2B2B] ml-2">
-                                          {topic.name}
-                                        </span>
-                                      }
-                                    />
-                                  </div>
-                                );
-                              })
+                                    {loadingMoreTopics === subject.id ? (
+                                      <span className="animate-pulse">Loading…</span>
+                                    ) : (
+                                      <>
+                                        <Icon icon="hugeicons:add-01" className="w-3 h-3" />
+                                        Load more topics
+                                      </>
+                                    )}
+                                  </button>
+                                )}
+                              </>
                             )}
                           </div>
                         )}

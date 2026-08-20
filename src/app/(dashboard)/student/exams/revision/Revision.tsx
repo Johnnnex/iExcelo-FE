@@ -14,7 +14,7 @@ import { Modal } from "@/components/molecules";
 import { Icon } from "@iconify/react";
 import { useExamProtection, useExamLeaveGuard } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { Button, CheckBox, Radio, RichText } from "@/components/atoms";
+import { Button, CheckBox, Radio, ContentRenderer } from "@/components/atoms";
 import { InputField } from "@/components/molecules";
 import { useExamStore, useAuthStore, useStudentStore } from "@/store";
 import { TopicWindow } from "./TopicWindow";
@@ -129,6 +129,10 @@ function RevisionTestContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [!!pendingConfig, !!examSession]);
 
+  const shouldClearRef = useRef(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => () => { if (shouldClearRef.current) clearSession(); }, []);
+
   if (!isNavigatingAway.current && !pendingConfig && !examSession) {
     return <RevisionSkeleton />;
   }
@@ -196,11 +200,14 @@ function RevisionTestContent() {
     } else if (isTextInput) {
       const studentAnswer =
         typeof answer === "string" ? answer.trim().toLowerCase() : "";
-      const accepted = String(correctAnswer ?? "")
-        .split(/[,/]/)
-        .map((a) => a.trim().toLowerCase())
+      const keywords = (
+        Array.isArray(correctAnswer)
+          ? (correctAnswer as string[])
+          : String(correctAnswer ?? "").split(/[\n,/]/)
+      )
+        .map((k) => k.trim().toLowerCase())
         .filter(Boolean);
-      isCorrect = accepted.length > 0 && accepted.includes(studentAnswer);
+      isCorrect = keywords.length > 0 && keywords.some((kw) => studentAnswer.includes(kw));
     } else if (isMultipleResponse) {
       const selected = Array.isArray(answer) ? [...answer].sort() : [];
       const correct = Array.isArray(correctAnswer)
@@ -306,9 +313,9 @@ function RevisionTestContent() {
 
   const handleReturnToMain = () => {
     isNavigatingAway.current = true;
-    clearSession();
-    fetchDashboard(granularity);
+    shouldClearRef.current = true;
     router.push("/student/exams");
+    fetchDashboard(granularity);
   };
 
   const getOptionState = (optionId: string) => {
@@ -492,12 +499,12 @@ function RevisionTestContent() {
                               </h4>
                             )}
                             <div className="text-sm text-gray-700 leading-relaxed max-h-56 overflow-y-auto pr-1">
-                              <RichText content={passage.content} />
+                              <ContentRenderer content={passage.content} contentFormat={passage.contentFormat} />
                             </div>
                           </div>
                         )}
                         <div className="text-gray-700 mb-6 text-[.9375rem] leading-relaxed">
-                          <RichText content={question.questionText} />
+                          <ContentRenderer content={question.questionText} contentFormat={question.contentFormat} />
                         </div>
 
                         {/* ── Essay ── */}
@@ -628,7 +635,7 @@ function RevisionTestContent() {
                                                 : "text-gray-600",
                                           )}
                                         >
-                                          <RichText
+                                          <ContentRenderer
                                             content={option.text}
                                             variant="inline"
                                           />
@@ -737,7 +744,7 @@ function RevisionTestContent() {
                                       state === "default" && "text-gray-600",
                                     )}
                                   >
-                                    <RichText
+                                    <ContentRenderer
                                       content={option.text}
                                       variant="inline"
                                     />
@@ -852,15 +859,13 @@ function RevisionTestContent() {
                   {(isExamSubmitted ||
                     submittedQuestions.has(currentQuestion)) &&
                     question &&
-                    (question.correctAnswer ||
-                      question.topicName ||
-                      question.explanation) && (
+                    (question.topicId || question.explanation) && (
                       <div
                         style={{
                           boxShadow:
                             "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
                         }}
-                        className="border-[#258BE4] rounded-xl border p-[1.25rem_1.375rem_2rem_1.25rem] bg-[#DBEDFF] overflow-hidden"
+                        className="border-[#258BE4] rounded-xl border p-5 bg-[#DBEDFF] overflow-hidden"
                       >
                         <div className="flex flex-col md:flex-row items-start md:justify-between">
                           <h3 className="font-semibold text-gray-900">
@@ -895,7 +900,7 @@ function RevisionTestContent() {
                                   Right Answer
                                 </h4>
                                 <div className="text-lg font-bold text-blue-600">
-                                  <RichText
+                                  <ContentRenderer
                                     content={getCorrectAnswerDisplay(question)}
                                     variant="inline"
                                   />
@@ -909,7 +914,7 @@ function RevisionTestContent() {
                           <>
                             <div className="h-[1px] w-full bg-[#EDEDED] my-4" />
                             <div className="text-gray-600 text-sm leading-relaxed">
-                              <RichText content={question.explanation} />
+                              <ContentRenderer content={question.explanation!} contentFormat={question.contentFormat} />
                             </div>
                           </>
                         )}

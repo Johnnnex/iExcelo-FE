@@ -14,7 +14,7 @@ import { Modal } from "@/components/molecules";
 import { Icon } from "@iconify/react";
 import { useExamProtection, useExamLeaveGuard } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { Button, CheckBox, Radio, RichText } from "@/components/atoms";
+import { Button, CheckBox, Radio, ContentRenderer } from "@/components/atoms";
 import { InputField } from "@/components/molecules";
 import { useExamStore, useAuthStore } from "@/store";
 import type { IQuestionResponse, IFlagUpdate } from "@/types";
@@ -184,6 +184,10 @@ export default function Mock() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [!!pendingConfig, !!examSession]);
 
+  const shouldClearRef = useRef(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => () => { if (shouldClearRef.current) clearSession(); }, []);
+
   // Session guard — must come AFTER all hooks
   if (!isNavigatingAway.current && !pendingConfig && !examSession) {
     return <MockSkeleton />;
@@ -265,7 +269,7 @@ export default function Mock() {
 
   const handleReturnToMain = () => {
     isNavigatingAway.current = true;
-    clearSession();
+    shouldClearRef.current = true;
     router.push("/student/exams");
   };
 
@@ -617,12 +621,12 @@ export default function Mock() {
                               </h4>
                             )}
                             <div className="text-sm text-gray-700 leading-relaxed max-h-56 overflow-y-auto pr-1">
-                              <RichText content={passage.content} />
+                              <ContentRenderer content={passage.content} contentFormat={passage.contentFormat} />
                             </div>
                           </div>
                         )}
                         <div className="text-gray-700 mb-6 text-[.9375rem] leading-relaxed">
-                          <RichText content={question.questionText} />
+                          <ContentRenderer content={question.questionText} contentFormat={question.contentFormat} />
                         </div>
                         {/* ── Essay ── */}
                         {isEssay ? (
@@ -678,7 +682,7 @@ export default function Mock() {
                                     }
                                     customLabel={
                                       <span className="text-sm text-gray-600 ml-2">
-                                        <RichText
+                                        <ContentRenderer
                                           content={option.text}
                                           variant="inline"
                                         />
@@ -724,7 +728,7 @@ export default function Mock() {
                                   onChange={() => handleSelectOption(option.id)}
                                 />
                                 <span className="text-sm text-gray-600">
-                                  <RichText
+                                  <ContentRenderer
                                     content={option.text}
                                     variant="inline"
                                   />

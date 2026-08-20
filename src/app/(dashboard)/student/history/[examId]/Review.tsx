@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { cn } from "@/lib/utils";
-import { Button, Tab, RichText, Radio, CheckBox } from "@/components/atoms";
+import { Button, Tab, ContentRenderer, Radio, CheckBox } from "@/components/atoms";
 import { Chart } from "@/components/molecules";
 import { MatchingQuestion } from "@/components/molecules/student-dashboard";
 import { useAuthStore, useStudentStore } from "@/store";
@@ -712,7 +712,7 @@ const Review = () => {
               )}
               <div className="text-gray-700 text-xs sm:text-sm leading-relaxed">
                 {fullDetailsContent ? (
-                  <RichText content={fullDetailsContent} />
+                  <ContentRenderer content={fullDetailsContent} />
                 ) : (
                   <p className="text-gray-400 italic">
                     No detailed explanation available.
@@ -812,14 +812,14 @@ function QuestionCard({
               </h4>
             )}
             <div className="text-xs sm:text-sm text-gray-700 leading-relaxed max-h-48 sm:max-h-56 overflow-y-auto pr-1">
-              <RichText content={question.passage.content} />
+              <ContentRenderer content={question.passage.content} contentFormat={question.passage.contentFormat} />
             </div>
           </div>
         )}
 
         {/* Question text */}
         <div className="text-gray-700 mb-4 sm:mb-6 text-[.8125rem] sm:text-[.9375rem] leading-relaxed">
-          <RichText content={question.questionText} />
+          <ContentRenderer content={question.questionText} contentFormat={question.contentFormat} />
         </div>
 
         {/* ── Essay ── */}
@@ -831,7 +831,7 @@ function QuestionCard({
               </p>
               <div className="border border-blue-200 bg-blue-50 rounded-xl p-4 text-sm text-gray-700 leading-relaxed min-h-[80px]">
                 {hasStudentAnswer ? (
-                  <RichText content={studentAnswer as string} />
+                  <ContentRenderer content={studentAnswer as string} />
                 ) : (
                   <p className="text-gray-400 italic">No answer provided.</p>
                 )}
@@ -843,7 +843,7 @@ function QuestionCard({
                   Model Answer
                 </p>
                 <div className="border border-[#EDEDED] bg-[#F8F9FA] rounded-xl p-4 text-sm text-gray-700 leading-relaxed min-h-[80px]">
-                  <RichText content={correctAnswer as string} />
+                  <ContentRenderer content={correctAnswer as string} />
                 </div>
               </div>
             )}
@@ -958,7 +958,7 @@ function QuestionCard({
                     {letter}
                   </span>
                   <span className={cn("text-sm flex-1", textStyle)}>
-                    <RichText content={option.text} variant="inline" />
+                    <ContentRenderer content={option.text} variant="inline" />
                   </span>
                   {state === "correct-picked" && (
                     <span className="text-xs font-medium text-green-700 flex-shrink-0">
@@ -1037,7 +1037,7 @@ function QuestionCard({
                     {letter}
                   </span>
                   <span className={cn("text-sm flex-1", textStyle)}>
-                    <RichText content={option.text} variant="inline" />
+                    <ContentRenderer content={option.text} variant="inline" />
                   </span>
                   {state === "correct-picked" && (
                     <span className="text-xs font-medium text-green-700 flex-shrink-0">
@@ -1067,12 +1067,12 @@ function QuestionCard({
         )}
 
         {/* ── Explanation card (same blue box as revision mode) ── */}
-        {!isEssay && (question.topicName || question.explanation) && (
+        {!isEssay && (question.topicId || question.topicName || question.explanation) && (
           <div
             style={{
               borderColor: "#258BE4",
             }}
-            className="rounded-xl border mt-4 sm:mt-6 p-3 sm:p-[1.25rem_1.375rem_1.5rem_1.25rem] bg-[#DBEDFF] overflow-hidden"
+            className="rounded-xl border mt-4 sm:mt-6 p-3 sm:p-5 bg-[#DBEDFF] overflow-hidden"
           >
             <div className="flex flex-col sm:flex-row items-start sm:justify-between">
               <h3 className="text-sm sm:text-base font-semibold text-gray-900">Explanation</h3>
@@ -1115,7 +1115,7 @@ function QuestionCard({
               <>
                 <div className="h-[1px] w-full bg-[#EDEDED] my-3 sm:my-4" />
                 <div className="text-gray-700 text-xs sm:text-sm leading-relaxed">
-                  <RichText content={question.explanation} variant="inline" />
+                  <ContentRenderer content={question.explanation} contentFormat={question.contentFormat} variant="inline" />
                 </div>
               </>
             )}

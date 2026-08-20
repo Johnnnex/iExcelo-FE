@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
-import { RichText } from "@/components/atoms";
+import { ContentRenderer } from "@/components/atoms";
 import { useExamStore } from "@/store";
 import Link from "next/link";
 import type { ITopic } from "@/types";
@@ -220,7 +220,7 @@ export function TopicWindow({ topicId, index, zIndex, onClose, onFocus }: Props)
               <hr className="border-[#EDEDED]" />
               <div className="text-gray-700 text-sm leading-relaxed">
                 {topic.content ? (
-                  <RichText content={topic.content} />
+                  <ContentRenderer content={topic.content} contentFormat={topic.contentFormat} />
                 ) : (
                   <p className="text-gray-400 italic">No content available for this topic.</p>
                 )}
