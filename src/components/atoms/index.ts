@@ -10,3 +10,4 @@ export * from "./RichText";
 export * from "./RichTextV2";
 export * from "./ContentRenderer";
 export * from "./Tab";
+export * from "./animations";

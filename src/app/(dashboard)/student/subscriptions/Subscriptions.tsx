@@ -131,18 +131,15 @@ function SubscriptionsSkeleton() {
       <div className="h-6 sm:h-7 w-40 sm:w-56 bg-gray-200 rounded-lg animate-pulse mb-4 sm:mb-5" />
 
       {/* Plan cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="flex flex-wrap justify-center gap-6">
         {[0, 1, 2].map((i) => (
-          <div key={i} className={cn(i === 2 && "sm:col-span-2 lg:col-span-1")}>
+          <div key={i} className="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]">
             <div
               style={{
                 boxShadow:
                   "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
               }}
-              className={cn(
-                "p-[.625rem_.5rem_.875rem_.5rem] sm:p-[1rem_.75rem_1.25rem_.75rem] rounded-[1.5rem] bg-white animate-pulse",
-                i === 2 && "sm:w-[calc(50%-.75rem)] sm:mx-auto lg:w-auto lg:mx-0"
-              )}
+              className="p-[.625rem_.5rem_.875rem_.5rem] sm:p-[1rem_.75rem_1.25rem_.75rem] rounded-[1.5rem] bg-white animate-pulse"
             >
               {/* Inner header */}
               <div className="p-[1rem_.875rem] sm:p-[1.5rem_1.25rem] mb-4 sm:mb-6 rounded-[1.25rem] bg-gray-100">
@@ -504,13 +501,11 @@ const Subscriptions = () => {
       {checkoutInfo && checkoutInfo.plans.length > 0 ? (
         <div
           className={cn(
-            "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
+            "flex flex-wrap justify-center gap-6",
             isSponsored && "opacity-50 pointer-events-none select-none",
           )}
         >
           {checkoutInfo.plans.map((plan, index) => {
-            const totalPlans = checkoutInfo.plans.length;
-            const isLastAndOdd = index === totalPlans - 1 && totalPlans % 2 !== 0;
             const style = planStyles[index] || planStyles[0];
             const isCurrentPlan = activeSubscription?.planId === plan.id;
             const isUpcomingPlan =
@@ -518,16 +513,13 @@ const Subscriptions = () => {
             const formattedPrice = `${currencySymbol}${plan.price.toLocaleString()}`;
 
             return (
-              <div key={plan.id} className={cn(isLastAndOdd && "sm:col-span-2 lg:col-span-1")}>
+              <div key={plan.id} className="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]">
                 <div
                   style={{
                     boxShadow:
                       "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
                   }}
-                  className={cn(
-                    "p-[.625rem_.5rem_.875rem_.5rem] sm:p-[1rem_.75rem_1.25rem_.75rem] rounded-[1.5rem] bg-white",
-                    isLastAndOdd && "sm:w-[calc(50%-.75rem)] sm:mx-auto lg:w-auto lg:mx-0"
-                  )}
+                  className="p-[.625rem_.5rem_.875rem_.5rem] sm:p-[1rem_.75rem_1.25rem_.75rem] rounded-[1.5rem] bg-white"
                 >
                   <div
                     style={{

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Icon } from "@iconify/react";
-import { Chip } from "../atoms";
+import { Chip, FadeIn } from "../atoms";
 
 const contentData = [
   {
@@ -66,19 +66,16 @@ const Features = () => {
       const rect = section.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Start effect when section enters viewport
       if (rect.top <= windowHeight * 0.3 && rect.bottom >= windowHeight * 0.3) {
         const sectionHeight = rect.height;
         const scrollProgress =
           (windowHeight * 0.3 - rect.top) / (sectionHeight * 0.8);
         const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
 
-        // Calculate which content should be shown
         const totalSteps = contentData.length;
         const currentStep = clampedProgress * totalSteps;
         const newIndex = Math.min(Math.floor(currentStep), totalSteps - 1);
 
-        // Calculate opacity for smooth fade
         const stepProgress = currentStep - newIndex;
         const fadeOpacity = 1 - Math.abs(stepProgress - 0.5) * 2;
 
@@ -92,67 +89,47 @@ const Features = () => {
       }
     };
 
-    // Use passive listener for better performance
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
+    handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [activeIndex]);
 
   const currentContent = contentData[activeIndex];
 
-  // Did something make shift here, oops, I just didn't want to use a library
   return (
     <section className="pb-[3rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]">
-      <div
-        className="mb-[2rem] md:hidden w-fit mx-auto"
-        data-aos="fade-up"
-        data-aos-duration="600"
-      >
+      <FadeIn className="mb-[2rem] md:hidden w-fit mx-auto">
         <Chip name="How It Works" />
-      </div>
-      <h2
-        className="md:text-[2.75rem] md:hidden text-[2.25rem] leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] text-center font-[600] text-[#101928] mb-[.5rem]"
-        data-aos="fade-up"
-        data-aos-duration="700"
-      >
-        Your Pathway to Exam Excellence
-      </h2>
-      <p
-        className="text-[#667185] md:hidden font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[4rem]"
-        data-aos="fade-up"
-        data-aos-duration="700"
-        data-aos-delay="100"
-      >
-        A step-by-step journey that turns preparation into mastery — helping you
-        build confidence, improve speed, and excel with ease.
-      </p>
+      </FadeIn>
+      <FadeIn className="md:hidden">
+        <h2 className="md:text-[2.75rem] text-[2.25rem] leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] text-center font-[600] text-[#101928] mb-[.5rem]">
+          Your Pathway to Exam Excellence
+        </h2>
+      </FadeIn>
+      <FadeIn delay={0.08} className="md:hidden">
+        <p className="text-[#667185] font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[4rem]">
+          A step-by-step journey that turns preparation into mastery — helping you
+          build confidence, improve speed, and excel with ease.
+        </p>
+      </FadeIn>
 
       <div ref={sectionRef} style={{ minHeight: "400vh" }}>
         <div className="sticky top-[15vh] md:top-[15vh]">
-          <div
-            className="mb-[2rem] hidden md:block w-fit mx-auto"
-            data-aos="fade-up"
-            data-aos-duration="600"
-          >
+          <FadeIn className="mb-[2rem] hidden md:block w-fit mx-auto">
             <Chip name="How It Works" />
-          </div>
-          <h2
-            className="md:text-[2.75rem] hidden md:block text-[2.25rem] leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] text-center font-[600] text-[#101928] mb-[.5rem]"
-            data-aos="fade-up"
-            data-aos-duration="700"
-          >
-            Your Pathway to Exam Excellence
-          </h2>
-          <p
-            className="text-[#667185] hidden md:block font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[4rem]"
-            data-aos="fade-up"
-            data-aos-duration="700"
-            data-aos-delay="100"
-          >
-            A step-by-step journey that turns preparation into mastery — helping
-            you build confidence, improve speed, and excel with ease.
-          </p>
+          </FadeIn>
+          <FadeIn className="hidden md:block">
+            <h2 className="md:text-[2.75rem] text-[2.25rem] leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] text-center font-[600] text-[#101928] mb-[.5rem]">
+              Your Pathway to Exam Excellence
+            </h2>
+          </FadeIn>
+          <FadeIn delay={0.08} className="hidden md:block">
+            <p className="text-[#667185] font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[4rem]">
+              A step-by-step journey that turns preparation into mastery — helping
+              you build confidence, improve speed, and excel with ease.
+            </p>
+          </FadeIn>
 
           <div
             style={{
@@ -165,9 +142,6 @@ const Features = () => {
               willChange: "opacity, transform",
             }}
             className="lg:max-w-[53.875rem] md:w-[95%] relative overflow-hidden md:h-[25.6875rem] flex justify-between flex-col md:p-[3rem_1.8125rem_3.4375rem_1.8125rem] p-[3rem_1.875rem_3rem_.875rem] gap-[6rem] rounded-[1rem] mx-auto"
-            data-aos="zoom-in"
-            data-aos-duration="800"
-            data-aos-delay="200"
           >
             <span
               style={{

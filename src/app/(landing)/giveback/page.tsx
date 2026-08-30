@@ -26,7 +26,7 @@ const GiveBack = () => {
               educational impact. Every contribution helps learners in need
               access tools and resources to succeed.
             </p>
-            <Button>
+            <Button href="/signup">
               Join the Giveback Program
               <Icon
                 icon="hugeicons:arrow-right-02"

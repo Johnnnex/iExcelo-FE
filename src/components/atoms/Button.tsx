@@ -2,6 +2,7 @@ import React, { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { geistSans } from "@/app/layout";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
 
 type ButtonVariant = "contained" | "outlined";
 
@@ -11,6 +12,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   disableLoader?: boolean; // This option was added due to the fact that sometimes one may not want a loader, just disabled button (rare but needed)
   variant?: ButtonVariant;
+  href?: string;
 }
 
 const containedStyles =
@@ -25,16 +27,27 @@ const Button = ({
   loading,
   disableLoader,
   variant = "contained",
+  href,
   ...props
 }: ButtonProps) => {
+  const classes = cn(
+    variant === "outlined" ? outlinedStyles : containedStyles,
+    geistSans?.className,
+    className,
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={cn(classes, "w-fit")}>
+        {children}
+      </Link>
+    );
+  }
+
   return (
     <button
       disabled={loading || props?.disabled}
-      className={cn(
-        variant === "outlined" ? outlinedStyles : containedStyles,
-        geistSans?.className,
-        className,
-      )}
+      className={classes}
       {...props}
     >
       {children}

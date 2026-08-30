@@ -635,7 +635,7 @@ export interface IDetailedResult {
   marks: number;
   passageId: string | null;
   passage: { id: string; title: string; content: string; contentFormat?: 'markdown' | 'plate' } | null;
-  options: { id: string; text: string }[];
+  options: { id: string; text: string; contentFormat?: 'markdown' | 'plate' }[];
   matchingPrompts?: string[];
   matchingOptions?: string[];
   studentAnswer: string | string[] | Record<string, string> | null;
@@ -681,6 +681,7 @@ export interface IExamAttemptDetail {
 export interface IExamOption {
   id: string;
   text: string;
+  contentFormat?: 'markdown' | 'plate';
 }
 
 export interface IExamQuestion {

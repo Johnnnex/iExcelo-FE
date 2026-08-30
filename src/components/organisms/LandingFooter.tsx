@@ -58,15 +58,29 @@ const LandingFooter = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-[2rem]">
               <div className="flex gap-[1.5rem] items-center">
                 {[
-                  { path: "facebook", url: "/" },
-                  { path: "twitter", url: "/" },
-                  { path: "instagram", url: "/" },
+                  {
+                    path: "facebook",
+                    url: "https://www.facebook.com/profile.php?id=61572819621643",
+                    label: "Facebook",
+                  },
+                  {
+                    path: "twitter",
+                    url: "https://x.com/iExcelo1?t=UZEdLQYbaq0ZbGdE4B6bQA&s=09",
+                    label: "X (Twitter)",
+                  },
+                  {
+                    path: "instagram",
+                    url: "https://www.instagram.com/iexceloofficial",
+                    label: "Instagram",
+                  },
                 ]?.map((item, index) => (
                   <a
                     href={item?.url}
                     target="_blank"
+                    rel="noopener noreferrer"
                     key={`__icon__social__${index}`}
-                    className="h-[1.5rem] w-[1.5rem] rounded-[50%] bg-[#007FFF] flex items-center justify-center"
+                    aria-label={item.label}
+                    className="h-[1.5rem] w-[1.5rem] rounded-[50%] bg-[#007FFF] flex items-center justify-center transition-opacity hover:opacity-80"
                   >
                     <SVGClient src={`/svg/${item?.path}.svg`} />
                   </a>

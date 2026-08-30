@@ -1,4 +1,4 @@
-import { Button, Chip } from "@/components/atoms";
+import { Button, Chip, FadeIn } from "@/components/atoms";
 import { CTA } from "@/components/organisms";
 import Features from "@/components/organisms/Features";
 import { Icon } from "@iconify/react";
@@ -13,11 +13,7 @@ const Revisions = () => {
   return (
     <main className="bg-white">
       <section className="bg-[url(/images/background-pattern-3.png)] relative overflow-hidden bg-center gap-[3.25rem] md:gap-0 bg-cover flex flex-col md:flex-row items-center pt-[8rem] md:pt-0 md:justify-center min-h-[100vh] px-[1rem]">
-        <div
-          className="flex flex-col relative z-[2] gap-[1rem] items-center"
-          data-aos="fade-up"
-          data-aos-duration="800"
-        >
+        <FadeIn className="flex flex-col relative z-[2] gap-[1rem] items-center">
           <Chip name="iExcelo Exam Revision" />
           <h1 className="text-[2.75rem] md:text-[3.25rem] font-[600] leading-[3rem] md:leading-[3.5rem] text-[#101928] tracking-[-.88px] md:tracking-[-1.04px] max-w-[40rem] mx-auto text-center">
             Your Smart Companion for Exam Success
@@ -29,7 +25,7 @@ const Revisions = () => {
               questions, smart explanations, and topic summaries, everything you
               need to prepare confidently and excel in any exam.
             </p>
-            <Button style={{ width: "fit-content", marginInline: "auto" }}>
+            <Button href="/signup" className="w-fit mx-auto">
               Start Revising Now
               <Icon
                 icon="hugeicons:arrow-right-02"
@@ -38,37 +34,30 @@ const Revisions = () => {
               />
             </Button>
           </div>
-        </div>
+        </FadeIn>
         <div className="md:absolute inset-0 w-full h-[22rem] md:h-full flex items-center justify-center">
-          <figure
+          <FadeIn
+            delay={0.1}
             className="h-full md:hidden lg:block w-full lg:w-[70%] bg-[url(/images/hero-img-6-sm.png)] md:bg-[url(/images/hero-img-6.png)] bg-center bg-contain bg-no-repeat"
-            data-aos="fade-left"
-            data-aos-duration="800"
-            data-aos-delay="100"
           />
         </div>
       </section>
 
       <section className="py-[6rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]">
-        <h2
-          className="md:text-[2.75rem] text-[2.25rem] text-center leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]"
-          data-aos="fade-up"
-          data-aos-duration="700"
-        >
-          Everything You Need to Excel All in One Place
-        </h2>
-        <p
-          className="text-[#667185] text-center font-[400] text-[1.125rem] leading-[1.75rem] mb-[2rem]"
-          data-aos="fade-up"
-          data-aos-duration="700"
-          data-aos-delay="100"
-        >
-          Designed to help you learn smarter and achieve more, iExcelo makes
-          exam preparation seamless, engaging, and effective, so you can focus
-          on what truly matters: excelling.
-        </p>
-        <div data-aos="fade-up" data-aos-duration="700" data-aos-delay="200">
-          <Button style={{ width: "fit-content", marginInline: "auto" }}>
+        <FadeIn>
+          <h2 className="md:text-[2.75rem] text-[2.25rem] text-center leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]">
+            Everything You Need to Excel All in One Place
+          </h2>
+        </FadeIn>
+        <FadeIn delay={0.08}>
+          <p className="text-[#667185] text-center font-[400] text-[1.125rem] leading-[1.75rem] mb-[2rem]">
+            Designed to help you learn smarter and achieve more, iExcelo makes
+            exam preparation seamless, engaging, and effective, so you can focus
+            on what truly matters: excelling.
+          </p>
+        </FadeIn>
+        <FadeIn delay={0.14}>
+          <Button href="/signup" className="mx-auto">
             Get Started
             <Icon
               icon="hugeicons:arrow-right-02"
@@ -76,7 +65,7 @@ const Revisions = () => {
               width={"1.5rem"}
             />
           </Button>
-        </div>
+        </FadeIn>
         <div className="mt-[4rem] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[2rem] md:[&>*:last-child:nth-child(odd)]:col-span-2 md:[&>*:last-child:nth-child(odd)]:mx-auto md:[&>*:last-child:nth-child(odd)]:max-w-[calc(50%-1rem)] lg:[&>*:last-child:nth-child(odd)]:col-span-1 lg:[&>*:last-child:nth-child(odd)]:mx-0 lg:[&>*:last-child:nth-child(odd)]:max-w-none">
           {[
             {
@@ -132,16 +121,14 @@ const Revisions = () => {
               content: `24/7 access to our platform from any device, anywhere you are. Study at your own pace, whenever and wherever inspiration strikes.`,
             },
           ]?.map((item, index) => (
-            <div
+            <FadeIn
               style={{
                 boxShadow:
                   "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
               }}
               key={`__item__${index}`}
+              delay={index * 0.04}
               className="h-[18.375rem] bg-[url(/images/background-pattern-5.png)] bg-center bg-cover p-[1.375rem_1.5rem] outline rounded-[1.5rem] outline-offset-[4px]"
-              data-aos="fade-up"
-              data-aos-duration="600"
-              data-aos-delay={index * 50}
             >
               <div className="flex flex-col w-fit items-center mb-[1px]">
                 <span
@@ -172,7 +159,7 @@ const Revisions = () => {
               <p className="text-[#667185] leading-[1.25rem] text-[.875rem] font-[400]">
                 {item?.content}
               </p>
-            </div>
+            </FadeIn>
           ))}
         </div>
       </section>

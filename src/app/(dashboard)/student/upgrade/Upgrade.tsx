@@ -137,7 +137,7 @@ export default function Upgrade({ examTypeId, checkoutInfo }: UpgradeProps) {
   return (
     <>
       <div className="min-h-screen bg-gray-100 p-4 md:p-8">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <button
             onClick={() => router.back()}
             className="text-gray-400 hover:text-gray-600 mb-8"
@@ -159,19 +159,19 @@ export default function Upgrade({ examTypeId, checkoutInfo }: UpgradeProps) {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             {plans.map((plan) => {
               const isSelected = selectedPlanId === plan.id;
               return (
                 <div
                   key={plan.id}
+                  className="w-full md:w-[calc(33.333%-1rem)] cursor-pointer"
                   onClick={() => {
                     setSelectedPlanId(plan.id);
                     const firstProv = plan.providers[0]?.provider ?? null;
                     setSelectedProvider(firstProv);
                     setShowPayment(true);
                   }}
-                  className="cursor-pointer"
                 >
                   <div
                     style={{
@@ -242,127 +242,131 @@ export default function Upgrade({ examTypeId, checkoutInfo }: UpgradeProps) {
 
       {/* PaymentMethodSelector inline */}
       {showPayment && (
-        <Modal isOpen onClose={() => setShowPayment(false)} className="rounded-2xl w-full max-w-3xl">
-            <div className="p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
-              <button
-                onClick={() => setShowPayment(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <Icon icon="hugeicons:cancel-01" className="w-6 h-6" />
-              </button>
+        <Modal
+          isOpen
+          onClose={() => setShowPayment(false)}
+          className="rounded-2xl w-full max-w-3xl"
+        >
+          <div className="p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
+            <button
+              onClick={() => setShowPayment(false)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <Icon icon="hugeicons:cancel-01" className="w-6 h-6" />
+            </button>
+          </div>
+
+          <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">
+                Payment Method
+              </h3>
+              <div className="space-y-3">
+                {availableProviders.map(({ provider: p }) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setSelectedProvider(p)}
+                    className={cn(
+                      "w-full flex items-center justify-between p-3 md:p-4 rounded-xl border cursor-pointer transition-colors",
+                      selectedProvider === p
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-200 hover:border-gray-300",
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      {p === "paystack" ? (
+                        <span className="text-cyan-500 font-bold">
+                          ≡ paystack
+                        </span>
+                      ) : (
+                        <span className="text-purple-600 font-bold text-lg">
+                          stripe
+                        </span>
+                      )}
+                    </div>
+                    {selectedProvider === p && (
+                      <Icon
+                        icon="hugeicons:checkmark-circle-02"
+                        className="w-5 h-5 text-blue-500"
+                      />
+                    )}
+                  </button>
+                ))}
+                {availableProviders.length === 0 && (
+                  <p className="text-sm text-gray-400">
+                    No payment methods available for this plan.
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-4">
-                  Payment Method
-                </h3>
-                <div className="space-y-3">
-                  {availableProviders.map(({ provider: p }) => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => setSelectedProvider(p)}
-                      className={cn(
-                        "w-full flex items-center justify-between p-3 md:p-4 rounded-xl border cursor-pointer transition-colors",
-                        selectedProvider === p
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-gray-200 hover:border-gray-300",
-                      )}
-                    >
-                      <div className="flex items-center gap-3">
-                        {p === "paystack" ? (
-                          <span className="text-cyan-500 font-bold">
-                            ≡ paystack
-                          </span>
-                        ) : (
-                          <span className="text-purple-600 font-bold text-lg">
-                            stripe
-                          </span>
-                        )}
-                      </div>
-                      {selectedProvider === p && (
-                        <Icon
-                          icon="hugeicons:checkmark-circle-02"
-                          className="w-5 h-5 text-blue-500"
-                        />
-                      )}
-                    </button>
-                  ))}
-                  {availableProviders.length === 0 && (
-                    <p className="text-sm text-gray-400">
-                      No payment methods available for this plan.
-                    </p>
-                  )}
-                </div>
+            <div className="bg-gray-50 rounded-xl p-4 md:p-6">
+              <h3 className="font-semibold text-gray-900 mb-4">Summary</h3>
+              <p className="text-sm text-gray-500 mb-2">
+                Subscribe to iExcelo {currentPlan?.name || "Plan"}
+              </p>
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="text-2xl md:text-3xl font-bold text-gray-900">
+                  {currentPlan?.formattedPrice || `${currencySymbol}0`}
+                </span>
+                <span className="text-sm text-gray-500">
+                  for {currentPlan?.durationDays || 0} days
+                </span>
               </div>
 
-              <div className="bg-gray-50 rounded-xl p-4 md:p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Summary</h3>
-                <p className="text-sm text-gray-500 mb-2">
-                  Subscribe to iExcelo {currentPlan?.name || "Plan"}
-                </p>
-                <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-2xl md:text-3xl font-bold text-gray-900">
+              <div className="space-y-3 border-t border-gray-200 pt-4">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">Subtotal</span>
+                  <span className="text-gray-900">
                     {currentPlan?.formattedPrice || `${currencySymbol}0`}
                   </span>
-                  <span className="text-sm text-gray-500">
-                    for {currentPlan?.durationDays || 0} days
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">Tax</span>
+                  <span className="text-gray-900">{currencySymbol}0.00</span>
+                </div>
+                <div className="flex justify-between text-sm font-semibold border-t border-gray-200 pt-3">
+                  <span className="text-gray-900">Today&apos;s Total</span>
+                  <span className="text-gray-900">
+                    {currentPlan?.formattedPrice || `${currencySymbol}0`}
                   </span>
                 </div>
-
-                <div className="space-y-3 border-t border-gray-200 pt-4">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Subtotal</span>
-                    <span className="text-gray-900">
-                      {currentPlan?.formattedPrice || `${currencySymbol}0`}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Tax</span>
-                    <span className="text-gray-900">{currencySymbol}0.00</span>
-                  </div>
-                  <div className="flex justify-between text-sm font-semibold border-t border-gray-200 pt-3">
-                    <span className="text-gray-900">Today&apos;s Total</span>
-                    <span className="text-gray-900">
-                      {currentPlan?.formattedPrice || `${currencySymbol}0`}
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
+          </div>
 
-            <div className="p-4 md:p-6 border-t border-gray-100">
-              <Button
-                className="w-full justify-center"
-                onClick={handleSubscribe}
-                loading={isCheckingOut}
-                disabled={!currentPlan || !selectedProvider}
-              >
-                Subscribe
-              </Button>
-              <p className="text-center text-xs text-gray-500 mt-4">
-                By subscribing, you authorize iExcelo to charge you according to
-                the terms until you cancel.
-              </p>
-              <div className="flex items-center justify-center gap-2 md:gap-4 mt-4 text-xs text-gray-400">
-                <span>
-                  Powered by{" "}
-                  {selectedProvider === "stripe" ? (
-                    <span className="text-purple-600 font-bold">stripe</span>
-                  ) : (
-                    <span className="text-cyan-500 font-bold">paystack</span>
-                  )}
-                </span>
-                <span>|</span>
-                <a href="#" className="hover:text-gray-600">
-                  Terms
-                </a>
-                <a href="#" className="hover:text-gray-600">
-                  Privacy
-                </a>
-              </div>
+          <div className="p-4 md:p-6 border-t border-gray-100">
+            <Button
+              className="w-full justify-center"
+              onClick={handleSubscribe}
+              loading={isCheckingOut}
+              disabled={!currentPlan || !selectedProvider}
+            >
+              Subscribe
+            </Button>
+            <p className="text-center text-xs text-gray-500 mt-4">
+              By subscribing, you authorize iExcelo to charge you according to
+              the terms until you cancel.
+            </p>
+            <div className="flex items-center justify-center gap-2 md:gap-4 mt-4 text-xs text-gray-400">
+              <span>
+                Powered by{" "}
+                {selectedProvider === "stripe" ? (
+                  <span className="text-purple-600 font-bold">stripe</span>
+                ) : (
+                  <span className="text-cyan-500 font-bold">paystack</span>
+                )}
+              </span>
+              <span>|</span>
+              <a href="#" className="hover:text-gray-600">
+                Terms
+              </a>
+              <a href="#" className="hover:text-gray-600">
+                Privacy
+              </a>
             </div>
+          </div>
         </Modal>
       )}
     </>

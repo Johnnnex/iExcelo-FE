@@ -1,4 +1,4 @@
-import { Button, Chip, SVGClient } from "@/components/atoms";
+import { Button, Chip, FadeIn, FadeInImg, ScaleIn, SVGClient } from "@/components/atoms";
 import {
   CTA,
   FaqV1,
@@ -24,11 +24,7 @@ export default function Home() {
         <section className="bg-[url(/images/background-pattern.png)] bg-center bg-cover flex justify-end pt-[8rem] md:pt-[10rem]">
           <div className="max-w-[1300px] flex flex-col md:gap-[3rem] gap-[2rem] lg:gap-[2rem] justify-end md:w-[90%] w-[100%] px-[1rem] mx-auto">
             <div className="flex flex-col lg:flex-row items-center gap-[2rem] md:gap-[3rem] lg:gap-0 justify-between">
-              <div
-                className="max-w-[40rem]"
-                data-aos="fade-up"
-                data-aos-duration="800"
-              >
+              <FadeIn className="max-w-[40rem]">
                 <h1 className="mb-[1rem] text-[2.75rem] text-center lg:text-left md:text-[3.25rem] font-[600] md:tracking-[-1.04px] tracking-[-.88px] text-[#101928] leading-[3rem] md:leading-[3.5rem]">
                   Revise Smarter, Practice Harder and{" "}
                   <span className="text-[#E32E89] z-[3] relative">
@@ -44,7 +40,7 @@ export default function Home() {
                   Modern online revision that makes exam prep simpler and
                   smarter
                 </p>
-                <Button className="w-fit mx-auto lg:ml-0">
+                <Button href="/signup" className="w-fit mx-auto lg:ml-0">
                   Get Started
                   <Icon
                     icon="hugeicons:arrow-right-02"
@@ -52,50 +48,41 @@ export default function Home() {
                     width={"1.5rem"}
                   />
                 </Button>
-              </div>
-              <img
+              </FadeIn>
+              <FadeInImg
                 src={"/images/hero-img-1.png"}
                 alt="Hero Image 1"
                 className="max-w-[36.625rem] w-[100%] md:h-[34.5rem]"
                 loading="lazy"
-                data-aos="fade-left"
-                data-aos-duration="800"
-                data-aos-delay="100"
+                delay={0.1}
               />
             </div>
-            <img
+            <FadeInImg
               src={"/images/hero-img-2.png"}
               alt="Hero Image 2"
               loading="lazy"
-              data-aos="fade-up"
-              data-aos-duration="800"
-              data-aos-delay="200"
+              delay={0.18}
             />
           </div>
         </section>
 
         <section className="py-[6rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]">
-          <div data-aos="fade-up" data-aos-duration="600">
+          <FadeIn className="w-fit">
             <Chip name="Our Benefits" iconPath="hugeicons:star" />
-          </div>
+          </FadeIn>
           <div className="mt-[2rem] flex flex-col lg:flex-row gap-[3.5625rem] lg:gap-0 justify-between lg:items-center">
             <div className="lg:w-[47%]">
-              <h2
-                className="md:text-[2.75rem] text-[2.25rem] leading-[2.75rem] md:leading-[3rem] w-[90%] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]"
-                data-aos="fade-up"
-                data-aos-duration="700"
-              >
-                Why Students Choose Us to Excel.
-              </h2>
-              <p
-                className="text-[#667185] font-[400] text-[1.125rem] leading-[1.75rem] mb-[2.5rem]"
-                data-aos="fade-up"
-                data-aos-duration="700"
-                data-aos-delay="100"
-              >
-                From top-level exam questions to smart revision tools, we make
-                preparation simpler, faster, and more effective.
-              </p>
+              <FadeIn>
+                <h2 className="md:text-[2.75rem] text-[2.25rem] leading-[2.75rem] md:leading-[3rem] w-[90%] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]">
+                  Why Students Choose Us to Excel.
+                </h2>
+              </FadeIn>
+              <FadeIn delay={0.08}>
+                <p className="text-[#667185] font-[400] text-[1.125rem] leading-[1.75rem] mb-[2.5rem]">
+                  From top-level exam questions to smart revision tools, we make
+                  preparation simpler, faster, and more effective.
+                </p>
+              </FadeIn>
               <div className="md:gap-[1.5rem_1rem] gap-[1rem] grid grid-cols-1 md:grid-cols-2">
                 {[
                   {
@@ -119,16 +106,14 @@ export default function Home() {
                     icon: "hugeicons:brain",
                   },
                 ]?.map((item, index) => (
-                  <div
+                  <FadeIn
                     key={`__box__item__${index}`}
+                    delay={index * 0.07}
                     style={{
                       boxShadow:
                         "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
                     }}
                     className="p-[1rem] flex flex-col gap-[1rem] bg-white rounded-[.75rem] overflow-hidden"
-                    data-aos="fade-up"
-                    data-aos-duration="600"
-                    data-aos-delay={index * 100}
                   >
                     <span className="p-[.75rem] w-fit bg-[#E6F2FF] rounded-[.5rem]">
                       <Icon
@@ -144,44 +129,64 @@ export default function Home() {
                     <p className="leading-[1.25rem] text-[#667185] w-[90%] font-[400] text-[.875rem]">
                       {item?.content}
                     </p>
-                  </div>
+                  </FadeIn>
                 ))}
               </div>
             </div>
-            <figure
+            <FadeInImg
+              src={`/images/landing-img-1.png`}
+              alt="Landing Image 1"
               className="lg:w-[47%]"
-              data-aos="fade-left"
-              data-aos-duration="800"
-            >
-              <img src={`/images/landing-img-1.png`} alt="Landing Image 1" />
-            </figure>
+              delay={0.1}
+            />
+          </div>
+        </section>
+
+        <section className="py-[3.25rem]">
+          <div className="w-fit mx-auto mb-[2rem]">
+            <Chip name="Our Exam Offerings" iconPath="hugeicons:library" />
+          </div>
+
+          <h2
+            className={`font-semibold leading-12 text-[#101928] text-[44px] text-center mb-2`}
+          >
+            Whatever the Exam, You&apos;re Covered.
+          </h2>
+          <p className="text-[#667185] text-center font-normal leading-7 text-[18px] mb-10">
+            iExcelo brings together revision, practice, and mock exams for
+            multiple exam types, helping students prepare better, faster, and
+            with confidence.
+          </p>
+          <div className="flex items-center gap-10 justify-center">
+            {["waec-v2", "jamb-v2", "neco-v2", "sat-v2"].map((item, index) => (
+              <span
+                key={`___${index}__`}
+                className="w-43.25 h-43.25 flex items-center justify-center rounded-[50%]"
+                style={{
+                  boxShadow: `0 0 0 0.613px rgba(0, 0, 0, 0.06), 0 3.067px 13.496px 0 rgba(0, 0, 0, 0.04)`,
+                }}
+              >
+                <SVGClient src={`/svg/${item}.svg`} />
+              </span>
+            ))}
           </div>
         </section>
 
         <section className="py-[6rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]">
-          <div
-            className="w-fit mx-auto mb-[2rem]"
-            data-aos="fade-up"
-            data-aos-duration="600"
-          >
+          <FadeIn className="w-fit mx-auto mb-[2rem]">
             <Chip name="Our Features" iconPath="hugeicons:sparkles" />
-          </div>
-          <h2
-            className="text-[2.25rem] md:text-[2.75rem] text-center leading-[2.75rem] md:leading-[3rem] md:tracking-[-.88px] tracking-[-.72px] font-[600] text-[#101928] mb-[.5rem]"
-            data-aos="fade-up"
-            data-aos-duration="700"
-          >
-            Where Success Meets Innovation.
-          </h2>
-          <p
-            className="text-[#667185] font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[2.5rem]"
-            data-aos="fade-up"
-            data-aos-duration="700"
-            data-aos-delay="100"
-          >
-            Revise smarter, support others through giveback, and unlock new
-            opportunities with our affiliate program
-          </p>
+          </FadeIn>
+          <FadeIn>
+            <h2 className="text-[2.25rem] md:text-[2.75rem] text-center leading-[2.75rem] md:leading-[3rem] md:tracking-[-.88px] tracking-[-.72px] font-[600] text-[#101928] mb-[.5rem]">
+              Where Success Meets Innovation.
+            </h2>
+          </FadeIn>
+          <FadeIn delay={0.08}>
+            <p className="text-[#667185] font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[2.5rem]">
+              Revise smarter, support others through giveback, and unlock new
+              opportunities with our affiliate program
+            </p>
+          </FadeIn>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1rem]">
             {[
               {
@@ -203,16 +208,14 @@ export default function Home() {
                 href: "/affiliate",
               },
             ]?.map((item, index) => (
-              <div
+              <FadeIn
                 key={`__item__${item?.title}__${index}`}
+                delay={index * 0.08}
                 className="rounded-[.75rem] overflow-hidden md:last:col-span-2 md:last:max-w-[50%] md:last:mx-auto lg:last:col-span-1 lg:last:max-w-none"
                 style={{
                   boxShadow:
                     "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
                 }}
-                data-aos="fade-up"
-                data-aos-duration="700"
-                data-aos-delay={index * 100}
               >
                 <figure className="h-[15.25rem] overflow-hidden">
                   <img
@@ -242,34 +245,25 @@ export default function Home() {
                     Learn More
                   </Link>
                 </div>
-              </div>
+              </FadeIn>
             ))}
           </div>
         </section>
 
         <section className="py-[4rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]">
-          <div
-            className="w-fit mx-auto mb-[2rem]"
-            data-aos="fade-up"
-            data-aos-duration="600"
-          >
+          <FadeIn className="w-fit mx-auto mb-[2rem]">
             <Chip name="Testimonials" iconPath="hugeicons:megaphone-02" />
-          </div>
-          <h2
-            className="md:text-[2.75rem] text-[2.25rem] text-center leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]"
-            data-aos="fade-up"
-            data-aos-duration="700"
-          >
-            What Our Users Say
-          </h2>
-          <p
-            className="text-[#667185] font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[2.5rem]"
-            data-aos="fade-up"
-            data-aos-duration="700"
-            data-aos-delay="100"
-          >
-            Used by thousands of students, parents and partners
-          </p>
+          </FadeIn>
+          <FadeIn>
+            <h2 className="md:text-[2.75rem] text-[2.25rem] text-center leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]">
+              What Our Users Say
+            </h2>
+          </FadeIn>
+          <FadeIn delay={0.08}>
+            <p className="text-[#667185] font-[400] text-[1.125rem] text-center leading-[1.75rem] mb-[2.5rem]">
+              Used by thousands of students, parents and partners
+            </p>
+          </FadeIn>
 
           <Testimonial />
         </section>

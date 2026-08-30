@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Button, Chip, SVGClient } from "@/components/atoms";
+import { Button, Chip, FadeIn, FadeInImg, ScaleIn, SVGClient } from "@/components/atoms";
 import { CTA } from "@/components/organisms";
 import { Icon } from "@iconify/react";
 import { Metadata } from "next";
@@ -14,11 +14,7 @@ const About = () => {
     <main className="bg-white w-[100%] overflow-hidden">
       <section className="bg-[url(/images/background-pattern-3.png)] bg-center bg-cover flex items-center pt-[8rem] lg:h-[100vh]">
         <div className="max-w-[1300px] md:w-[90%] w-[100%] px-[1rem] flex flex-col lg:flex-row gap-[3.25rem] lg:items-center justify-between lg:gap-[2.3125rem] mx-auto">
-          <div
-            className="lg:w-[50%]"
-            data-aos="fade-right"
-            data-aos-duration="800"
-          >
+          <FadeIn className="lg:w-[50%]">
             <Chip name="About Us" />
             <h1 className="my-[1rem] text-[2.75rem] md:text-[3.25rem] font-[600] tracking-[-.88px] md:tracking-[-1.04px] text-[#101928] leading-[3rem] md:leading-[3.5rem]">
               The Journey <br /> Behind iExeclo
@@ -31,22 +27,21 @@ const About = () => {
               students to contribute, collaborate, and grow while supporting
               others on their journey to success.
             </p>
-            <Button>
+            <Button href="/signup">
               Contact Us
               <Icon icon="hugeicons:call" height={"1.5rem"} width={"1.5rem"} />
             </Button>
-          </div>
-          <img
+          </FadeIn>
+          <FadeInImg
             src={"/images/hero-img-3.png"}
             alt="Hero Image 3"
             className="lg:w-[50%] h-[19.125rem] md:h-[34.5rem]"
             loading="lazy"
-            data-aos="fade-left"
-            data-aos-duration="800"
-            data-aos-delay="100"
+            delay={0.1}
           />
         </div>
       </section>
+
       <section className="py-[6rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem] flex flex-col gap-[2rem] justify-end">
         <div className="flex lg:items-center flex-col lg:flex-row justify-between gap-[5.125rem]">
           <div className="lg:w-[48%] flex flex-col gap-[1rem]">
@@ -63,11 +58,9 @@ const About = () => {
               },
             ]?.map((item, index) => (
               <Fragment key={`__item__${index}`}>
-                <div
+                <FadeIn
                   className="flex flex-col gap-[.75rem]"
-                  data-aos="fade-up"
-                  data-aos-duration="700"
-                  data-aos-delay={index * 100}
+                  delay={index * 0.1}
                 >
                   <span className="flex text-[#007FFF] text-[1.75rem] md:text-[2rem] leading-[2.25rem] md:leading-[2.5rem] font-[500] tracking-[-.56px] md:tracking-[-.64px] gap-[.5rem] items-center">
                     <SVGClient src={`/svg/${item?.icon}.svg`} />
@@ -76,46 +69,36 @@ const About = () => {
                   <p className="font-[400] text-[#667185] text-[1rem] md:text-[1.125rem] leading-[1.5rem] md:leading-[1.75rem]">
                     {item?.content}
                   </p>
-                </div>
+                </FadeIn>
 
                 {index === 0 && <div className="h-[1px] bg-[#EDEDED] w-full" />}
               </Fragment>
             ))}
           </div>
-          <img
+          <FadeInImg
             src={"/images/about-img-1.png"}
             alt="About Image 1"
             className="lg:w-[45%] h-[21.25rem] md:h-[34.5rem]"
             loading="lazy"
-            data-aos="fade-left"
-            data-aos-duration="800"
+            delay={0.1}
           />
         </div>
       </section>
 
       <section className="py-[6rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]">
-        <div
-          className="w-fit mx-auto mb-[2rem]"
-          data-aos="fade-up"
-          data-aos-duration="600"
-        >
+        <FadeIn className="w-fit mx-auto mb-[2rem]">
           <Chip name="Our Team" />
-        </div>
-        <h2
-          className="md:text-[2.75rem] text-[2.25rem] text-center leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]"
-          data-aos="fade-up"
-          data-aos-duration="700"
-        >
-          Our Dedicated Team
-        </h2>
-        <p
-          className="text-[#667185] text-center font-[400] text-[1.125rem] leading-[1.75rem] mb-[4rem]"
-          data-aos="fade-up"
-          data-aos-duration="700"
-          data-aos-delay="100"
-        >
-          Meet the passionate individuals driving iExcelo&apos;s mission.
-        </p>
+        </FadeIn>
+        <FadeIn>
+          <h2 className="md:text-[2.75rem] text-[2.25rem] text-center leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] font-[600] text-[#101928] mb-[.5rem]">
+            Our Dedicated Team
+          </h2>
+        </FadeIn>
+        <FadeIn delay={0.08}>
+          <p className="text-[#667185] text-center font-[400] text-[1.125rem] leading-[1.75rem] mb-[4rem]">
+            Meet the passionate individuals driving iExcelo&apos;s mission.
+          </p>
+        </FadeIn>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-[2rem] mx-auto sm:[&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:mx-auto sm:[&>*:last-child:nth-child(odd)]:max-w-[calc(50%-1rem)] lg:[&>*:last-child:nth-child(odd)]:col-span-2 lg:[&>*:last-child:nth-child(odd)]:mx-0 lg:[&>*:last-child:nth-child(odd)]:max-w-none lg:[&>*:nth-child(-n+3)]:col-span-2 lg:[&>*:nth-child(4)]:col-span-2 lg:[&>*:nth-child(4)]:col-start-2 lg:[&>*:nth-child(5)]:col-span-2 lg:[&>*:nth-child(5)]:col-start-4">
           {[
             {
@@ -149,15 +132,13 @@ const About = () => {
               href: "https://johnex.com",
             },
           ]?.map((teamDeets, index) => (
-            <div
+            <FadeIn
               key={`___team__deets__${index}`}
+              delay={index * 0.07}
               style={{
                 backgroundImage: `url(/images/team-member-${index + 1}.png)`,
               }}
               className="rounded-[1rem] overflow-hidden bg-center bg-cover relative w-full h-[30rem]"
-              data-aos="fade-up"
-              data-aos-duration="700"
-              data-aos-delay={index * 80}
             >
               <div className="absolute p-[0_1rem_1.5rem_1rem] bottom-0 left-0 w-full">
                 <div className="backdrop-blur-[12px] text-white p-[1.5rem_1.25rem] bg-[rgba(255,_255,_255,_0.30)] border border-[rgba(255,_255,_255,_0.50)]">
@@ -181,18 +162,14 @@ const About = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </FadeIn>
           ))}
         </div>
       </section>
 
       <section className="py-[6rem] bg-[url(/images/background-pattern-4.png)] bg-cover bg-center">
         <div className="flex flex-col lg:flex-row gap-[4rem] lg:gap-[2rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem] justify-between lg:items-center">
-          <figure
-            className="lg:w-[42%] w-full aspect-square flex relative items-center justify-center"
-            data-aos="zoom-in"
-            data-aos-duration="800"
-          >
+          <ScaleIn className="lg:w-[42%] w-full aspect-square flex relative items-center justify-center">
             <img
               src={"/images/about-img-2-inner.png"}
               alt="About Image 2"
@@ -235,7 +212,7 @@ const About = () => {
                 ))}
               </div>
             </div>
-          </figure>
+          </ScaleIn>
           <div className="lg:w-[45%] flex flex-col gap-[2rem]">
             {[
               {
@@ -244,17 +221,15 @@ const About = () => {
                 content: `We're on a mission to make quality exam preparation accessible, engaging, and meaningful. iExcelo bridges smart learning with social impact helping students achieve excellence while empowering others through our GiveBack initiative.`,
               },
               {
-                title: "Give Back Program",
+                title: "Our Values",
                 content: `We believe education should inspire, not intimidate. Our values center on excellence, empathy, and empowerment combining technology, knowledge, and community to help every learner rise and give others the chance to do the same.`,
                 icon: "binoculars",
               },
             ]?.map((item, index) => (
               <Fragment key={`__item__${index}`}>
-                <div
+                <FadeIn
                   className="flex flex-col gap-[.75rem]"
-                  data-aos="fade-up"
-                  data-aos-duration="700"
-                  data-aos-delay={index * 100}
+                  delay={index * 0.1}
                 >
                   <span className="flex text-[#007FFF] text-[2rem] leading-[2.5rem] font-[500] tracking-[-.64px] gap-[.5rem] items-center">
                     <SVGClient src={`/svg/${item?.icon}.svg`} />
@@ -263,7 +238,7 @@ const About = () => {
                   <p className="font-[400] text-[#667185] text-[1.125rem] leading-[1.75rem]">
                     {item?.content}
                   </p>
-                </div>
+                </FadeIn>
 
                 {index === 0 && <div className="h-[1px] bg-[#EDEDED] w-full" />}
               </Fragment>

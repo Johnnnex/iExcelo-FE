@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Icon } from "@iconify/react";
-import { Chip } from "../atoms";
+import { Chip, FadeIn } from "../atoms";
 
 const FaqV1 = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -54,11 +54,7 @@ const FaqV1 = () => {
 
   return (
     <section className="py-20 max-w-[1300px] flex flex-col lg:flex-row justify-between items-start mx-auto w-[90%] bg-white gap-[2rem] lg:gap-12">
-      <div
-        className="lg:w-[40%] lg:sticky top-12"
-        data-aos="fade-right"
-        data-aos-duration="700"
-      >
+      <FadeIn className="lg:w-[40%] lg:sticky top-12">
         <Chip name="FAQs" iconPath="hugeicons:bubble-chat-question" />
         <h2 className="md:text-[2.75rem] text-[2.25rem] mt-[1.875rem] leading-[2.75rem] md:leading-[3rem] tracking-[-.72px] md:tracking-[-.88px] font-semibold text-[#101928] mb-2">
           Got Questions? We&apos;ve Got Answers
@@ -68,16 +64,15 @@ const FaqV1 = () => {
           don&apos;t hesitate to get in touch with us. We&apos;re here to help
           you!
         </p>
-      </div>
+      </FadeIn>
 
-      <div
+      <FadeIn
+        delay={0.1}
         style={{
           boxShadow:
             "0 0 0 1px rgba(0, 0, 0, 0.06), 0 5px 22px 0 rgba(0, 0, 0, 0.04)",
         }}
         className="border border-[#DCDFE4] py-1 rounded-[2rem] lg:w-[53%] overflow-hidden"
-        data-aos="fade-left"
-        data-aos-duration="700"
       >
         {faqs.map((faq, index) => (
           <div
@@ -126,7 +121,7 @@ const FaqV1 = () => {
             </div>
           </div>
         ))}
-      </div>
+      </FadeIn>
     </section>
   );
 };
