@@ -48,8 +48,14 @@ export function FadeIn({ children, className, style, delay = 0 }: FadeInProps) {
   );
 }
 
-interface FadeInImgProps
-  extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface FadeInImgProps {
+  src?: string;
+  alt?: string;
+  className?: string;
+  style?: CSSProperties;
+  width?: number | string;
+  height?: number | string;
+  loading?: "lazy" | "eager";
   delay?: number;
 }
 
