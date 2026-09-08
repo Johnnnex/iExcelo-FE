@@ -167,6 +167,10 @@ export default function Exams() {
     (sum, s) => sum + (s.totalQuestions ?? 0),
     0,
   );
+  const visibleQAttempted = visibleSubjects.reduce(
+    (sum, s) => sum + (s.questionsAttempted ?? 0),
+    0,
+  );
 
   const handleSelectAll = (checked: boolean) => {
     setSelectedSubjectIds(checked ? visibleSubjects.map((s) => s.id) : []);
@@ -562,7 +566,7 @@ export default function Exams() {
                       }
                     />
                     <span className="text-xs text-[#667085]">
-                      {visibleQTotal.toLocaleString()} Qs
+                      {visibleQAttempted.toLocaleString()}/{visibleQTotal.toLocaleString()} Qs
                     </span>
                   </div>
 
@@ -598,7 +602,7 @@ export default function Exams() {
                           ) : (
                             <div className="flex items-center gap-2">
                               <span className="text-xs text-[#667085]">
-                                {(subject.totalQuestions ?? 0).toLocaleString()} Qs
+                                {(subject.questionsAttempted ?? 0).toLocaleString()}/{(subject.totalQuestions ?? 0).toLocaleString()} Qs
                               </span>
                               <button
                                 onClick={() => handleViewTopics(subject.id)}

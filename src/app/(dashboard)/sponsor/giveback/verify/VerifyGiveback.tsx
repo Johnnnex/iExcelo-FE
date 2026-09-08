@@ -94,7 +94,7 @@ const VerifyGiveback = () => {
             </Button>
 
             <a
-              href="mailto:support@iexcelo.com"
+              href="mailto:platform@iexcelo.com"
               className="inline-flex items-center gap-1 text-pink-500 text-sm font-medium hover:underline"
             >
               Contact Support

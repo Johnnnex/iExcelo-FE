@@ -54,12 +54,12 @@ function AccountCard({
 }) {
   return (
     <div style={{ boxShadow: CARD_SHADOW }} className="rounded-[.75rem] bg-white p-5">
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-3 min-w-0">
           <div className="w-10 h-10 rounded-full bg-[#EFF8FF] flex items-center justify-center shrink-0">
             <Icon icon="hugeicons:bank" className="w-5 h-5 text-[#007FFF]" />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[.9375rem] font-[600] text-[#101828]">{account.bankName}</span>
               {account.isDefault && (
@@ -71,14 +71,14 @@ function AccountCard({
                 {account.currency}
               </span>
             </div>
-            <p className="text-[.8125rem] text-[#667085] mt-[.125rem]">{account.accountName}</p>
+            <p className="text-[.8125rem] text-[#667085] mt-[.125rem] truncate">{account.accountName}</p>
             <p className="text-[.8125rem] text-[#667085]">{account.accountNumber}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 ml-auto">
+        <div className="flex items-center gap-2 sm:shrink-0">
           {!account.isDefault && (
-            <Button variant="outlined" disabled={isManaging} onClick={() => onSetDefault(account.id)}>
+            <Button variant="outlined" disabled={isManaging} onClick={() => onSetDefault(account.id)} className="flex-1 sm:flex-none">
               Set Default
             </Button>
           )}
@@ -86,7 +86,7 @@ function AccountCard({
             variant="outlined"
             disabled={isManaging}
             onClick={() => onRemove(account.id)}
-            className="!border-[#FECDCA] !text-[#D42620] hover:!bg-[#FFF4F4]"
+            className={`!border-[#FECDCA] !text-[#D42620] hover:!bg-[#FFF4F4] ${!account.isDefault ? "" : "flex-1 sm:flex-none"}`}
           >
             Remove
           </Button>

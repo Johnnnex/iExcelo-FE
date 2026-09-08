@@ -239,6 +239,13 @@ export function TopicWindow({ topicId, index, zIndex, onClose, onFocus }: Props)
             href={`/student/topics/${topic.id}`}
             target="_blank"
             onMouseDown={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              // On mobile, use window.open so Chrome Android groups the tab under the current page
+              if (typeof window !== "undefined" && window.innerWidth <= 768) {
+                e.preventDefault();
+                window.open(`/student/topics/${topic.id}`, "_blank");
+              }
+            }}
             className="text-[#007FFF] text-sm font-medium hover:underline flex items-center gap-1"
           >
             Open in full page
