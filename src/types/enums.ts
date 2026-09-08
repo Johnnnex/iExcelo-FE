@@ -14,7 +14,7 @@ export enum SponsorCategory {
 }
 
 export enum CommissionStatus {
-  PENDING = "pending",
+  CONFIRMED = "confirmed",
   PAID = "paid",
 }
 

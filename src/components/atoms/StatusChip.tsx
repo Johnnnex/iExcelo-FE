@@ -18,11 +18,11 @@ const StatusChip = ({
             borderColor: "#ABEFC6",
           },
           {
-            id: CommissionStatus.PENDING,
-            color: "#344054",
-            bgColor: "#F9FAFB",
-            label: "Pending",
-            borderColor: "#EAECF0",
+            id: CommissionStatus.CONFIRMED,
+            color: "#B54708",
+            bgColor: "#FEF6E7",
+            label: "Confirmed",
+            borderColor: "#FEDF89",
           },
         ]
       : type === "payout"
