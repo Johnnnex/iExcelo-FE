@@ -26,7 +26,7 @@ const scaleVariants = {
 const viewport = { once: true, margin: "-60px" };
 
 interface FadeInProps {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
   style?: CSSProperties;
   delay?: number;
