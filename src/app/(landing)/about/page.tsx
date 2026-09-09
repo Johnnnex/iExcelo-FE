@@ -27,7 +27,7 @@ const About = () => {
               students to contribute, collaborate, and grow while supporting
               others on their journey to success.
             </p>
-            <Button href="/signup">
+            <Button href="/contact">
               Contact Us
               <Icon icon="hugeicons:call" height={"1.5rem"} width={"1.5rem"} />
             </Button>

@@ -1,4 +1,4 @@
-import { Button, Chip, FadeIn, FadeInImg, ScaleIn, SVGClient } from "@/components/atoms";
+import { Button, Chip, FadeIn, FadeInImg, SVGClient } from "@/components/atoms";
 import {
   CTA,
   FaqV1,
@@ -142,26 +142,24 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-[3.25rem]">
+        <section className="py-[3.25rem] max-w-[1300px] mx-auto md:w-[90%] w-[100%] px-[1rem]">
           <div className="w-fit mx-auto mb-[2rem]">
             <Chip name="Our Exam Offerings" iconPath="hugeicons:library" />
           </div>
 
-          <h2
-            className={`font-semibold leading-12 text-[#101928] text-[44px] text-center mb-2`}
-          >
+          <h2 className="font-semibold text-[#101928] text-[1.75rem] md:text-[2.25rem] lg:text-[2.75rem] text-center leading-[2.25rem] md:leading-[2.75rem] lg:leading-[3rem] tracking-[-0.56px] md:tracking-[-0.72px] lg:tracking-[-0.88px] mb-2">
             Whatever the Exam, You&apos;re Covered.
           </h2>
-          <p className="text-[#667185] text-center font-normal leading-7 text-[18px] mb-10">
+          <p className="text-[#667185] text-center font-normal text-[0.875rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.5rem] md:leading-[1.75rem] mb-10">
             iExcelo brings together revision, practice, and mock exams for
             multiple exam types, helping students prepare better, faster, and
             with confidence.
           </p>
-          <div className="flex items-center gap-10 justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-4 gap-6 lg:gap-10 justify-items-center">
             {["waec-v2", "jamb-v2", "neco-v2", "sat-v2"].map((item, index) => (
               <span
                 key={`___${index}__`}
-                className="w-43.25 h-43.25 flex items-center justify-center rounded-[50%]"
+                className={`md:col-span-2 lg:col-span-1${index === 3 ? " md:col-start-4 lg:col-start-auto" : ""} w-[9rem] h-[9rem] sm:w-[10rem] sm:h-[10rem] lg:w-43.25 lg:h-43.25 flex items-center justify-center rounded-[50%]`}
                 style={{
                   boxShadow: `0 0 0 0.613px rgba(0, 0, 0, 0.06), 0 3.067px 13.496px 0 rgba(0, 0, 0, 0.04)`,
                 }}

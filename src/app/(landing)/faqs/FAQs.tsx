@@ -27,7 +27,7 @@ const FAQs = () => {
             Can&apos;t find the answer you&apos;re looking for?{" "}
             <a
               href="mailto:platform@iexcelo.com"
-              className="text-[#E32E89] underline"
+              className="text-[#007FFF] underline"
             >
               Please contact our friendly team.
             </a>

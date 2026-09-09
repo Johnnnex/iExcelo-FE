@@ -43,7 +43,7 @@ const Contact = () => {
             icon: "hugeicons:call-02",
             name: "Phone",
             content: "Mon-Fri from 8am to 5pm.",
-            moreInfo: "+234 909 999 0919",
+            moreInfo: "+234 812 483 2720",
           },
         ]?.map((item, index) => (
           <FadeIn
