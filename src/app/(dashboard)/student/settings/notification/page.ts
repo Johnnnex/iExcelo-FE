@@ -1,3 +1,9 @@
 import type { Metadata } from "next";
-export { default } from "./Notification";
-export const metadata: Metadata = { title: "Notification Settings | iExcelo" };
+import Notification from "./Notification";
+
+export const metadata: Metadata = {
+  title: "iExcelo - Student | Notification Settings",
+  robots: { index: false, follow: false },
+};
+
+export default Notification;

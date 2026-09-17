@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Socket } from "socket.io-client";
+import type { Socket } from "socket.io-client";
 import { authRequest } from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
 import { handleAxiosError, stripMarkdownPreview } from "@/utils";

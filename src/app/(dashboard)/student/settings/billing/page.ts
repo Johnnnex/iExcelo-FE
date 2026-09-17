@@ -1,3 +1,9 @@
 import type { Metadata } from "next";
-export { default } from "./Billing";
-export const metadata: Metadata = { title: "Billing & Subscription | iExcelo" };
+import Billing from "./Billing";
+
+export const metadata: Metadata = {
+  title: "iExcelo - Student | Billing",
+  robots: { index: false, follow: false },
+};
+
+export default Billing;

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -243,7 +243,7 @@ function SetPasswordFlow({ email }: { email: string }) {
 
 // ─── Password ──────────────────────────────────────────────────────────────────
 
-export default function Password() {
+function PasswordInner() {
   const { user, refreshUser } = useAuthStore();
   const { changePassword, changingPassword, disconnectGoogle, disconnectingGoogle } =
     useSettingsStore();
@@ -408,5 +408,13 @@ export default function Password() {
         )}
       </SectionCard>
     </div>
+  );
+}
+
+export default function Password() {
+  return (
+    <Suspense>
+      <PasswordInner />
+    </Suspense>
   );
 }

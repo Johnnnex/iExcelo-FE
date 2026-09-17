@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, Suspense } from "react";
 import { Icon } from "@iconify/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSponsorStore, useAuthStore } from "@/store";
 import { Button } from "@/components/atoms";
 
-const VerifyGiveback = () => {
+const VerifyGivebackInner = () => {
   const { accessToken } = useAuthStore();
   const { verifyGiveback } = useSponsorStore();
   const searchParams = useSearchParams();
@@ -151,5 +151,13 @@ const VerifyGiveback = () => {
     </div>
   );
 };
+
+function VerifyGiveback() {
+  return (
+    <Suspense>
+      <VerifyGivebackInner />
+    </Suspense>
+  );
+}
 
 export default VerifyGiveback;

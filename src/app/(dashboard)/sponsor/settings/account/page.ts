@@ -1,3 +1,9 @@
 import type { Metadata } from "next";
-export { default } from "@/app/(dashboard)/student/settings/account/Account";
-export const metadata: Metadata = { title: "Account Settings | iExcelo" };
+import Account from "@/app/(dashboard)/student/settings/account/Account";
+
+export const metadata: Metadata = {
+  title: "iExcelo - Sponsor | Account Settings",
+  robots: { index: false, follow: false },
+};
+
+export default Account;

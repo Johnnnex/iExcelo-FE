@@ -13,7 +13,7 @@ import React, {
 import { TableVirtuoso } from "react-virtuoso";
 import { SVGClient, CheckBox } from "../atoms";
 import { debounce } from "@/utils";
-import { geistSans } from "@/app/layout";
+import { geistSans } from "@/lib/fonts";
 import { Icon } from "@iconify/react";
 
 type thOptions = {

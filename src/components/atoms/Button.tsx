@@ -1,6 +1,6 @@
 import React, { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { geistSans } from "@/app/layout";
+import { geistSans } from "@/lib/fonts";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 

@@ -1,3 +1,9 @@
 import type { Metadata } from "next";
-export { default } from "./Account";
-export const metadata: Metadata = { title: "Account Settings | iExcelo" };
+import Account from "./Account";
+
+export const metadata: Metadata = {
+  title: "iExcelo - Student | Account Settings",
+  robots: { index: false, follow: false },
+};
+
+export default Account;

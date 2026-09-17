@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/store";
+import { useAuthStore } from "@/store/auth.store";
 import { API_URL, API_KEY } from "@/utils";
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 

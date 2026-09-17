@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, Suspense } from "react";
 import { useForm, type FieldErrors, type FieldError } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { defaultCountries, parseCountry } from "react-international-phone";
@@ -21,7 +21,7 @@ import { useAuthStore, useUtilsStore } from "@/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-const SignUp = () => {
+const SignUpInner = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState<1 | 2>(1);
@@ -409,5 +409,13 @@ const SignUp = () => {
     </div>
   );
 };
+
+function SignUp() {
+  return (
+    <Suspense>
+      <SignUpInner />
+    </Suspense>
+  );
+}
 
 export default SignUp;

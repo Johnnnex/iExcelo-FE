@@ -1,3 +1,9 @@
 import type { Metadata } from "next";
-export { default } from "./PayoutAccounts";
-export const metadata: Metadata = { title: "Payout Accounts | iExcelo" };
+import PayoutAccounts from "./PayoutAccounts";
+
+export const metadata: Metadata = {
+  title: "iExcelo - Affiliates | Payout Accounts",
+  robots: { index: false, follow: false },
+};
+
+export default PayoutAccounts;

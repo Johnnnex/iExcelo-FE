@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { InputField } from "@/components/molecules";
@@ -14,7 +14,7 @@ import {
 import { useAuthStore } from "@/store";
 import { toast } from "sonner";
 
-export default function ConfirmReset() {
+function ConfirmResetInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -127,5 +127,13 @@ export default function ConfirmReset() {
         </div>
       </form>
     </div>
+  );
+}
+
+export default function ConfirmReset() {
+  return (
+    <Suspense>
+      <ConfirmResetInner />
+    </Suspense>
   );
 }

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,7 +16,7 @@ import { createOnboardingSchema } from "@/schemas";
 import { categoryOptions } from "../../(sign-in-up)/signup/data";
 import { Icon } from "@iconify/react";
 
-export default function OnboardingPage() {
+function OnboardingPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { hydrated, userType, completeOnboarding, setTempToken } =
@@ -391,5 +391,13 @@ export default function OnboardingPage() {
         </div>
       </form>
     </div>
+  );
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense>
+      <OnboardingPageInner />
+    </Suspense>
   );
 }

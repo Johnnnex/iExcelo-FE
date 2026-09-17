@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -15,7 +15,7 @@ import { activateAccountSchema } from "@/schemas/sponsor.schema";
 
 type ActivateFormData = yup.InferType<typeof activateAccountSchema>;
 
-export default function ActivateAccount() {
+function ActivateAccountInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token") ?? "";
@@ -191,5 +191,13 @@ export default function ActivateAccount() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function ActivateAccount() {
+  return (
+    <Suspense>
+      <ActivateAccountInner />
+    </Suspense>
   );
 }

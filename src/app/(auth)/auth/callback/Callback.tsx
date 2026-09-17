@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store";
 import { Icon } from "@iconify/react";
 
-export default function AuthCallbackPage() {
+function AuthCallbackPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { exchangeToken } = useAuthStore();
@@ -39,5 +39,13 @@ export default function AuthCallbackPage() {
         Finishing sign in&hellip;
       </p>
     </section>
+  );
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense>
+      <AuthCallbackPageInner />
+    </Suspense>
   );
 }
